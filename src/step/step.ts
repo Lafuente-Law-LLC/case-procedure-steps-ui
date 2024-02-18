@@ -40,6 +40,10 @@ abstract class Step {
     REGISTERED_STEPS.add(instance);
   }
 
+  static unregisterInstance(instance: Step) {
+    REGISTERED_STEPS.delete(instance);
+  }
+
   static get registeredSteps() {
     return Array.from(REGISTERED_STEPS);
   }
@@ -53,7 +57,20 @@ abstract class Step {
     return null;
   }
 
-  abstract children: Step[];
+  //TODO: This is a bit of a mess. I think we need to refactor this to be more
+  get steps() {
+    const id = this.id;
+    let idArr = this.stepTree.find(id)?.model.steps || [];
+    return idArr.map((id: IdObj) => {
+      const step = Step.searchById(id.id);
+      if (step && step.steps) {
+        return { step: step, steps: step.steps };
+      }
+    });
+  }
+
+  abstract stepTree: StepTree;
+  abstract addStep(dataOrStep: any): void;
 }
 
 class RootStep extends Step {
@@ -85,14 +102,23 @@ class RootStep extends Step {
     }
   }
 
-  get children() {
-    let idArr = this.stepTree.rootNode.model.steps || [];
-    return idArr.map((id: IdObj) => {
-      const step = Step.searchById(id.id);
-      if (step && step.children) {
-        return {...step, children: step.children};
+  addStep(dataOrStep: any): void {
+    try {
+      if (dataOrStep instanceof Step) {
+        this.stepTree.addStep(this, dataOrStep);
+      } else {
+        const newChild = new ChildStep(
+          dataOrStep.title,
+          dataOrStep.summary,
+          dataOrStep.id,
+          dataOrStep.callbacks,
+          this
+        );
+        this.stepTree.addStep(this, newChild);
       }
-    });
+    } catch (e) {
+      console.warn(e);
+    }
   }
 }
 
@@ -109,19 +135,27 @@ class ChildStep extends Step {
     this.root = root;
   }
 
-  #stepTree() {
+  get stepTree() {
     return this.root.stepTree;
   }
 
-  get children() {
-    const id = this.id;
-    let idArr = this.#stepTree().find(id)?.model.steps || [];
-    return idArr.map((id: IdObj) => {
-      const step = Step.searchById(id.id);
-      if (step && step.children) {
-        return {...step, children: step.children};
+  addStep(dataOrStep: any) {
+    try {
+      if (dataOrStep instanceof Step) {
+        this.stepTree.addStep(this, dataOrStep);
+      } else {
+        const child = new ChildStep(
+          dataOrStep.title,
+          dataOrStep.summary,
+          dataOrStep.id,
+          dataOrStep.callbacks,
+          this.root
+        );
+        this.stepTree.addStep(this, child);
       }
-    });
+    } catch (e) {
+      console.warn(e);
+    }
   }
 }
 

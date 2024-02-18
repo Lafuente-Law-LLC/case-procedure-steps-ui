@@ -2,7 +2,6 @@ import { Step } from "./step";
 import type { IdObj } from "../treeModel/stepTree";
 import StepTree from "../treeModel/stepTree";
 
-
 class RootStep extends Step {
   nodeTree: StepTree;
   constructor(data: any) {
@@ -11,7 +10,6 @@ class RootStep extends Step {
     super(title, summary, id, callbacks, rootStepId);
     const parsedData = this.parseData(data);
     this.nodeTree = new StepTree(parsedData);
-
   }
 
   parseData(data: any): IdObj {

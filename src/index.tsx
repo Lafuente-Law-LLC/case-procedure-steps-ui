@@ -8,6 +8,11 @@ const App: React.FC = () => {
 };
 
 const rt = new RootStep(sampleStep); 
-console.log(rt.children);
+const child = rt.steps[1];
+const child2 = rt.steps[2];
+const step = child.step
+const step2 = child2.step
+step.addStep(step2);
+
 ReactDOM.render(<App />, document.getElementById('root'));
 
