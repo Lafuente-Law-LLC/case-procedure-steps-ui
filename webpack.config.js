@@ -11,6 +11,7 @@ module.exports = {
     extensions: [".tsx", ".ts", ".js", ".jsx"], // Add .tsx and .ts extensions
   },
   plugins: [new htmlWebpackPlugin({ template: path.resolve(__dirname, "index.html") })],
+  devtool: "source-map",
   module: {
     rules: [
       {
