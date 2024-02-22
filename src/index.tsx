@@ -2,17 +2,22 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import sampleStep from '../ignore/rootStep';
 
-import {Step, RootStep} from "./step/step";
+import RootNodeStep from './step/rootNodeStep';
 const App: React.FC = () => {
   return <h1>Hello</h1>;
 };
 
-const rt = new RootStep(sampleStep); 
-const child = rt.steps[1];
-const child2 = rt.steps[2];
-const step = child.step
-const step2 = child2.step
-step.addStep(step2);
+const rt = new RootNodeStep(sampleStep).rootStep
+const steps = rt?.steps
+const recursive = (step: any) => {
+  console.log(step)
+  step.steps.forEach((s: any) => {
+    recursive(s)
+  })
+}
 
+steps?.forEach((step: any) => {
+  recursive(step)
+})
 ReactDOM.render(<App />, document.getElementById('root'));
 
