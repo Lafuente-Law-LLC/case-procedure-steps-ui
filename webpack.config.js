@@ -10,7 +10,9 @@ module.exports = {
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".jsx"], // Add .tsx and .ts extensions
   },
-  plugins: [new htmlWebpackPlugin({ template: path.resolve(__dirname, "index.html") })],
+  plugins: [
+    new htmlWebpackPlugin({ template: path.resolve(__dirname, "index.html") }),
+  ],
   devtool: "source-map",
   module: {
     rules: [
@@ -20,6 +22,14 @@ module.exports = {
         use: {
           loader: "babel-loader",
         },
+      },
+      {
+        test: /\.scss$/, // SCSS files
+        use: [
+          "style-loader", // Creates `style` nodes from JS strings
+          "css-loader", // Translates CSS into CommonJS
+          "sass-loader", // Compiles Sass to CSS
+        ],
       },
     ],
   },

@@ -72,8 +72,8 @@ export default class StepNode {
     if (!sibling || !this.parent) {
       return false;
     }
-
-    return !!this.parent.children.splice(this.indexAmongSiblings, 1);
+    sibling.drop();
+    return !!this.parent.addChildAtIndex(sibling, this.indexAmongSiblings);
   }
 
   moveStepBelow(siblingId: string) {
@@ -81,8 +81,8 @@ export default class StepNode {
     if (!sibling || !this.parent) {
       return false;
     }
-
-    return !!this.parent.children.splice(this.indexAmongSiblings + 1, 1);
+    sibling.drop();
+    return !!this.parent.addChildAtIndex(sibling, this.indexAmongSiblings + 1);
   }
 
   findNodeById(id: string) {
