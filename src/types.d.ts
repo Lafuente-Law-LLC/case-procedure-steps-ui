@@ -10,9 +10,9 @@ export interface CallbackObj {
   }
   
   interface StepObj {
-    title: string;
-    summary: string;
-    id?: string;
+    title?: string;
+    summary?: string;
+    id: string;
     callbacks?: CallbackObj[];
   }
   

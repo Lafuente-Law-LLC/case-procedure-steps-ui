@@ -1,8 +1,6 @@
-
-import StepNode from "../stepNode/stepNode";
+import StepNode from "./stepNode";
 import StepManager from "./stepManager";
 import type { CallbackObj, StepObj } from "../types";
-import { v4 } from "uuid";
 
 class Step {
   title: string;
@@ -10,48 +8,45 @@ class Step {
   id: string;
   callbacks?: CallbackObj[];
   stepNode: StepNode;
-  constructor(
-    stepNode: StepNode,
-    title: string,
-    summary: string,
-    id?: string,
-    callbacks?: CallbackObj[]
-  ) {
-    this.title = title || "";
-    this.summary = summary || "";
-    this.id = id || v4();
-    this.callbacks = callbacks || [];
-    this.stepNode = stepNode;
-  }
-
-  addStep(stepOrObj: Step | StepObj) {
-    if (stepOrObj instanceof Step) {
-      this.stepNode.addChild(stepOrObj.stepNode.node);
-    } else {
-      this.stepNode.addChild(stepOrObj);
+  constructor(dataObj: StepObj, stepNode: StepNode) {
+    if (!dataObj.id) {
+      throw new Error("Step id is required");
     }
+    this.title = dataObj.title || "";
+    this.summary = dataObj.summary || "";
+    this.id = dataObj.id;
+    this.callbacks = dataObj.callbacks || [];
+    this.stepNode = stepNode;
+    StepManager.registerInstance(this);
   }
 
-  moveStepAbove(step:Step){
-    const siblingId = step.stepNode.node.model.id;
-    this.stepNode.moveStepAbove(siblingId);
+  addNewStep() {
+    const step = this.stepNode.addNewChild();
+    if (step) {
+      this.callupdateCallbacks();
+    }
+    return step;
   }
 
-  moveStepBelow(step:Step){
-    const siblingId = step.stepNode.node.model.id;
-    this.stepNode.moveStepBelow(siblingId);
+  addAsChildStep(step: Step) {
+    this.stepNode.addAsChild(step.stepNode.node);
+  }
+
+  moveStepAboveSelf(step: Step) {
+    this.stepNode.moveNodeAboveSelf(step.stepNode.node);
+  }
+
+  moveStepBelowSelf(step: Step) {
+    this.stepNode.moveNodeBelowSelf(step.stepNode.node);
   }
 
   remove() {
-    this.stepNode.removeChild(this.id);
+    this.stepNode.removeSelf();
     StepManager.unregisterInstance(this);
   }
 
   get parentStep(): Step | null {
-    const parent = this.stepNode.parent;
-    if (!parent) {
-      return null;
-    }
+    const parent = this.stepNode.parentNode;
     return StepManager.searchById(parent.model.id) || null;
   }
 
@@ -59,15 +54,28 @@ class Step {
     return this.stepNode.node.getPath().length === 1;
   }
 
-  get steps(): any[] {
-    const children = this.stepNode.children;
-    if (children) {
-      return children.map((child) => {
-        return StepManager.searchById(child.model.id);
-      });
-    }else{
-      return []
-    }
+  callupdateCallbacks() {
+    StepManager.updateCallbacks.forEach((callback) => callback());
+  }
+  /**
+   * Returns the step's children
+   * @returns {Step[]}
+   */
+  get steps() {
+    const stepsArray = this.stepNode.childrenNodes.map((node) =>
+      StepManager.searchById(node.model.id)
+    );
+    return stepsArray.filter((step) => step !== undefined);
+  }
+
+  toJSON(): any {
+    return {
+      title: this.title,
+      summary: this.summary,
+      id: this.id,
+      callbacks: this.callbacks,
+      steps: this.steps.map((step) => step && step.toJSON()),
+    };
   }
 }
 

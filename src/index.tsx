@@ -1,44 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import sampleStep from "../ignore/rootStep";
 import "bootstrap/scss/bootstrap.scss";
-import { Accordion } from "react-bootstrap";
 import { Step } from "./step/step";
 import RootNodeStep from "./step/rootNodeStep";
+import "./css/styles.scss";
+import { DragItem } from "./components/DragItem";
+import StepManager from "./step/stepManager";
 
-const rt = new RootNodeStep(sampleStep).rootStep;
-const firstStep = rt!.steps[0];
-const lastStep = rt!.steps[rt!.steps.length - 1];
-
-lastStep.moveStepBelow(firstStep);
-
-const accordionFn = (step: Step) => {
-  if (step.steps.length > 0) {
-    return (
-      <Accordion key={step.id}>
-        <Accordion.Item eventKey="0">
-          <Accordion.Header>{step.title}</Accordion.Header>
-          <Accordion.Body>
-            {step.steps.map((step) => {
-              return accordionFn(step);
-            })}
-          </Accordion.Body>
-        </Accordion.Item>
-      </Accordion>
-    );
-  } else {
-    return (
-      <Accordion key={step.id}>
-        <Accordion.Item eventKey="0">
-          <Accordion.Header>{step.title}</Accordion.Header>
-          <Accordion.Body>{step.summary}</Accordion.Body>
-        </Accordion.Item>
-      </Accordion>
-    );
-  }
-};
 const App: React.FC = () => {
-  return <div>{accordionFn(rt)}</div>;
+  const rt = new RootNodeStep(sampleStep).rootStep as Step;
+  const [steps, setSteps] = useState(rt.steps);
+  StepManager.registerUpdateCallback(() => {
+    console.log(rt.toJSON());
+    setSteps(rt.steps);
+
+  });
+
+  useState;
+  return (
+    <div>
+      <DragItem step={rt}></DragItem>
+    </div>
+  );
 };
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App></App>, document.getElementById("root"));

@@ -1,8 +1,11 @@
 import { Step } from "./step";
-const REGISTERED_STEPS = new Set<Step>();
+
 export default class StepManager {
-  static get registeredSteps() {
-    return REGISTERED_STEPS;
+  private static registeredSteps = new Set<Step>();
+   static updateCallbacks = new Set<() => void>();
+
+  static registerUpdateCallback(callback: () => void) {
+    StepManager.updateCallbacks.add(callback);
   }
   static registerInstance(instance: Step) {
     StepManager.registeredSteps.add(instance);

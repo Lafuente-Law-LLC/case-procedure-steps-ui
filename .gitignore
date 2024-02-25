@@ -1,7 +1,7 @@
 /node_modules/
 /ignore/
-
-
+/storybook-static/
+/.storybook/
 /.bundle
 /*.pdf
 # Ignore all logfiles and tempfiles.
