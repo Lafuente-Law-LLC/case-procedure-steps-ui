@@ -13,6 +13,9 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
   const addNewStep = () => {
     step.addNewStep()
   }
+  const removeStep = () => {
+    step.remove();
+  }
   return (
     <div className="drag__item__head">
       <div
@@ -28,6 +31,7 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
       <div className="head__end">
         <DragItemModal step={step}></DragItemModal>
         <Button onClick={addNewStep}>Add</Button>
+        <Button onClick={removeStep}>Delete</Button>
       </div>
     </div>
   );

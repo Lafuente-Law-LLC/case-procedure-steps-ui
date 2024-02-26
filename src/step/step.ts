@@ -43,6 +43,7 @@ class Step {
   remove() {
     this.stepNode.removeSelf();
     this.stepManager.unregisterInstance(this);
+    this.callupdateCallbacks();
   }
 
   get parentStep(): Step | null {
