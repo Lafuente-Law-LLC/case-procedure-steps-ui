@@ -7,6 +7,7 @@ import RootStepConstructor from "./step/rootStepConstructor";
 import "./css/styles.scss";
 import { DragItem } from "./components/DragItem";
 
+
 const App: React.FC = () => {
   const constructorRt = new RootStepConstructor(sampleStep);
   const rt = constructorRt.rootStep;

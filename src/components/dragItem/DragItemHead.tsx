@@ -11,13 +11,25 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
   const { title } = step;
 
   const addNewStep = () => {
-    step.addNewStep()
-  }
+    step.addNewStep();
+  };
   const removeStep = () => {
     step.remove();
-  }
+  };
+
+  const onDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    const currentTarget = e.currentTarget;
+    currentTarget.classList.add("dragging");  
+    e.dataTransfer.setData("text/plain", "This text may be dragged");
+  };
+
   return (
-    <div className="drag__item__head">
+    <div
+      className="drag__item__head"
+      draggable
+      onDragStart={onDragStart}
+      data-step-id={step.id}
+    >
       <div
         className="head__start collapse"
         data-bs-toggle={"collapse"}

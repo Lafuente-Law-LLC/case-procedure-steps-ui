@@ -25,19 +25,25 @@ class Step {
   addNewStep() {
     const step = this.stepNode.addNewChild();
     this.callupdateCallbacks();
-    return step
+    return step;
   }
 
   addAsChildStep(step: Step) {
     this.stepNode.addAsChild(step.stepNode.node);
   }
 
+  findStepById(id: string) {
+    return this.stepManager.searchById(id);
+  }
+
   moveStepAboveSelf(step: Step) {
     this.stepNode.moveNodeAboveSelf(step.stepNode.node);
+    this.callupdateCallbacks();
   }
 
   moveStepBelowSelf(step: Step) {
     this.stepNode.moveNodeBelowSelf(step.stepNode.node);
+    this.callupdateCallbacks();
   }
 
   remove() {
@@ -58,15 +64,12 @@ class Step {
   callupdateCallbacks() {
     this.stepManager.updateCallbacks.forEach((callback) => callback());
   }
-  /**
-   * Returns the step's children
-   * @returns {Step[]}
-   */
+
   get steps() {
     const stepsArray = this.stepNode.childrenNodes.map((node) =>
       this.stepManager.searchById(node.model.id)
     );
-   
+
     return stepsArray.filter((step) => step !== undefined);
   }
 

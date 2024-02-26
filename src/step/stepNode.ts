@@ -20,7 +20,7 @@ export default class StepNode {
 
   addNewChild() {
     const newId = v4();
-    const newNode = this.node.addChild(new TreeModel().parse({ id: newId })); 
+    const newNode = this.node.addChild(new TreeModel().parse({ id: newId }));
     const manager = this.stepManager;
     return new Step({ id: newId }, new StepNode(newNode, manager));
   }
@@ -36,13 +36,13 @@ export default class StepNode {
 
   get parentNode() {
     if (this.node.getPath().length == 1) {
-      this.rootNode;
+      return this.rootNode;
     }
     return this.node.getPath().slice(-2, -1)[0];
   }
 
   get childrenNodes(): Node[] {
-    return this.node.children ;
+    return this.node.children;
   }
 
   get siblingNodes(): Node[] {
@@ -58,13 +58,25 @@ export default class StepNode {
   }
 
   moveNodeAboveSelf(node: Node) {
-    node.drop();
-    return this.parentNode.addChildAtIndex(node, this.indexAmongSiblings);
+    try {
+      node.drop();
+      return this.parentNode.addChildAtIndex(node, this.indexAmongSiblings);
+    } catch (e) {
+      console.log(e);
+      debugger;
+    }
   }
 
   moveNodeBelowSelf(node: Node) {
-    node.drop();
-    return this.parentNode.addChildAtIndex(node, this.indexAmongSiblings + 1);
+    try {
+      node.drop();
+      return this.parentNode.addChildAtIndex(node, this.indexAmongSiblings + 1);
+    }catch(e){
+      console.log(e);
+      debugger;
+    }
+
+
   }
 
   findNodeById(id: string) {
