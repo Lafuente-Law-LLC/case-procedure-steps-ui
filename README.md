@@ -1,4 +1,4 @@
-# case-procedure-steps-ui# Steps Management System
+# Steps Management System
 
 The Steps Management System is designed to facilitate the creation, manipulation, and navigation of a structured step-based workflow. This system is ideal for managing tasks, procedures, or any process that can be broken down into a series of steps. It utilizes a tree structure for organizing steps, allowing for hierarchical relationships between steps, including parent-child and sibling connections. The system comprises several key components: `Step`, `StepNode`, `StepManager`, and `RootStepConstructor`, working together to offer a comprehensive API for handling complex workflows.
 
