@@ -1789,7 +1789,7 @@
 
 "@shopify/draggable@^1.1.3":
   version "1.1.3"
-  resolved "https://registry.yarnpkg.com/@shopify/draggable/-/draggable-1.1.3.tgz#4c1d0415629198ec11d27b776dda0fc89eb5efa2"
+  resolved "https://registry.npmjs.org/@shopify/draggable/-/draggable-1.1.3.tgz"
   integrity sha512-okZG6FTOX1HpfToN2uFVXTicum+NtHFGEY+0MFkZsdChP5qvLSlkffQormMxoDQVIDsK+jso3yz03tteIJ/A0w==
 
 "@sinclair/typebox@^0.27.8":
@@ -2415,7 +2415,7 @@
     "@storybook/react" "7.6.17"
     "@types/node" "^18.0.0"
 
-"@storybook/react@7.6.17", "@storybook/react@^7.6.17":
+"@storybook/react@7.6.17":
   version "7.6.17"
   resolved "https://registry.npmjs.org/@storybook/react/-/react-7.6.17.tgz"
   integrity sha512-lVqzQSU03rRJWYW+gK2gq6mSo3/qtnVICY8B8oP7gc36jVu4ksDIu45bTfukM618ODkUZy0vZe6T4engK3azjA==
@@ -7408,7 +7408,7 @@ package-json@^2.3.1:
 
 package.json@^2.0.1:
   version "2.0.1"
-  resolved "https://registry.yarnpkg.com/package.json/-/package.json-2.0.1.tgz#f886059d2a49ed076e64883695d73b2b46d21d6d"
+  resolved "https://registry.npmjs.org/package.json/-/package.json-2.0.1.tgz"
   integrity sha512-pSxZ6XR5yEawRN2ekxx9IKgPN5uNAYco7MCPxtBEWMKO3UKWa1X2CtQMzMgloeGj2g2o6cue3Sb5iPkByIJqlw==
   dependencies:
     git-package-json "^1.4.0"
@@ -7923,7 +7923,7 @@ rc@^1.0.1, rc@^1.1.6:
 
 react-bootstrap-icons@^1.11.3:
   version "1.11.3"
-  resolved "https://registry.yarnpkg.com/react-bootstrap-icons/-/react-bootstrap-icons-1.11.3.tgz#f4483bbe4f43428df33747b12d12d91361f73cc4"
+  resolved "https://registry.npmjs.org/react-bootstrap-icons/-/react-bootstrap-icons-1.11.3.tgz"
   integrity sha512-f/DAy4UXnjdbaZyUcZKR2I3xim56uCznb9t+u3ojwzDG1p2RUrua/d8R4xplAQ8Bj/LVZwHVSrvO+npvp3l3pw==
   dependencies:
     prop-types "^15.7.2"

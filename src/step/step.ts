@@ -8,6 +8,7 @@ class Step {
   id: string;
   callbacks?: CallbackObj[];
   stepNode: StepNode;
+  stepManager: StepManager;
   constructor(dataObj: StepObj, stepNode: StepNode) {
     if (!dataObj.id) {
       throw new Error("Step id is required");
@@ -17,15 +18,14 @@ class Step {
     this.id = dataObj.id;
     this.callbacks = dataObj.callbacks || [];
     this.stepNode = stepNode;
-    StepManager.registerInstance(this);
+    this.stepManager = this.stepNode.stepManager;
+    this.stepManager.registerInstance(this);
   }
 
   addNewStep() {
     const step = this.stepNode.addNewChild();
-    if (step) {
-      this.callupdateCallbacks();
-    }
-    return step;
+    this.callupdateCallbacks();
+    return step
   }
 
   addAsChildStep(step: Step) {
@@ -42,12 +42,12 @@ class Step {
 
   remove() {
     this.stepNode.removeSelf();
-    StepManager.unregisterInstance(this);
+    this.stepManager.unregisterInstance(this);
   }
 
   get parentStep(): Step | null {
     const parent = this.stepNode.parentNode;
-    return StepManager.searchById(parent.model.id) || null;
+    return this.stepManager.searchById(parent.model.id) || null;
   }
 
   isRoot() {
@@ -55,7 +55,7 @@ class Step {
   }
 
   callupdateCallbacks() {
-    StepManager.updateCallbacks.forEach((callback) => callback());
+    this.stepManager.updateCallbacks.forEach((callback) => callback());
   }
   /**
    * Returns the step's children
@@ -63,8 +63,9 @@ class Step {
    */
   get steps() {
     const stepsArray = this.stepNode.childrenNodes.map((node) =>
-      StepManager.searchById(node.model.id)
+      this.stepManager.searchById(node.model.id)
     );
+   
     return stepsArray.filter((step) => step !== undefined);
   }
 

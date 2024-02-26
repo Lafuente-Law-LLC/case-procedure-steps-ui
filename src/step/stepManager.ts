@@ -1,22 +1,24 @@
 import { Step } from "./step";
 
 export default class StepManager {
-  private static registeredSteps = new Set<Step>();
-   static updateCallbacks = new Set<() => void>();
-
-  static registerUpdateCallback(callback: () => void) {
-    StepManager.updateCallbacks.add(callback);
-  }
-  static registerInstance(instance: Step) {
-    StepManager.registeredSteps.add(instance);
-  }
-  static unregisterInstance(instance: Step) {
-    StepManager.registeredSteps.delete(instance);
+  registeredSteps: Set<Step>;
+  updateCallbacks: Set<() => void>;
+  constructor() {
+    this.registeredSteps = new Set<Step>();
+    this.updateCallbacks = new Set<() => void>();
   }
 
-  static searchById(id: string) {
-    return Array.from(StepManager.registeredSteps).find(
-      (step) => step.id === id
-    );
+  registerInstance(instance: Step) {
+    this.registeredSteps.add(instance);
+  }
+  unregisterInstance(instance: Step) {
+    this.registeredSteps.delete(instance);
+  }
+
+  registerUpdateCallback(callback: () => void) {
+    this.updateCallbacks.add(callback);
+  }
+  searchById(id: string) {
+    return Array.from(this.registeredSteps).find((step) => step.id === id);
   }
 }

@@ -2,6 +2,7 @@ import TreeModel from "tree-model";
 import { StepObj } from "../types";
 import { Step } from "./step";
 import { v4 } from "uuid";
+import StepManager from "./stepManager";
 type Node = TreeModel.Node<StepObj>;
 
 const returnRootNode = (node: Node) => node.getPath().slice(0, 1)[0];
@@ -9,16 +10,19 @@ const returnRootNode = (node: Node) => node.getPath().slice(0, 1)[0];
 export default class StepNode {
   node: Node;
   rootNode: Node;
-  constructor(node: Node) {
+  stepManager: StepManager;
+  constructor(node: Node, stepManager: StepManager) {
     if (!node) throw new Error("Node is required");
     this.node = node;
     this.rootNode = returnRootNode(node);
+    this.stepManager = stepManager;
   }
 
   addNewChild() {
     const newId = v4();
-    const newNode = this.node.addChild(new TreeModel().parse({ id: newId }));
-    return new Step({ id: newId }, new StepNode(newNode));
+    const newNode = this.node.addChild(new TreeModel().parse({ id: newId })); 
+    const manager = this.stepManager;
+    return new Step({ id: newId }, new StepNode(newNode, manager));
   }
 
   addAsChild(treeNode: Node) {
@@ -38,11 +42,11 @@ export default class StepNode {
   }
 
   get childrenNodes(): Node[] {
-    return this.node.children || [];
+    return this.node.children ;
   }
 
   get siblingNodes(): Node[] {
-    return this.parentNode.children || [];
+    return this.parentNode.children;
   }
 
   get indexAmongSiblings() {

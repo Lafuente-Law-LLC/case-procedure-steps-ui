@@ -7,12 +7,12 @@ type DragItemOptions = {
 };
 
 export const DragItemBody = ({ step }: DragItemOptions) => {
-  const { summary } = step;
+  
   return (
     <div className="drag__item__body collapse" id={`body_${step.id}`}>
       {step.steps &&
         step.steps.map((step) => {
-          return <DragItem step={step} key={step.id} />;
+          return step && <DragItem step={step} key={step.id} />;
         })}
     </div>
   );

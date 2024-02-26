@@ -11,7 +11,7 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
   const { title } = step;
 
   const addNewStep = () => {
-    step.addNewStep();
+    step.addNewStep()
   }
   return (
     <div className="drag__item__head">

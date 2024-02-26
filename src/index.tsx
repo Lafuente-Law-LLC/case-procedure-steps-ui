@@ -3,26 +3,20 @@ import ReactDOM from "react-dom";
 import sampleStep from "../ignore/rootStep";
 import "bootstrap/scss/bootstrap.scss";
 import { Step } from "./step/step";
-import RootNodeStep from "./step/rootNodeStep";
+import RootStepConstructor from "./step/rootStepConstructor";
 import "./css/styles.scss";
 import { DragItem } from "./components/DragItem";
-import StepManager from "./step/stepManager";
 
 const App: React.FC = () => {
-  const rt = new RootNodeStep(sampleStep).rootStep as Step;
+  const constructorRt = new RootStepConstructor(sampleStep);
+  const rt = constructorRt.rootStep;
   const [steps, setSteps] = useState(rt.steps);
-  StepManager.registerUpdateCallback(() => {
-    console.log(rt.toJSON());
+  constructorRt.registerUpdateCallback(() => {
+    
     setSteps(rt.steps);
-
   });
 
-  useState;
-  return (
-    <div>
-      <DragItem step={rt}></DragItem>
-    </div>
-  );
+  return steps.map((step) => <DragItem step={step} key={step.id}></DragItem>);
 };
 
 ReactDOM.render(<App></App>, document.getElementById("root"));
