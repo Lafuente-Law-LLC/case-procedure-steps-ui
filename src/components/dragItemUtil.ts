@@ -8,14 +8,18 @@ export function removeClassesFromElements(classes: string[]) {
 }
 
 export const addAboveStep = (step: Step, stepToAdd: Step) => {
-  if(step.isAncestorOf(stepToAdd)) return;
+  if (step.isAncestorOf(stepToAdd)) return;
   step.moveStepAboveSelf(stepToAdd);
 };
 
 export const addBelowStep = (step: Step, stepToAdd: Step) => {
-  if(step.isAncestorOf(stepToAdd)) return;
+  if (step.isAncestorOf(stepToAdd)) return;
   step.moveStepBelowSelf(stepToAdd);
-}
+};
+
+export const aboveOrBelowFromPoint = (point: Point, element: HTMLElement) => {
+  return compareVerticalPosition(point, element) == 1 ? "above" : "below";
+};
 
 export function closestElement(
   target: HTMLElement | Point,
@@ -24,8 +28,7 @@ export function closestElement(
   if (!elements || !elements.length) return null;
 
   let targetRect: any;
-  if ("x" in target && "y" in target) {
-    // If target is a point, create a virtual rectangle around it
+  if ("x" in target && "y" in target) { 
     targetRect = {
       left: target.x,
       top: target.y,
@@ -121,4 +124,61 @@ export function compareVerticalPosition(
     // element1 and element2 overlap vertically
     return 0;
   }
+}
+
+export const returnDraggingElementAndCurrentTarget = (
+  e: React.DragEvent<HTMLElement>
+) => {
+  const draggingElement = document.querySelector<HTMLElement>(".dragging");
+  throwErrorIfNoElement(draggingElement);
+  const currentTarget = e.currentTarget;
+  throwErrorIfNoElement(currentTarget);
+  throwIfCondition(currentTarget === draggingElement, "Current target is dragging element"); 
+  return { draggingElement, currentTarget };
+
+}
+
+export function throwErrorIfNoElement<T>(element: T | null): asserts element is NonNullable<T> {
+  if (!element) {
+    throw new Error("No element found");
+  }
+}
+
+export function throwIfCondition(condition: boolean, message: string) {
+  if (condition) {
+    throw new Error(message);
+  }
+}
+
+
+
+/**
+ * Return the step that corresponds to the element  
+ * @param element 
+ * @param step 
+ * @returns 
+ */
+export const returnStepFromElement = (element: HTMLElement, step: Step) => {
+  const elementStepId = element.getAttribute("data-step-id");
+  if (!elementStepId) throw new Error("No step id found");
+  const step1 = step.findStepById(elementStepId);
+  if (!step1) throw new Error("No step found");
+  return step1;
+};
+
+/**
+ *  Get all children of parentElement that match the selector, except for the filterElement
+ * @param parentElement - The parent element to search for children
+ * @param selector - The selector to match children
+ * @param filterElement - The element to filter out of the results
+ * @returns
+ */
+export function getFilteredChildren<T extends HTMLElement>(
+  parentElement: HTMLElement,
+  selector: string,
+  filterElement: HTMLElement
+): T[] {
+  return Array.from(parentElement.querySelectorAll<T>(selector)).filter(
+    (element) => element !== filterElement
+  );
 }

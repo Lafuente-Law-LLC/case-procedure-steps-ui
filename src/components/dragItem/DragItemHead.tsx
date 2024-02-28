@@ -3,7 +3,9 @@ import { Button } from "react-bootstrap";
 import { Step } from "../../step/step";
 import { ArrowRight } from "react-bootstrap-icons";
 import { DragItemModal } from "./DragItemModal";
-import { removeClassesFromElements } from "../dragItemUtil";
+import {
+  removeClassesFromElements, 
+} from "../dragItemUtil";
 
 type DragItemHeadOptions = {
   step: Step;
@@ -26,9 +28,6 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
 
   const onDragOver = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
-    const draggingElement = document.querySelector(".dragging");
-    const currentTarget = e.currentTarget;
-    if (draggingElement === currentTarget) return;
   };
 
   const onDragEnd = (e: React.DragEvent<HTMLElement>) => {
@@ -36,17 +35,16 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
   };
 
   const onDragEnter = (e: React.DragEvent<HTMLElement>) => {
-    e.preventDefault();
-    removeClassesFromElements(["drag-over"]);
-    const draggingElement = document.querySelector(".dragging");
-    if (!draggingElement) return;
-    const currentTarget = e.currentTarget;
-    if (draggingElement === currentTarget) {
+    try {
+      e.preventDefault();
+      removeClassesFromElements(["drag-over"]);
+      const currentTarget = e.currentTarget;
+      if (currentTarget.classList.contains("drag__item__head"))
+        e.stopPropagation();
+      currentTarget.classList.add("drag-over");
+    } catch (e) {
       return;
     }
-    if (currentTarget.classList.contains("drag__item__head"))
-      e.stopPropagation();
-    currentTarget.classList.add("drag-over");
   };
 
   return (

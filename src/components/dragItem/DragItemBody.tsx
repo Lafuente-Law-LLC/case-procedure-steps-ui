@@ -1,12 +1,16 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Step } from "../../step/step";
 import { DragItem } from "../DragItem";
 import {
   closestElement,
-  compareVerticalPosition,
   removeClassesFromElements,
   addAboveStep,
   addBelowStep,
+  returnDraggingElementAndCurrentTarget,
+  aboveOrBelowFromPoint,
+  getFilteredChildren,
+  returnStepFromElement,
+  throwIfCondition,
 } from "../dragItemUtil";
 
 type DragItemOptions = {
@@ -20,82 +24,83 @@ export const DragItemBody = ({ step }: DragItemOptions) => {
 
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLElement>) => {
-      e.preventDefault();
-      const draggingElement = document.querySelector<HTMLElement>(".dragging");
-      const currentTarget = e.currentTarget;
-      if (
-        !draggingElement ||
-        !currentTarget ||
-        draggingElement === currentTarget ||
-        !currentTarget.classList.contains("drag__item__body")
-      )
+      try {
+        e.preventDefault();
+        const { draggingElement, currentTarget } =
+          returnDraggingElementAndCurrentTarget(e);
+        throwIfCondition(
+          !currentTarget.classList.contains("drag__item__body"),
+          "Current target is not a drag item body"
+        );
+        const dragItemHeadChildren = getFilteredChildren<HTMLElement>(
+          currentTarget,
+          ".drag__item__head",
+          draggingElement
+        );
+
+        const currentPoint = { x: e.clientX, y: e.clientY };
+        const closestDragItemHead = closestElement(
+          currentPoint,
+          dragItemHeadChildren
+        );
+        if (!closestDragItemHead) return;
+
+        const aboveOrBelow = aboveOrBelowFromPoint(
+          currentPoint,
+          closestDragItemHead
+        );
+        const draggingElementStep = returnStepFromElement(
+          draggingElement,
+          step
+        );
+        const dragItemHeadStep = returnStepFromElement(
+          closestDragItemHead,
+          step
+        );
+
+        aboveOrBelow === "above"
+          ? addAboveStep(dragItemHeadStep, draggingElementStep)
+          : addBelowStep(dragItemHeadStep, draggingElementStep);
+
+        draggingElement.classList.add("flash");
+        setTimeout(() => {
+          draggingElement.classList.remove("flash");
+        }, 1000);
+      } catch (e) {
         return;
-
-      const dragItemHeadChildren = [
-        ...currentTarget.querySelectorAll<HTMLElement>(".drag__item__head"),
-      ].filter((element) => element !== draggingElement);
-      const dragItemHead = closestElement(
-        { x: e.clientX, y: e.clientY },
-        dragItemHeadChildren
-      );
-      if (!dragItemHead) return;
-      const aboveOrBelow =
-        compareVerticalPosition({ x: e.clientX, y: e.clientY }, dragItemHead) ==
-        1
-          ? "above"
-          : "below";
-
-      const draggingElementStepId =
-        draggingElement.getAttribute("data-step-id");
-      const dragItemHeadStepId = dragItemHead.getAttribute("data-step-id");
-      if (!draggingElementStepId || !dragItemHeadStepId) return;
-      const draggingStep = step.findStepById(draggingElementStepId);
-      const dragItemHeadStep = step.findStepById(dragItemHeadStepId);
-      if (!draggingStep || !dragItemHeadStep) return;
-
-      if (aboveOrBelow === "above") {
-        addAboveStep(dragItemHeadStep, draggingStep);
-      } else {
-        addBelowStep(dragItemHeadStep, draggingStep);
       }
     },
     [step]
   );
 
   const onDragEnter = useCallback((e: React.DragEvent<HTMLElement>) => {
-    e.preventDefault();
-    removeClassesFromElements(["above", "below"]);
-    const draggingElement = document.querySelector<HTMLElement>(".dragging");
-    if (!draggingElement) return;
-    const currentTarget = e.currentTarget;
-    if (!currentTarget) return;
-    if (draggingElement === currentTarget) return;
-    if (!currentTarget.classList.contains("drag__item__body")) return;
-    let dragItemHeadChildren = [
-      ...currentTarget.querySelectorAll<HTMLElement>(".drag__item__head"),
-    ].filter((element) => element !== draggingElement);
+    try {
+      e.preventDefault();
+      removeClassesFromElements(["above", "below"]);
+      const { draggingElement, currentTarget } =
+        returnDraggingElementAndCurrentTarget(e);
 
-    const dragItemHead = closestElement(
-      { x: e.clientX, y: e.clientY },
-      dragItemHeadChildren
-    );
-    if (!dragItemHead) return;
+      const dragItemHeadChildren = getFilteredChildren<HTMLElement>(
+        currentTarget,
+        ".drag__item__head",
+        draggingElement
+      );
 
-    const aboveOrBelow =
-      compareVerticalPosition({ x: e.clientX, y: e.clientY }, dragItemHead) == 1
-        ? "above"
-        : "below";
+      const currentPoint = { x: e.clientX, y: e.clientY };
+      const dragItemHead = closestElement(currentPoint, dragItemHeadChildren);
+      if (!dragItemHead) return;
 
-    if (aboveOrBelow === "above") {
-      dragItemHead.classList.add("above");
-    } else {
-      dragItemHead.classList.add("below");
+      const aboveOrBelow = aboveOrBelowFromPoint(currentPoint, dragItemHead);
+      dragItemHead.classList.add(aboveOrBelow);
+    } catch (e) {
+      return;
     }
   }, []);
 
   const onDragEnd = useCallback((e: React.DragEvent<HTMLElement>) => {
     removeClassesFromElements(["dragging", "drag-over", "above", "below"]);
   }, []);
+
 
   return (
     <div

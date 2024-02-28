@@ -17,51 +17,27 @@ exports.DragItemBody = function (_a) {
         e.preventDefault();
     }, []);
     var onDrop = react_1.useCallback(function (e) {
-        e.preventDefault();
-        var draggingElement = document.querySelector(".dragging");
-        if (!draggingElement)
-            return;
-        var currentTarget = e.currentTarget;
-        if (!currentTarget)
-            return;
-        if (draggingElement === currentTarget)
-            return;
-        if (!currentTarget.classList.contains("drag__item__body"))
-            return;
-        var listofElementsWithAboveClass = document.querySelectorAll(".above");
-        var listofElementsWithBelowClass = document.querySelectorAll(".below");
-        listofElementsWithAboveClass.forEach(function (element) {
-            return element.classList.remove("above");
-        });
-        listofElementsWithBelowClass.forEach(function (element) {
-            return element.classList.remove("below");
-        });
-        var dragItemHeadChildren = __spreadArrays(currentTarget.querySelectorAll(".drag__item__head")).filter(function (element) { return element !== draggingElement; });
-        var dragItemHead = dragItemUtil_1.closestElement({ x: e.clientX, y: e.clientY }, dragItemHeadChildren);
-        if (!dragItemHead)
-            return;
-        var aboveOrBelow = dragItemUtil_1.compareVerticalPosition({ x: e.clientX, y: e.clientY }, dragItemHead) ==
-            1
-            ? "above"
-            : "below";
-        var draggingElementStepId = draggingElement.getAttribute("data-step-id");
-        var dragItemHeadStepId = dragItemHead.getAttribute("data-step-id");
-        if (!draggingElementStepId || !dragItemHeadStepId)
-            return;
-        var draggingStep = step.findStepById(draggingElementStepId);
-        var dragItemHeadStep = step.findStepById(dragItemHeadStepId);
-        if (!draggingStep || !dragItemHeadStep)
-            return;
-        if (aboveOrBelow === "above") {
-            dragItemHeadStep.moveStepAboveSelf(draggingStep);
+        try {
+            e.preventDefault();
+            var _a = dragItemUtil_1.returnDraggingElementAndCurrentTarget(e), draggingElement_1 = _a.draggingElement, currentTarget = _a.currentTarget;
+            var dragItemHeadChildren = __spreadArrays(currentTarget.querySelectorAll(".drag__item__head")).filter(function (element) { return element !== draggingElement_1; });
+            var dragItemHead = dragItemUtil_1.closestElement({ x: e.clientX, y: e.clientY }, dragItemHeadChildren);
+            if (!dragItemHead)
+                return;
+            var aboveOrBelow = dragItemUtil_1.aboveOrBelowFromPoint({ x: e.clientX, y: e.clientY }, dragItemHead);
+            var _b = dragItemUtil_1.returnStepsFromElements(draggingElement_1, dragItemHead, step), draggingStep = _b.step1, dragItemHeadStep = _b.step2;
+            aboveOrBelow === "above"
+                ? dragItemUtil_1.addAboveStep(dragItemHeadStep, draggingStep)
+                : dragItemUtil_1.addBelowStep(dragItemHeadStep, draggingStep);
         }
-        else {
-            dragItemHeadStep.moveStepBelowSelf(draggingStep);
+        catch (e) {
+            console.log(e);
+            return;
         }
     }, [step]);
     var onDragEnter = react_1.useCallback(function (e) {
         e.preventDefault();
-        var target = e.target;
+        dragItemUtil_1.removeClassesFromElements(["above", "below"]);
         var draggingElement = document.querySelector(".dragging");
         if (!draggingElement)
             return;
@@ -70,14 +46,6 @@ exports.DragItemBody = function (_a) {
             return;
         if (draggingElement === currentTarget)
             return;
-        var listofElementsWithAboveClass = document.querySelectorAll(".above");
-        var listofElementsWithBelowClass = document.querySelectorAll(".below");
-        listofElementsWithAboveClass.forEach(function (element) {
-            return element.classList.remove("above");
-        });
-        listofElementsWithBelowClass.forEach(function (element) {
-            return element.classList.remove("below");
-        });
         if (!currentTarget.classList.contains("drag__item__body"))
             return;
         var dragItemHeadChildren = __spreadArrays(currentTarget.querySelectorAll(".drag__item__head")).filter(function (element) { return element !== draggingElement; });
@@ -94,18 +62,10 @@ exports.DragItemBody = function (_a) {
             dragItemHead.classList.add("below");
         }
     }, []);
-    var onDragLeave = react_1.useCallback(function (e) {
-        e.preventDefault();
-        var draggingElement = document.querySelector(".dragging");
-        if (!draggingElement)
-            return;
-        var currentTarget = e.currentTarget;
-        if (draggingElement === currentTarget)
-            return;
-        if (!currentTarget.classList.contains("drag__item__body"))
-            return;
+    var onDragEnd = react_1.useCallback(function (e) {
+        dragItemUtil_1.removeClassesFromElements(["dragging", "drag-over", "above", "below"]);
     }, []);
-    return (react_1["default"].createElement("div", { className: "drag__item__body collapse", id: "body_" + step.id, "data-step-id": step.id, onDragOver: onDragOver, onDragEnter: onDragEnter, onDragLeave: onDragLeave, onDrop: onDrop }, step.steps &&
+    return (react_1["default"].createElement("div", { className: "drag__item__body collapse", id: "body_" + step.id, "data-step-id": step.id, onDragOver: onDragOver, onDragEnter: onDragEnter, onDrop: onDrop, onDragEnd: onDragEnd }, step.steps &&
         step.steps.map(function (step) {
             return step && react_1["default"].createElement(DragItem_1.DragItem, { step: step, key: step.id });
         })));

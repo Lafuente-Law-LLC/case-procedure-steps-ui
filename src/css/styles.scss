@@ -1,10 +1,16 @@
 @import "bootstrap/scss/bootstrap.scss";
 
 .drag__item {
+  @extend .card;
   padding: 10;
 }
 
+.drag__item__body {
+  @extend .card-body;
+}
+
 .drag__item__head {
+  @extend .card-header;
   min-height: 3em;
   display: flex;
   @extend .shadow-sm;
@@ -73,9 +79,13 @@
   }
   50% {
     opacity: 0.5;
+    background-color: #000;
   }
 }
 
+.flash {
+  animation: flashAnimation 1s infinite;
+}
 .dragging {
   cursor: grab; /* Change cursor to grab icon */
   border: 2px dashed #aaa; /* Add a dashed border */
