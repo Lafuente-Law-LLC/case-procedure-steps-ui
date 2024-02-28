@@ -53,6 +53,9 @@ export default class StepNode {
     return this.node.getIndex();
   }
 
+  isAncestorOf(node: Node) {
+    return this.node.getPath().includes(node);
+  }
   siblingAtGivenIndex(index: number) {
     return this.siblingNodes[index];
   }

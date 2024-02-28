@@ -3,6 +3,8 @@ import { Button } from "react-bootstrap";
 import { Step } from "../../step/step";
 import { ArrowRight } from "react-bootstrap-icons";
 import { DragItemModal } from "./DragItemModal";
+import { removeClassesFromElements } from "../dragItemUtil";
+
 type DragItemHeadOptions = {
   step: Step;
 };
@@ -17,10 +19,34 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
     step.remove();
   };
 
-  const onDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+  const onDragStart = (e: React.DragEvent<HTMLElement>) => {
+    e.currentTarget.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const onDragOver = (e: React.DragEvent<HTMLElement>) => {
+    e.preventDefault();
+    const draggingElement = document.querySelector(".dragging");
     const currentTarget = e.currentTarget;
-    currentTarget.classList.add("dragging");  
-    e.dataTransfer.setData("text/plain", "This text may be dragged");
+    if (draggingElement === currentTarget) return;
+  };
+
+  const onDragEnd = (e: React.DragEvent<HTMLElement>) => {
+    removeClassesFromElements(["dragging", "drag-over", "above", "below"]);
+  };
+
+  const onDragEnter = (e: React.DragEvent<HTMLElement>) => {
+    e.preventDefault();
+    removeClassesFromElements(["drag-over"]);
+    const draggingElement = document.querySelector(".dragging");
+    if (!draggingElement) return;
+    const currentTarget = e.currentTarget;
+    if (draggingElement === currentTarget) {
+      return;
+    }
+    if (currentTarget.classList.contains("drag__item__head"))
+      e.stopPropagation();
+    currentTarget.classList.add("drag-over");
   };
 
   return (
@@ -28,6 +54,9 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
       className="drag__item__head"
       draggable
       onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      onDragOver={onDragOver}
+      onDragEnter={onDragEnter}
       data-step-id={step.id}
     >
       <div
@@ -38,7 +67,7 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
         <ArrowRight className="arrow-right" />
       </div>
       <div className="head__middle">
-        <div>{step.title}</div>
+        <div>{title}</div>
       </div>
       <div className="head__end">
         <DragItemModal step={step}></DragItemModal>

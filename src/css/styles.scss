@@ -10,6 +10,9 @@
   @extend .shadow-sm;
   border: grey 1px solid;
   border-radius: 1em;
+  transition: margin 0.3s ease;
+  margin: 5px;
+
   & .head__start {
     flex: 1;
     display: flex;
@@ -50,7 +53,32 @@
   }
 }
 
-.drag_over{
-  border: 2px dashed #000;
+.above {
+  border-top: 4px solid rgb(121, 129, 206); /* Highlight top border when dragging element is above */
+  border-bottom: 2px solid #aaa; /* Reset bottom border */
 }
 
+.below {
+  border-top: 2px solid #aaa; /* Reset top border */
+  border-bottom: 4px solid rgb(121, 129, 206); /* Highlight bottom border when dragging element is below */
+}
+.drag-over {
+  margin: 2em;
+}
+
+@keyframes flashAnimation {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.dragging {
+  cursor: grab; /* Change cursor to grab icon */
+  border: 2px dashed #aaa; /* Add a dashed border */
+  opacity: 0.7; /* Reduce opacity to indicate dragging */
+  animation: flashAnimation 1s infinite;
+}

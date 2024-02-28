@@ -32,9 +32,14 @@ class Step {
     this.stepNode.addAsChild(step.stepNode.node);
   }
 
+  isAncestorOf(step: Step) {
+    return this.stepNode.isAncestorOf(step.stepNode.node);
+  }
+
   findStepById(id: string) {
     return this.stepManager.searchById(id);
   }
+
 
   moveStepAboveSelf(step: Step) {
     this.stepNode.moveNodeAboveSelf(step.stepNode.node);
