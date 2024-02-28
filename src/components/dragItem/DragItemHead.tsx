@@ -1,11 +1,11 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 import { Step } from "../../step/step";
+import { EditText, EditTextarea } from "react-edit-text";
+
 import { ArrowRight } from "react-bootstrap-icons";
 import { DragItemModal } from "./DragItemModal";
-import {
-  removeClassesFromElements, 
-} from "../dragItemUtil";
+import { removeClassesFromElements } from "../dragItemUtil";
 
 type DragItemHeadOptions = {
   step: Step;
@@ -13,13 +13,6 @@ type DragItemHeadOptions = {
 
 export const DragItemHead = ({ step }: DragItemHeadOptions) => {
   const { title } = step;
-
-  const addNewStep = () => {
-    step.addNewStep();
-  };
-  const removeStep = () => {
-    step.remove();
-  };
 
   const onDragStart = (e: React.DragEvent<HTMLElement>) => {
     e.currentTarget.classList.add("dragging");
@@ -47,6 +40,13 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
     }
   };
 
+  const onChangeTitle = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { value } = event.target;
+    step.updateTitle(value);
+  };
+
   return (
     <div
       className="drag__item__head"
@@ -65,12 +65,10 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
         <ArrowRight className="arrow-right" />
       </div>
       <div className="head__middle">
-        <div>{title}</div>
+        <EditText value={title} onChange={onChangeTitle}></EditText>
       </div>
       <div className="head__end">
         <DragItemModal step={step}></DragItemModal>
-        <Button onClick={addNewStep}>Add</Button>
-        <Button onClick={removeStep}>Delete</Button>
       </div>
     </div>
   );

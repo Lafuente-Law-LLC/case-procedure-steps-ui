@@ -101,7 +101,6 @@ export const DragItemBody = ({ step }: DragItemOptions) => {
     removeClassesFromElements(["dragging", "drag-over", "above", "below"]);
   }, []);
 
-
   return (
     <div
       className="drag__item__body collapse"

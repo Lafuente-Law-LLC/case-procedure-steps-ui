@@ -2,25 +2,27 @@ import React, { useState } from "react";
 import { Step } from "../../step/step";
 import { Modal, Tab, Tabs } from "react-bootstrap";
 import { ThreeDotsVertical } from "react-bootstrap-icons";
+import {EditText, EditTextarea} from "react-edit-text";
 type DragItemOptions = {
   step: Step;
 };
 
 const ModalBody = ({ step }: DragItemOptions) => {
+  const changeSummary = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { value } = event.target;
+    step.updateSummary(value);
+  }
   return (
     <Tabs defaultActiveKey="summary" id="uncontrolled-tab-example">
       <Tab eventKey="summary" title="Summary">
         <div className="container mt-3">
-          <p>{step.summary}</p>
+          <EditTextarea value={step.summary} onChange={changeSummary}></EditTextarea>
         </div>
       </Tab>
       <Tab eventKey="callbacks" title="Callbacks">
         <div className="container">
-          <pre>
-          {step.callbacks && JSON.stringify(step.callbacks)}
-          </pre>
+          <pre>{step.callbacks && JSON.stringify(step.callbacks)}</pre>
         </div>
-        
       </Tab>
     </Tabs>
   );

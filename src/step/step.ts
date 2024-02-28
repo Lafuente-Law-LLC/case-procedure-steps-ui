@@ -22,6 +22,16 @@ class Step {
     this.stepManager.registerInstance(this);
   }
 
+  updateTitle(title: string) {
+    this.title = title;
+    this.callupdateCallbacks();
+  }
+
+  updateSummary(summary: string) {
+    this.summary = summary;
+    this.callupdateCallbacks();
+  }
+
   addNewStep() {
     const step = this.stepNode.addNewChild();
     this.callupdateCallbacks();

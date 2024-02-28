@@ -1,16 +1,10 @@
 @import "bootstrap/scss/bootstrap.scss";
-
-.drag__item {
-  @extend .card;
+@import "react-edit-text/dist/index.css";
+.drag__item { 
   padding: 10;
 }
 
-.drag__item__body {
-  @extend .card-body;
-}
-
 .drag__item__head {
-  @extend .card-header;
   min-height: 3em;
   display: flex;
   @extend .shadow-sm;
@@ -79,7 +73,7 @@
   }
   50% {
     opacity: 0.5;
-    background-color: #000;
+    background-color: rgb(116, 125, 211);
   }
 }
 
