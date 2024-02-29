@@ -1,6 +1,19 @@
 @import "bootstrap/scss/bootstrap.scss";
 @import "react-edit-text/dist/index.css";
-.drag__item { 
+
+body {
+  font-family: "Open-Sans", sans-serif;
+  font-size: 1.2em;
+  line-height: 1.5;
+  color: #333;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.drag__item {
+  font-family: "Open-Sans", sans-serif;
   padding: 10;
 }
 
