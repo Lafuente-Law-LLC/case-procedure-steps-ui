@@ -13,6 +13,12 @@ type DragItemHeadOptions = {
 
 export const DragItemHead = ({ step }: DragItemHeadOptions) => {
   const { title } = step;
+  const addStep = () => {
+    step.addNewStep();
+  }
+  const removeStep = () => {
+    step.remove()
+  }
 
   const onDragStart = (e: React.DragEvent<HTMLElement>) => {
     e.currentTarget.classList.add("dragging");
@@ -69,6 +75,10 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
       </div>
       <div className="head__end">
         <DragItemModal step={step}></DragItemModal>
+        <div className="row pt-3">
+          <div className="col fs-6" onClick={addStep}>Add</div>
+          <div className="col fs-6" onClick={removeStep}>Delete</div>
+        </div>
       </div>
     </div>
   );

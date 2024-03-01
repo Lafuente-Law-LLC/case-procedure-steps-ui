@@ -1,6 +1,13 @@
 @import "bootstrap/scss/bootstrap.scss";
 @import "react-edit-text/dist/index.css";
 
+
+
+.window{
+  max-height: 75vh;
+  overflow-y: scroll;
+}
+
 body {
   font-family: "Open-Sans", sans-serif;
   font-size: 1.2em;

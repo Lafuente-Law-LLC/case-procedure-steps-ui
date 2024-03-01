@@ -1,27 +1,30 @@
 import React, { useState } from "react";
 import { Step } from "../../step/step";
-import { Modal, Tab, Table, Tabs } from "react-bootstrap";
+import { Modal, ModalDialog, Tab, Table, Tabs } from "react-bootstrap";
 import { ThreeDotsVertical } from "react-bootstrap-icons";
 import { EditText, EditTextarea } from "react-edit-text";
+
 type DragItemOptions = {
   step: Step;
 };
 
-const WithArgs = ({ args }) => {
-  const {title, summary} = args;
+const LabelRow = ({ label, value }: { label: string; value: string }) => {
   return (
-    <div className="input">
-      {[title, summary].map((arg, index) => (
-        <div className="input-group" key={index}>
-          <div className="input-group-prepend"></div>
-          <span className="input-group-text" id="basic-addon1">
-            {arg}
-          </span>
-          <input className="form-control" type="text" value={arg} />
-        </div>
-      ))}
+    <div className="row">
+      <div className="col-4 fw-semibold text-secondary">{label}</div>
+      <div className="col-8">{value}</div>
     </div>
   );
+};
+
+const extractKeyValues = (obj: any) => {
+  const keyValues = [] as any;
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      keyValues.push({ label: key, value: obj[key] });
+    }
+  }
+  return keyValues;
 };
 
 const ModalBody = ({ step }: DragItemOptions) => {
@@ -57,7 +60,15 @@ const ModalBody = ({ step }: DragItemOptions) => {
                   <td>{callback.on}</td>
                   <td>{callback.run}</td>
                   <td>
-                    <WithArgs args={callback["with_args"]}></WithArgs>
+                    {extractKeyValues(callback.with_args).map(
+                      (keyValue, index) => (
+                        <LabelRow
+                          key={index}
+                          label={keyValue.label}
+                          value={keyValue.value}
+                        />
+                      )
+                    )}
                   </td>
                 </tr>
               ))}
@@ -75,7 +86,7 @@ export const DragItemModal = ({ step }: DragItemOptions) => {
   return (
     <>
       <ThreeDotsVertical className="three-dots-vertical" onClick={handleShow} />
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Header>
           <Modal.Title>{step.title}</Modal.Title>
         </Modal.Header>
