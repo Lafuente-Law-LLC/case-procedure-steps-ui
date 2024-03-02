@@ -3,12 +3,19 @@ import { Step } from "../../step/step";
 import { Modal, ModalDialog, Tab, Table, Tabs } from "react-bootstrap";
 import { ThreeDotsVertical } from "react-bootstrap-icons";
 import { EditText, EditTextarea } from "react-edit-text";
-
+import GhostAddButton from "../GhostAddButton";
+import AddFutureEvent from "../AddFutureEvent";
 type DragItemOptions = {
   step: Step;
 };
 
-const LabelRow = ({ label, value }: { label: string; value: string }) => {
+export const LabelRow = ({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) => {
   return (
     <div className="row">
       <div className="col-4 fw-semibold text-secondary">{label}</div>
@@ -72,8 +79,10 @@ const ModalBody = ({ step }: DragItemOptions) => {
                   </td>
                 </tr>
               ))}
+            <AddFutureEvent />
           </tbody>
         </Table>
+        <GhostAddButton />
       </Tab>
     </Tabs>
   );
