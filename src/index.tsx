@@ -16,15 +16,15 @@ const App: React.FC = () => {
   });
   const addStep = () => {
     rt.addNewStep();
-  }
+  };
   return (
     <>
-    <div className="container pt-4 border border-dark window">
-      {steps.map((step) => (
-        <DragItem step={step} key={step.id}></DragItem>
-      ))}
-    </div>
-    <button onClick={addStep}>Add</button>
+      <div className="container pt-4 border border-dark window">
+        {steps.map((step) => (
+          <DragItem step={step} key={step.id}></DragItem>
+        ))}
+      </div>
+      <button onClick={addStep}>Add</button>
     </>
   );
 };

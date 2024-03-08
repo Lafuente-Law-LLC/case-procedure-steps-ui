@@ -1,16 +1,20 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { CiSquarePlus } from "react-icons/ci";
 import {
   useFloating,
   autoUpdate,
   useHover,
   useInteractions,
-  offset,
-  flip,
   safePolygon,
+  useClick,
 } from "@floating-ui/react";
+
+
+
 const GhostAddButton = () => {
   const [isOpen, setOpen] = useState(false);
+  const [isHover, setHover] = useState(false);
+
   const { refs, floatingStyles, context } = useFloating({
     placement: "right",
     strategy: "absolute",
@@ -20,14 +24,11 @@ const GhostAddButton = () => {
     whileElementsMounted: autoUpdate,
   });
 
-  const hover = useHover(context, {
-    enabled: true,
-    handleClose: safePolygon(),
-  });
-  const { getReferenceProps, getFloatingProps } = useInteractions([hover]);
+  const click = useClick(context)
+  const { getReferenceProps, getFloatingProps } = useInteractions([click]);
 
   return (
-    <div className="ghost-add-button">
+    <div className="ghost-add-button" onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)} >
       <div className="head">
         <div ref={refs.setReference} {...getReferenceProps()}>
           <CiSquarePlus size={"2em"} />
@@ -41,7 +42,7 @@ const GhostAddButton = () => {
           ></div>
         )}
       </div>
-      <div className={"tail" + `${isOpen ? " hover" : ""}`}></div>
+      <div className={"tail" + `${ isHover? " hover" : ""}`}></div>
     </div>
   );
 };

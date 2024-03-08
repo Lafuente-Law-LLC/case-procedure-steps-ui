@@ -65,8 +65,7 @@ export default class StepNode {
       node.drop();
       return this.parentNode.addChildAtIndex(node, this.indexAmongSiblings);
     } catch (e) {
-      console.log(e);
-      debugger;
+      console.warn(e);
     }
   }
 
@@ -74,12 +73,9 @@ export default class StepNode {
     try {
       node.drop();
       return this.parentNode.addChildAtIndex(node, this.indexAmongSiblings + 1);
-    }catch(e){
-      console.log(e);
-      debugger;
+    } catch (e) {
+      console.warn(e);
     }
-
-
   }
 
   findNodeById(id: string) {
