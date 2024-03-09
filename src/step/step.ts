@@ -1,15 +1,15 @@
 import StepNode from "./stepNode";
 import StepManager from "./stepManager";
-import type { CallbackObj, StepObj } from "../types";
+import type {Callback} from "../types";
 
 class Step {
   title: string;
   summary: string;
   id: string;
-  callbacks?: CallbackObj[];
+  callbacks: Callback[];
   stepNode: StepNode;
   stepManager: StepManager;
-  constructor(dataObj: StepObj, stepNode: StepNode) {
+  constructor(dataObj: Partial<Step>, stepNode: StepNode) {
     if (!dataObj.id) {
       throw new Error("Step id is required");
     }

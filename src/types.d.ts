@@ -1,36 +1,20 @@
+import type { Step } from "../src/Step";
+
 export type Options = { childrenPropertyName: string };
-export type IdObj = {
+
+export interface CallbackManager {
+  update: (id: string, callback: Partial<CallbackWithId>) => void;
+  add: (callback: Partial<CallbackWithId>) => void;
+  remove: (id: string) => void;
+  find: (id: string) => CallbackWithId | undefined;
+}
+
+export interface Callback {
+  event: string;
+  function: string;
+  args: any;
+}
+
+export interface CallbackWithId extends Callback {
   id: string;
-  steps: IdObj[];
-};
-
-
-
-export interface CreateTaskCallback extends CallbackObj {
-  with_args: {
-    title: string;
-    summary: string;
-  };
-}
-
-
-export interface FutureEventCallback extends CallbackObj {
-  with_args: {
-    title: string;
-    date: string;
-    summary: string;
-  };
-}
-
-export interface CallbackObj {
-  on: string;
-  run: string;
-  with_args: any;
-}
-
-interface StepObj {
-  title?: string;
-  summary?: string;
-  id: string;
-  callbacks?: CallbackObj[];
 }
