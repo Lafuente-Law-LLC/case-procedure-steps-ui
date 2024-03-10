@@ -1,13 +1,9 @@
 import type { Step } from "../src/Step";
-
 export type Options = { childrenPropertyName: string };
-
-export interface CallbackManager {
-  update: (id: string, callback: Partial<CallbackWithId>) => void;
-  add: (callback: Partial<CallbackWithId>) => void;
-  remove: (id: string) => void;
-  find: (id: string) => CallbackWithId | undefined;
-}
+import type {
+  Managers,
+  PartialCallback
+} from "./components/callbacks/callbackManagers";
 
 export interface Callback {
   event: string;
@@ -18,3 +14,30 @@ export interface Callback {
 export interface CallbackWithId extends Callback {
   id: string;
 }
+
+interface AddAction {
+  manager: Managers;
+  type: "add";
+  payload: {
+    callback: PartialCallback
+  };
+}
+
+interface RemoveAction {
+  manager: Managers;
+  type: "remove";
+  payload: {
+    id: string;
+  };
+}
+
+interface UpdateAction {
+  manager: Managers;
+  type: "update";
+  payload: {
+    id: string;
+    callback: PartialCallback;
+  };
+}
+
+export type Action = AddAction | RemoveAction | UpdateAction;

@@ -1,10 +1,23 @@
 import React from "react";
-
-const CallbackTableRow = () => {
+import { CallbackWithId } from "../../types";
+import { extractKeyValues } from "./callbacksTableUtils";
+import LabelRow from "./LabelRow";
+const CallbackTableRow = ({
+  callbackWithId: callback,
+}: {
+  callbackWithId: CallbackWithId;
+}) => {
+  
   return (
-    <div>
-      <h1>CallbackTable</h1>
-    </div>
+    <tr>
+      <td>{callback.event}</td>
+      <td>{callback.function}</td>
+      <td>
+        {extractKeyValues(callback.args).map((keyValue, index) => (
+          <LabelRow key={index} label={keyValue.label} value={keyValue.value} />
+        ))}
+      </td>
+    </tr>
   );
 };
 

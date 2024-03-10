@@ -27,6 +27,10 @@ class Step {
     this.callupdateCallbacks();
   }
 
+  updateCallbacks(callbacks: Callback[]) {
+    this.callbacks = callbacks;
+    this.callupdateCallbacks();
+  }
   updateSummary(summary: string) {
     this.summary = summary;
     this.callupdateCallbacks();

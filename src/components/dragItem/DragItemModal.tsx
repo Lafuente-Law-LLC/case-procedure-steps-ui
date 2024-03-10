@@ -4,7 +4,7 @@ import { Modal, ModalDialog, Tab, Table, Tabs } from "react-bootstrap";
 import { ThreeDotsVertical } from "react-bootstrap-icons";
 import { EditText, EditTextarea } from "react-edit-text";
 import GhostAddButton from "../GhostAddButton";
-import AddFutureEvent from "../AddFutureEvent";
+import CallbacksTable from "../callbacks/CallbacksTable";
 type DragItemOptions = {
   step: Step;
 };
@@ -24,15 +24,6 @@ export const LabelRow = ({
   );
 };
 
-const extractKeyValues = (obj: any) => {
-  const keyValues = [] as any;
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      keyValues.push({ label: key, value: obj[key] });
-    }
-  }
-  return keyValues;
-};
 
 const ModalBody = ({ step }: DragItemOptions) => {
   const changeSummary = (
@@ -52,37 +43,7 @@ const ModalBody = ({ step }: DragItemOptions) => {
         </div>
       </Tab>
       <Tab eventKey="callbacks" title="Callbacks">
-        <Table>
-          <thead>
-            <tr>
-              <th>On</th>
-              <th>Run</th>
-              <th>With Args</th>
-            </tr>
-          </thead>
-          <tbody>
-            {step.callbacks &&
-              step.callbacks.map((callback, index) => (
-                <tr key={index}>
-                  <td>{callback.on}</td>
-                  <td>{callback.run}</td>
-                  <td>
-                    {extractKeyValues(callback.with_args).map(
-                      (keyValue, index) => (
-                        <LabelRow
-                          key={index}
-                          label={keyValue.label}
-                          value={keyValue.value}
-                        />
-                      )
-                    )}
-                  </td>
-                </tr>
-              ))}
-            <AddFutureEvent />
-          </tbody>
-        </Table>
-        <GhostAddButton />
+        <CallbacksTable step={step} /> 
       </Tab>
     </Tabs>
   );

@@ -82,3 +82,107 @@ console.log(workflowJSON);
 ```
 
 This example demonstrates basic usage and manipulation of a workflow using the Steps Management System. The system is flexible and can be extended to accommodate various workflow management needs.
+
+Certainly! Here's a detailed cheat sheet for using the Callback Manager Library:
+
+---
+
+# Callback Manager Library Cheat Sheet
+
+## Importing the Library
+
+```typescript
+import { EventCallbackManager, TaskCallbackManager } from 'callback-manager';
+```
+
+## Creating Callback Managers
+
+### EventCallbackManager
+
+```typescript
+const eventManager = new EventCallbackManager(initialCallbacks: CallbackWithId[]);
+```
+
+### TaskCallbackManager
+
+```typescript
+const taskManager = new TaskCallbackManager(initialCallbacks: CallbackWithId[]);
+```
+
+## Managing Callbacks
+
+### Adding a Callback
+
+```typescript
+manager.add(callback: Partial<T>);
+```
+
+### Updating a Callback
+
+```typescript
+manager.update(id: string, callback: Partial<T>);
+```
+
+### Removing a Callback
+
+```typescript
+manager.remove(id: string);
+```
+
+### Finding a Callback by ID
+
+```typescript
+const callback = manager.find(id: string);
+```
+
+## Types and Interfaces
+
+### CallbackWithId
+
+```typescript
+interface CallbackWithId {
+  id: string;
+  // Other callback properties...
+}
+```
+
+### PartialCallback
+
+```typescript
+type PartialCallback = Partial<EventCallback> & Partial<TaskCallback>;
+```
+
+### Managers
+
+```typescript
+type Managers = typeof EventCallbackManager | typeof TaskCallbackManager;
+```
+
+## Usage Example
+
+```typescript
+// Create an instance of EventCallbackManager with initial callbacks
+const eventManager = new EventCallbackManager([]);
+
+// Add a new event callback
+eventManager.add({
+  args: {
+    title: 'Event Title',
+    summary: 'Event Summary',
+    date: '2024-03-09T12:00:00Z',
+  },
+});
+
+// Update an existing callback
+eventManager.update('callbackId', { args: { date: '2024-03-10T12:00:00Z' } });
+
+// Remove a callback by ID
+eventManager.remove('callbackId');
+
+// Find a callback by ID
+const callback = eventManager.find('callbackId');
+```
+
+---
+
+This cheat sheet provides a quick reference for using the Callback Manager Library, including creating callback managers, managing callbacks, and understanding types and interfaces. Feel free to customize it further to suit your specific needs!

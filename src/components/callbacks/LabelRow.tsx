@@ -1,8 +1,4 @@
 import React from "react";
-
-
-
-
 const LabelRow = ({ label, value }: { label: string; value: string }) => {
   return (
     <div className="row">
