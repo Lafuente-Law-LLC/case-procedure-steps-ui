@@ -5,10 +5,12 @@ import {
   removeCallback,
 } from "./callbacksTableUtils";
 
-
 /**
- * Manages a list of callbacks, allowing for the addition, update, removal, and retrieval of callbacks by ID.
- * @template T - The type of callback, extending from CallbackWithId to ensure an ID property is present.
+ * Manages a list of callbacks, allowing for the addition, update, removal, and
+ * retrieval of callbacks by ID.
+ *
+ * @template T - The type of callback, extending from CallbackWithId to ensure
+ *   an ID property is present.
  */
 class CallbackManager<T extends CallbackWithId> {
   callbacks: CallbackWithId[] = [];

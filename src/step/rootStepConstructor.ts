@@ -14,8 +14,7 @@ const defaultSetupFunction = (data: any): FormattedStepObj => {
   data.id = data.id || v4();
   data.summary = data.summary || "";
   data.callbacks = data.callbacks || [];
-  data.children = data.steps || [];
-  delete data.steps;
+  data.children = data.steps || []; 
   return data;
 };
 

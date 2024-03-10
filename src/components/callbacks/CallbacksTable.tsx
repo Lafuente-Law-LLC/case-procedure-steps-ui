@@ -61,11 +61,11 @@ const CallbacksTable = ({ step }: { step: Step }) => {
     reducer,
     processCallbacks(step.callbacks)
   );
+
   useEffect(() => {
-      step.updateCallbacks(callbacks) 
-      console.log('callbacks', step)
+    step.updateCallbacks(callbacks);
   }, [callbacks]);
-  
+
   return (
     <>
       <Table>
@@ -86,6 +86,7 @@ const CallbacksTable = ({ step }: { step: Step }) => {
         items={[<Item callbacksDispatch={callbacksDispatch}></Item>]}
       />
     </>
+
   );
 };
 
