@@ -1,28 +1,9 @@
-import type { CallbackWithId } from "../../types";
+import type { CallbackWithId, EventCallback, TaskCallback } from "../../types";
 import CallbackManager from "./callbackManager";
 import { v4 } from "uuid";
-import {format} from "date-fns";
 
-const EVENTS = ["after_create", "complete"] as const;
 
-interface EventCallback extends CallbackWithId {
-  event: (typeof EVENTS)[number];
-  function: "create_future_event";
-  args: {
-    title: string;
-    summary: string;
-    date: string;
-  };
-}
-
-interface TaskCallback extends CallbackWithId {
-  event: (typeof EVENTS)[number];
-  function: "create_task";
-  args: {
-    title: string;
-    summary: string;
-  };
-}
+export const EVENTS = ["after_create", "complete"] as const;
 
 export class EventCallbackManager extends CallbackManager<EventCallback> {
   constructor(callbacks: CallbackWithId[]) {
@@ -33,7 +14,7 @@ export class EventCallbackManager extends CallbackManager<EventCallback> {
       args: {
         title: "",
         summary: "",
-        date: new Date().toISOString(), 
+        date: new Date().toISOString(),
       },
     }));
   }
@@ -53,5 +34,5 @@ export class TaskCallbackManager extends CallbackManager<TaskCallback> {
   }
 }
 
-export type PartialCallback = Partial<EventCallback> & Partial<TaskCallback>;
+
 export type Managers = typeof EventCallbackManager | typeof TaskCallbackManager;

@@ -4,14 +4,8 @@ import {
   findCallback,
   removeCallback,
 } from "./callbacksTableUtils";
+import { merge } from "lodash";
 
-/**
- * Manages a list of callbacks, allowing for the addition, update, removal, and
- * retrieval of callbacks by ID.
- *
- * @template T - The type of callback, extending from CallbackWithId to ensure
- *   an ID property is present.
- */
 class CallbackManager<T extends CallbackWithId> {
   callbacks: CallbackWithId[] = [];
   defaultCallbackFn: () => T;
@@ -25,11 +19,11 @@ class CallbackManager<T extends CallbackWithId> {
     if (index === -1) {
       throw new Error(`Callback with id ${id} not found`);
     }
-    this.callbacks[index] = { ...this.callbacks[index], ...callback };
+    this.callbacks[index] = merge(this.callbacks[index], callback);
   }
 
   add(callback: Partial<T> = {}) {
-    const newCallback = { ...this.defaultCallbackFn(), ...callback };
+    const newCallback = merge(this.defaultCallbackFn(), callback);
     this.callbacks.push(newCallback);
   }
 

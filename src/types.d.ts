@@ -3,14 +3,16 @@ import type { StepManager } from "../src/StepManager";
 import type TreeModel from "tree-model";
 import type { Node } from "tree-model";
 export type Options = { childrenPropertyName: string };
+import { EVENTS } from "./components/callbacks/callbackManagers";
+import CallbackManager from "./components/callbacks/callbackManager";
+import type { Managers } from "./components/callbacks/callbackManagers";
 
 import type {
   Managers,
   PartialCallback,
 } from "./components/callbacks/callbackManagers";
 
-
-
+/** Represent functions calls at specific points in the lifecycle of the Step */
 export interface Callback {
   event: string;
   function: string;
@@ -38,29 +40,47 @@ export interface CallbackWithId extends Callback {
   id: string;
 }
 
-interface AddAction {
-  manager: Managers;
-  type: "add";
-  payload: {
-    callback: PartialCallback;
+export interface EventCallback extends CallbackWithId {
+  event: (typeof EVENTS)[number];
+  function: "create_future_event";
+  args: {
+    title: string;
+    summary: string;
+    date: string;
   };
 }
 
-interface RemoveAction {
-  manager: Managers;
-  type: "remove";
-  payload: {
-    id: string;
+export interface TaskCallback extends CallbackWithId {
+  event: (typeof EVENTS)[number];
+  function: "create_task";
+  args: {
+    title: string;
+    summary: string;
   };
 }
+export type ActionType = "add" | "remove" | "update";
 
-interface UpdateAction {
+type BasicAction = {
   manager: Managers;
-  type: "update";
-  payload: {
-    id: string;
-    callback: PartialCallback;
-  };
-}
+  type: ActionType;
+};
 
-export type Action = AddAction | RemoveAction | UpdateAction;
+export type Action<T extends CallbackWithId> = BasicAction &
+  (
+    | {
+        type: "add";
+        payload: {
+          event: string;
+          args: Partial<T["args"]>;
+        };
+      }
+    | { type: "remove"; payload: { id: string } }
+    | {
+        type: "update";
+        payload: { id: string; event: string; args: Partial<T["args"]> };
+      }
+  );
+
+export type ActionDispatcher<T extends CallbackWithId> = React.Dispatch<
+  Action<T>
+>;

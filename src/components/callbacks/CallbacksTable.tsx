@@ -19,8 +19,9 @@ const reducer = (state: CallbackWithId[], action: Action) => {
   const { type, payload } = action;
   switch (type) {
     case "add":
-      if (payload.callback === undefined) return state;
-      manager.add(payload.callback);
+      if (payload === undefined) return state;
+      payload.id ? delete payload.id : null;
+      manager.add(...payload);
       return manager.callbacks;
     case "remove":
       if (payload.id === undefined) return state;
