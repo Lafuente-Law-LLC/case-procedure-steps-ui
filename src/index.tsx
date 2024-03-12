@@ -5,7 +5,7 @@ import "bootstrap/scss/bootstrap.scss";
 import { Step } from "./step/step";
 import RootStepConstructor from "./step/rootStepConstructor";
 import "./css/styles.scss";
-import { DragItem } from "./components/DragItem";
+import { DragItem } from "./components/DragItem/DragItem";
 
 const App: React.FC = () => {
   const constructorRt = new RootStepConstructor(sampleStep);

@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { Step } from "../step/step";
-import { DragItemHead } from "./dragItem/DragItemHead";
-import { DragItemBody } from "./dragItem/DragItemBody";
+import { Step } from "../../step/step";
+import { DragItemHead } from "./DragItemHead";
+import { DragItemBody } from "./DragItemBody";
 import "../css/styles.scss";
-import { removeClassesFromElements } from "./dragItemUtil";
+import { removeClassesFromElements } from "./helpers/dragItemUtil";
 type DragItemOptions = {
   step: Step;
 };

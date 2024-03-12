@@ -1,7 +1,7 @@
 import React from "react";
 import { CallbackWithId, Action, EventCallback } from "../../../types";
-import { EventCallbackManager } from "../callbackManagers";
-import DispatchFunctionFactory from "../dispatchFunctionFactory";
+import { EventCallbackManager } from "../helpers/callbackManagers";
+import DispatchFunctionFactory from "../helpers/dispatchFunctionFactory";
 export const EventTableRow = ({
   callbackWithId,
   dispatcher,

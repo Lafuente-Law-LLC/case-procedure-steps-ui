@@ -1,5 +1,8 @@
 type Point = { x: number; y: number };
-import { Step } from "../step/step";
+import { Step } from "../../../step/step";
+
+
+
 export function removeClassesFromElements(classes: string[]) {
   classes.forEach((className) => {
     const elements = document.querySelectorAll<HTMLElement>(`.${className}`);

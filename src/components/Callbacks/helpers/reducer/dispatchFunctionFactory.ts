@@ -1,6 +1,6 @@
-import type { CallbackWithId, ActionDispatcher } from "../../types";
-import type { Managers } from "./callbackManagers";
-import { EVENTS } from "./callbackManagers";
+import type { CallbackWithId, ActionDispatcher } from "../../../../types";
+import type { Managers } from "../manager/callbackManagers";
+import { EVENTS } from "../manager/callbackManagers";
 
 function isEvent(input: string): input is (typeof EVENTS)[number] {
   return EVENTS.includes(input as any);

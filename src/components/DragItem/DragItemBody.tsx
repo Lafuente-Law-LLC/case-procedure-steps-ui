@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback} from "react";
 import { Step } from "../../step/step";
-import { DragItem } from "../DragItem";
+import { DragItem } from "./DragItem";
 import {
   closestElement,
   removeClassesFromElements,
@@ -11,7 +11,7 @@ import {
   getFilteredChildren,
   returnStepFromElement,
   throwIfCondition,
-} from "../dragItemUtil";
+} from "./helpers/dragItemUtil";
 
 type DragItemOptions = {
   step: Step;

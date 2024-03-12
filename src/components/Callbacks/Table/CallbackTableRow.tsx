@@ -1,6 +1,6 @@
 import React from "react";
-import { CallbackWithId } from "../../types";
-import { extractKeyValues } from "./callbacksTableUtils";
+import { CallbackWithId } from "../../../types";
+import { extractKeyValues } from "../helpers/callbacksTableUtils";
 import LabelRow from "./LabelRow";
 
 

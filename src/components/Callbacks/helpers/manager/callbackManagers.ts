@@ -1,15 +1,13 @@
-import type { CallbackWithId, EventCallback, TaskCallback } from "../../types";
+import type { CallbackWithId } from "../../../../types";
+import type { EventCallback, TaskCallback } from "../../types";
 import CallbackManager from "./callbackManager";
 import { v4 } from "uuid";
-
-
-export const EVENTS = ["after_create", "complete"] as const;
 
 export class EventCallbackManager extends CallbackManager<EventCallback> {
   constructor(callbacks: CallbackWithId[]) {
     super(callbacks, () => ({
       id: v4(),
-      event: "after_create",
+      event: "",
       function: "create_future_event",
       args: {
         title: "",
@@ -24,7 +22,7 @@ export class TaskCallbackManager extends CallbackManager<TaskCallback> {
   constructor(callbacks: CallbackWithId[]) {
     super(callbacks, () => ({
       id: v4(),
-      event: "after_create",
+      event: "",
       function: "create_task",
       args: {
         title: "",
@@ -35,4 +33,3 @@ export class TaskCallbackManager extends CallbackManager<TaskCallback> {
 }
 
 
-export type Managers = typeof EventCallbackManager | typeof TaskCallbackManager;

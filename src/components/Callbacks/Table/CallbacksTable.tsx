@@ -1,42 +1,12 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { Table } from "react-bootstrap";
-import { Step } from "../../step/step";
-import { CallbackWithId, Action } from "../../types";
-import { processCallbacks } from "./callbacksTableUtils";
+import { Step } from "../../../step/step";
+import { CallbackWithId, Action } from "../../../types";
+import { processCallbacks } from "../helpers/callbacksTableUtils";
 import CallbackTableRow from "./CallbackTableRow";
-import GhostAddButton from "../GhostAddButton";
-import { EventCallbackManager } from "./callbackManagers";
-const reducer = (state: CallbackWithId[], action: Action) => {
-  if (
-    action.payload === undefined ||
-    action.type === undefined ||
-    action.manager === undefined
-  ) {
-    return state;
-  }
-
-  const manager = new action.manager(state);
-  const { type, payload } = action;
-  switch (type) {
-    case "add":
-      if (payload === undefined) return state;
-      payload.id ? delete payload.id : null;
-      manager.add(...payload);
-      return manager.callbacks;
-    case "remove":
-      if (payload.id === undefined) return state;
-      manager.remove(payload.id);
-      return manager.callbacks;
-    case "update":
-      if (payload.id === undefined || payload.callback === undefined)
-        return state;
-      manager.update(payload.id, payload.callback);
-      return manager.callbacks;
-    default:
-      return state;
-  }
-};
-
+import GhostAddButton from "../../GhostAddButton";
+import { EventCallbackManager } from "../helpers/manager/callbackManagers";
+import reducer from "../helpers/reducer/reducerFunction";
 const Item = ({
   callbacksDispatch,
 }: {

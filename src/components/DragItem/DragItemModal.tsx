@@ -4,7 +4,7 @@ import { Modal, ModalDialog, Tab, Table, Tabs } from "react-bootstrap";
 import { ThreeDotsVertical } from "react-bootstrap-icons";
 import { EditText, EditTextarea } from "react-edit-text";
 import GhostAddButton from "../GhostAddButton";
-import CallbacksTable from "../callbacks/CallbacksTable";
+import CallbacksTable from "../Callbacks/Table/CallbacksTable";
 type DragItemOptions = {
   step: Step;
 };

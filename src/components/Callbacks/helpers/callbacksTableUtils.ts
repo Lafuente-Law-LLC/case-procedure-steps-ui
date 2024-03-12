@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import type { Callback, CallbackWithId } from "../../types";
+import type { Callback, CallbackWithId } from "../../../types";
 
 export const processCallbacks = (callbacks: Callback[]): CallbackWithId[] => {
   return callbacks.map((callback) => ({ ...callback, id: uuidv4() }));

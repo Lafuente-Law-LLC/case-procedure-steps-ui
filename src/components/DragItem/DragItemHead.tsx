@@ -5,7 +5,7 @@ import { EditText, EditTextarea } from "react-edit-text";
 
 import { ArrowRight } from "react-bootstrap-icons";
 import { DragItemModal } from "./DragItemModal";
-import { removeClassesFromElements } from "../dragItemUtil";
+import { removeClassesFromElements } from "./helpers/dragItemUtil";
 
 type DragItemHeadOptions = {
   step: Step;
