@@ -61,11 +61,13 @@ const reducer: TReducer<EventCallback | TaskCallback> = (state, action) => {
       return manager.callbacks;
     case "update":
       if (data === undefined || data.id === undefined) return state;
-      manager.update(data.id, { event: data.event, args: data.args });
+      manager.update(data.id, data);
       return manager.callbacks;
     default:
       return state;
   }
 };
 
+
+export type Dispatcher = React.Dispatch<Action<EventCallback | TaskCallback>>;
 export default reducer;

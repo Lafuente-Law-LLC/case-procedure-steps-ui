@@ -1,59 +1,45 @@
-import type { CallbackWithId, ActionDispatcher } from "../../../../types";
-import type { Managers } from "../manager/callbackManagers";
-import { EVENTS } from "../manager/callbackManagers";
+import type { Dispatcher } from "./reducerFunction";
+import type { EventCallback, TaskCallback } from "../../types";
+import type { CallbackWithId } from "../../../../types";
+import {
+  TaskCallbackManager,
+  EventCallbackManager,
+} from "../manager/callbackManagers";
 
-function isEvent(input: string): input is (typeof EVENTS)[number] {
-  return EVENTS.includes(input as any);
-}
-
-const DispatchFunctionFactory = <T extends CallbackWithId>(
-  dispatcher: ActionDispatcher<T>,
-  manager: Managers,
-  callbackWithId: T,
+const dispatchFunctionFactory = (
+  callback: CallbackWithId,
+  dispatcher: Dispatcher
 ) => {
-  const updateEvent = (event: string) => {
-    if (!isEvent(event)) return;
-    dispatcher({
-      type: "update",
-      manager: manager,
-      payload: {
-        id: callbackWithId.id,
-        event: event,
-        args: { ...callbackWithId.args },
-      },
-    });
-  };
+  const manager =
+    callback.function == "create_future_event"
+      ? EventCallbackManager
+      : TaskCallbackManager;
 
-  const createArgsUpdater = (x: string) => {
-    return (value: string) => {
-      if (!isEvent(callbackWithId.event)) return;
-      dispatcher({
-        type: "update",
-        manager: manager,
-        payload: {
-          id: callbackWithId.id,
-          event: callbackWithId.event,
-          args: { ...callbackWithId.args, [x]: value },
-        },
-      });
-    };
+  const add = (data: any) => {
+    dispatcher({
+      manager: manager,
+      type: "add",
+      data: data,
+    });
   };
 
   const remove = () => {
     dispatcher({
-      type: "remove",
       manager: manager,
-      payload: { 
-        id: callbackWithId.id,
-      },
+      type: "remove",
+      data: { id: callback.id },
     });
   };
 
-  return {
-    updateEvent,
-    createArgsUpdater,
-    remove,
+  const update = (data: any) => {
+    dispatcher({
+      manager: manager,
+      type: "update",
+      data: { id: callback.id, ...data },
+    });
   };
+
+  return { add, remove, update };
 };
 
-export default DispatchFunctionFactory;
+export default dispatchFunctionFactory;

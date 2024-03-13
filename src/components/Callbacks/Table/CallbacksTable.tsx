@@ -1,26 +1,18 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { Table } from "react-bootstrap";
 import { Step } from "../../../step/step";
-import { CallbackWithId, Action } from "../../../types";
 import { processCallbacks } from "../helpers/callbacksTableUtils";
 import CallbackTableRow from "./CallbackTableRow";
 import GhostAddButton from "../../GhostAddButton";
 import { EventCallbackManager } from "../helpers/manager/callbackManagers";
 import reducer from "../helpers/reducer/reducerFunction";
-const Item = ({
-  callbacksDispatch,
-}: {
-  callbacksDispatch: React.Dispatch<Action>;
-}) => {
-  const add = () => {
-    callbacksDispatch({
-      type: "add",
-      manager: EventCallbackManager,
-      payload: { callback: { event: "after_create" } },
-    });
+import dispatchFunctionFactory from "../helpers/reducer/dispatchFunctionFactory";
+const Item = ({ add }: { add: (data: any) => void }) => {
+  const addFn = (e: React.MouseEvent<HTMLElement> | undefined) => {
+    add({});
   };
   return (
-    <div role="button" className="btn btn-sm btn-primary" onClick={add}>
+    <div role="button" className="btn btn-sm btn-primary" onClick={addFn}>
       Add Event
     </div>
   );
@@ -28,10 +20,17 @@ const Item = ({
 
 const CallbacksTable = ({ step }: { step: Step }) => {
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [callbacks, callbacksDispatch] = useReducer<typeof reducer>(
+  const [callbacks, callbacksDispatch] = useReducer(
     reducer,
     processCallbacks(step.callbacks)
   );
+
+  const addFunction = (data: any) =>
+    callbacksDispatch({
+      type: "add",
+      manager: EventCallbackManager,
+      data: data,
+    });
 
   useEffect(() => {
     step.updateCallbacks(callbacks);
@@ -49,15 +48,16 @@ const CallbacksTable = ({ step }: { step: Step }) => {
         </thead>
         <tbody>
           {callbacks.map((callback) => (
-            <CallbackTableRow key={callback.id} callbackWithId={callback} />
+            <CallbackTableRow
+              key={callback.id}
+              callbackWithId={callback}
+              dispatcher={callbacksDispatch}
+            />
           ))}
         </tbody>
       </Table>
-      <GhostAddButton
-        items={[<Item callbacksDispatch={callbacksDispatch}></Item>]}
-      />
+      <GhostAddButton items={[<Item add={addFunction}></Item>]} />
     </>
-
   );
 };
 
