@@ -19,7 +19,7 @@ const Item = ({ add }: { add: (data: any) => void }) => {
 };
 
 const CallbacksTable = ({ step }: { step: Step }) => {
-  const [editMode, setEditMode] = useState<boolean>(false);
+  
   const [callbacks, callbacksDispatch] = useReducer(
     reducer,
     processCallbacks(step.callbacks)

@@ -105,6 +105,17 @@ body {
   animation: flashAnimation 1s infinite;
 }
 
+.label-row-component {
+  @extend .row;
+  & .label {
+    @extend .col-4;
+    @extend .text-secondary;
+  }
+  & .value {
+    @extend .col-8;
+  }
+}
+
 .ghost-add-button {
   position: relative;
   display: flex;

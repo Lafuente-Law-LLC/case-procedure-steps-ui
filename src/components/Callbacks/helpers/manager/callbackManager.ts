@@ -24,7 +24,7 @@ class CallbackManager<T extends CallbackWithId> {
     this.callbacks = processCallbacks(callbacks);
   }
 
-  update(id: string, data: any = {}) {
+  update(id: string, data: any = {}) { 
     const index = this.callbacks.findIndex((c) => c.id === id);
     if (index === -1) {
       throw new Error(`Callback with id ${id} not found`);

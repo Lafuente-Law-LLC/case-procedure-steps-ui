@@ -1,5 +1,4 @@
 import type { Dispatcher } from "./reducerFunction";
-import type { EventCallback, TaskCallback } from "../../types";
 import type { CallbackWithId } from "../../../../types";
 import {
   TaskCallbackManager,

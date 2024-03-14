@@ -4,8 +4,14 @@ export type Option = {
   value: string;
   label: string;
 };
-const EditableSelect = ({ options }: { options: Option[] }) => {
-  const [value, setValue] = useState("");
+const EditableSelect = ({
+  options,
+  initialValue,
+}: {
+  options: Option[];
+  initialValue?: string;
+}) => {
+  const [value, setValue] = useState(initialValue || "");
   const [isEditing, setIsEditing] = useState(false);
 
   const handleChange = (

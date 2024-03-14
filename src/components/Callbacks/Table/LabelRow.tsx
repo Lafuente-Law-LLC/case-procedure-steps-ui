@@ -1,28 +1,43 @@
 import React from "react";
-import type { Dispatcher } from "../helpers/reducer/reducerFunction";
-import {
-  TaskCallbackManager,
-  EventCallbackManager,
-} from "../helpers/manager/callbackManagers";
-import { EditText } from "react-edit-text";
-const LabelRow = ({
+type ChangeFunction = (e: React.ChangeEvent<HTMLInputElement>) => void;
+
+const EditableInput = ({
   label,
   value,
-  update,
+  changeFunction,
 }: {
   label: string;
   value: string;
-  update: (data: any) => void;
+  changeFunction: ChangeFunction;
 }) => {
-  const updateText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    update({ [label.toLowerCase()]: e.target.value });
-  };
+  const type = label === "date" ? "date" : "text";
+  return <input type={type} value={value} onChange={changeFunction} />;
+};
 
+const LabelRow = ({
+  editMode,
+  label,
+  value,
+  changeFunction,
+}: {
+  editMode: boolean;
+  label: string;
+  value: string;
+  changeFunction: ChangeFunction;
+}) => {
   return (
-    <div className="row">
-      <div className="col-4 fw-semibold text-secondary">{label}</div>
-      <div className="col-8">
-        <EditText defaultValue={value} onChange={update}></EditText>
+    <div className="label-row-component">
+      <div className="label">{label}</div>
+      <div className="value">
+        {!editMode ? (
+          value
+        ) : (
+          <EditableInput
+            label={label}
+            value={value}
+            changeFunction={changeFunction}
+          ></EditableInput>
+        )}
       </div>
     </div>
   );

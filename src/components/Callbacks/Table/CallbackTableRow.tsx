@@ -2,12 +2,6 @@ import React from "react";
 import { CallbackWithId } from "../../../types";
 import { extractKeyValues } from "../helpers/callbacksTableUtils";
 import LabelRow from "./LabelRow";
-import Form from "react-bootstrap/Form";
-import {
-  TaskCallbackManager,
-  EventCallbackManager,
-} from "../helpers/manager/callbackManagers";
-
 import type { Dispatcher } from "../helpers/reducer/reducerFunction";
 import dispatchFunctionFactory from "../helpers/reducer/dispatchFunctionFactory";
 
@@ -23,26 +17,30 @@ const CallbackTableRow = ({
     remove,
     update: updateFn,
   } = dispatchFunctionFactory(callback, dispatcher);
+
+  const onChange = (label: string, value: string) => {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      const id = callback.id; 
+      updateFn({ args: { [label]: event.target.value } });
+    };
+  };
+
   return (
     <tr>
-      <td>
-        <Form.Select value={callback.event}>
-          <option></option>
-          <option value="on_complete"> On Complete</option>
-          <option value="after_create">After Create</option>
-        </Form.Select>
-      </td>
+      <td>{callback.event}</td>
       <td>{callback.function}</td>
       <td>
         {extractKeyValues(callback.args).map((keyValue, index) => (
           <LabelRow
+            editMode={true}
             key={index}
             label={keyValue.label}
             value={keyValue.value}
-            update={updateFn}
+            changeFunction={onChange(keyValue.label, keyValue.value)}
           />
         ))}
       </td>
+      <div>{callback.id}</div>
     </tr>
   );
 };
