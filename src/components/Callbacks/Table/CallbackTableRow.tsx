@@ -2,6 +2,7 @@ import React from "react";
 import { CallbackWithId } from "../../../types";
 import { extractKeyValues } from "../helpers/callbacksTableUtils";
 import LabelRow from "./LabelRow";
+import Form from "react-bootstrap/Form";
 import {
   TaskCallbackManager,
   EventCallbackManager,
@@ -24,7 +25,13 @@ const CallbackTableRow = ({
   } = dispatchFunctionFactory(callback, dispatcher);
   return (
     <tr>
-      <td>{callback.event}</td>
+      <td>
+        <Form.Select value={callback.event}>
+          <option></option>
+          <option value="on_complete"> On Complete</option>
+          <option value="after_create">After Create</option>
+        </Form.Select>
+      </td>
       <td>{callback.function}</td>
       <td>
         {extractKeyValues(callback.args).map((keyValue, index) => (

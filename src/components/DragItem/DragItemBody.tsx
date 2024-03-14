@@ -1,4 +1,4 @@
-import React, { useCallback} from "react";
+import React, { useCallback } from "react";
 import { Step } from "../../step/step";
 import { DragItem } from "./DragItem";
 import {
