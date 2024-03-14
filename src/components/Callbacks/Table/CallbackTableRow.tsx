@@ -12,18 +12,7 @@ const CallbackTableRow = ({
   callbackWithId: CallbackWithId;
   dispatcher: Dispatcher;
 }) => {
-  const {
-    add: addFn,
-    remove,
-    update: updateFn,
-  } = dispatchFunctionFactory(callback, dispatcher);
-
-  const onChange = (label: string, value: string) => {
-    return (event: React.ChangeEvent<HTMLInputElement>) => {
-      const id = callback.id; 
-      updateFn({ args: { [label]: event.target.value } });
-    };
-  };
+  
 
   return (
     <tr>

@@ -5,6 +5,7 @@ import {
   removeCallback,
 } from "../callbacksTableUtils";
 import { merge } from "lodash";
+
 /**
  * Manages a collection of callbacks, providing functionality to add, update,
  * find, and remove callbacks. This class ensures efficient handling of callback
@@ -16,15 +17,19 @@ import { merge } from "lodash";
  * @template T - A type extending CallbackWithId, specifying the structure of
  *   the callbacks managed by this class.
  */
-class CallbackManager<T extends CallbackWithId> {
+
+class CallbackManager {
   callbacks: CallbackWithId[] = [];
-  defaultCallbackFn: () => T;
-  constructor(callbacks: CallbackWithId[], defaultCallbackFn: () => T) {
+  defaultCallbackFn: ()=> CallbackWithId;
+  constructor(
+    callbacks: CallbackWithId[],
+    defaultCallbackFn: <T extends CallbackWithId>() => T,
+  ) {
     this.defaultCallbackFn = defaultCallbackFn;
     this.callbacks = processCallbacks(callbacks);
   }
 
-  update(id: string, data: any = {}) { 
+  update(id: string, data: any = {}) {
     const index = this.callbacks.findIndex((c) => c.id === id);
     if (index === -1) {
       throw new Error(`Callback with id ${id} not found`);

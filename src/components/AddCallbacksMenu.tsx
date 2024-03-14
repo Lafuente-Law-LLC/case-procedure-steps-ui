@@ -7,7 +7,7 @@ import {
   useClick,
 } from "@floating-ui/react";
 
-const GhostAddButton = ({ items }: { items: React.JSX.Element[] }) => {
+const AddCallbacksMenu = ({children}:React.PropsWithChildren) => {
   const [isOpen, setOpen] = useState(false);
   const [isHover, setHover] = useState(false);
 
@@ -25,7 +25,7 @@ const GhostAddButton = ({ items }: { items: React.JSX.Element[] }) => {
 
   return (
     <div
-      className="ghost-add-button"
+      className="add-callbacks-button"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
@@ -35,14 +35,12 @@ const GhostAddButton = ({ items }: { items: React.JSX.Element[] }) => {
         </div>
         {isOpen && (
           <div
-            className="menu-fl"
+            className="menu"
             ref={refs.setFloating}
             style={floatingStyles}
             {...getFloatingProps()}
           >
-            {items.map((item, index) => (
-              <div key={index}>{item}</div>
-            ))}
+            {children}
           </div>
         )}
       </div>
@@ -51,4 +49,4 @@ const GhostAddButton = ({ items }: { items: React.JSX.Element[] }) => {
   );
 };
 
-export default GhostAddButton;
+export default AddCallbacksMenu;

@@ -1,73 +1,43 @@
 import type { CallbackWithId } from "../../../../types";
-import type { Reducer } from "react";
-import { EventCallback, TaskCallback } from "../../types";
+import { merge } from "lodash";
+export type Action =
+  | { type: "add"; data: CallbackWithId }
+  | { type: "remove"; data: { id: string } }
+  | { type: "update"; data: { id: string } & Partial<CallbackWithId> };
 
-import type {
-  EventCallbackManager,
-  TaskCallbackManager,
-} from "../manager/callbackManagers";
-export type ActionType = "add" | "remove" | "update";
-
-export type BaseAction<T extends CallbackWithId> = {
-  manager: T extends EventCallback
-    ? typeof EventCallbackManager
-    : T extends TaskCallback
-      ? typeof TaskCallbackManager
-      : never;
-  type: ActionType;
+const isACallbackWithId = (data: any): data is CallbackWithId => {
+  return (
+    data !== undefined &&
+    data.id !== undefined &&
+    data.event !== undefined &&
+    data.function !== undefined &&
+    data.args !== undefined
+  );
 };
 
-export type Action<T extends CallbackWithId> = BaseAction<T> &
-  (
-    | {
-        type: "add";
-        data: {
-          event: string;
-          args: Partial<T["args"]>;
-        };
-      }
-    | { type: "remove"; data: { id: string } }
-    | {
-        type: "update";
-        data: { id: string; event: string; args: Partial<T["args"]> };
-      }
-  );
 
-export type ActionDispatcher<T extends CallbackWithId> = React.Dispatch<
-  Action<T>
->;
-
-type TReducer<T extends CallbackWithId> = Reducer<CallbackWithId[], Action<T>>;
-
-const reducer: TReducer<EventCallback | TaskCallback> = (state, action) => {
-  if (
-    action.data === undefined ||
-    action.type === undefined ||
-    action.manager === undefined
-  ) {
+const reducer = (state: CallbackWithId[], action: Action) => {
+  if (action.data === undefined || action.type === undefined) {
     return state;
   }
-
-  const manager = new action.manager(state);
   const { type, data } = action;
   switch (type) {
     case "add":
-      if (data === undefined) return state;
-      manager.add(data);
-      return manager.callbacks;
+      if (!isACallbackWithId(data)) return state;
+      return [...state, data]
     case "remove":
-      if (data.id === undefined) return state;
-      manager.remove(data.id);
-      return manager.callbacks;
+      if (!isACallbackWithId(data)) return state;
+      return state.filter((callback) => callback.id !== data.id);
     case "update":
-      if (data === undefined || data.id === undefined) return state;
-      manager.update(data.id, data);
-      return manager.callbacks;
+      return state.map((callback) =>
+        callback.id === action.data.id
+          ? merge({}, callback, action.data)
+          : callback,
+      );
     default:
       return state;
   }
 };
 
-
-export type Dispatcher = React.Dispatch<Action<EventCallback | TaskCallback>>;
+export type Dispatcher = React.Dispatch<Action>;
 export default reducer;
