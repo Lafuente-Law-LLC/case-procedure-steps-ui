@@ -11,7 +11,11 @@ const EditableInput = ({
   changeFunction: ChangeFunction;
 }) => {
   const type = label === "date" ? "date" : "text";
-  return <input type={type} value={value} onChange={changeFunction} />;
+  return (
+
+      <input type={type} value={value} onChange={changeFunction} />
+
+  );
 };
 
 const LabelRow = ({

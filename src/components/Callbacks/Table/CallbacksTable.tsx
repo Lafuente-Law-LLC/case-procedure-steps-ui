@@ -7,6 +7,7 @@ import reducer from "../helpers/reducer/reducerFunction";
 import dispatchFunctionFactory from "../helpers/reducer/dispatchFunctionFactory";
 import AddCallbacksMenu from "../../AddCallbacksMenu";
 import type { EventCallback, TaskCallback } from "../types";
+import { v4 } from "uuid";
 import { CallbackWithId } from "../../../types";
 
 type MenuItemProps = {
@@ -18,12 +19,46 @@ type MenuItemProps = {
   type: "event" | "task";
 };
 
-const MenuItem = ({ text, defaultFn, type }: MenuItemProps) => {
+const eventCreationFn = (): EventCallback => {
+  return {
+    id: v4(),
+    event: "",
+    function: "create_future_event",
+    args: {
+      title: "",
+      summary: "",
+      date: "",
+    },
+  };
+};
 
-  const addFn = (e: React.MouseEvent<HTMLElement>) => {};
+const taskCreationFn = (): TaskCallback => {
+  return {
+    id: v4(),
+    event: "",
+    function: "create_task",
+    args: {
+      title: "",
+      summary: "",
+    },
+  };
+};
+
+const MenuItem = ({ text, defaultFn, type }: MenuItemProps) => {
+  if (type !== "event" && type !== "task") {
+    throw new Error("Invalid type");
+  }
+  const fn = type === "event" ? eventCreationFn : taskCreationFn;
+
+  const addFn = (e: React.MouseEvent<HTMLElement>) => {
+    defaultFn<CallbackWithId>(fn, {});
+  };
   return (
-    <div role="button" className="btn btn-sm btn-primary" onClick={addFn}>
-      Add Event
+    <div className={'menu-item'}>
+    <div className="btn btn-sm btn-primary" onClick={addFn}>
+      {text}
+    </div>
+      
     </div>
   );
 };
@@ -59,10 +94,25 @@ const CallbacksTable = ({ step }: { step: Step }) => {
             />
           ))}
         </tbody>
-        <AddCallbacksMenu>
-          <button>Hello</button>
-        </AddCallbacksMenu>
       </Table>
+      <AddCallbacksMenu>
+        <MenuItem text="Add Event" defaultFn={addCallbackFn} type="event" />
+        <MenuItem text="Add Task" defaultFn={addCallbackFn} type="task" />
+        <div role="menuitem" tabindex="-1" id=":r2i:" class="menu-item">
+  <div class="menu-item-content">
+    <div class="menu-item-icon">
+      <img src="/images/blocks/text/en-US.png" referrerpolicy="same-origin" class="icon-image">
+    </div>
+    <div class="menu-item-text">
+      <div class="text-container">
+        <div class="text">Text</div>
+      </div>
+      <div class="description">Just start writing with plain text.</div>
+    </div>
+  </div>
+</div>
+
+      </AddCallbacksMenu>
     </>
   );
 };

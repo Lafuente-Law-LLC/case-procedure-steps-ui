@@ -119,13 +119,31 @@ body {
 .add-callbacks-button {
   position: relative;
   display: flex;
-  & .menu {
-    min-height: 150px;
-    width: 100px;
 
-    border-radius: 5px;
-    background-color: #f4f4f4;
-    padding: 5px;
+  & .head {
+    & .menu {
+      min-height: 150px;
+      width: 100px;
+      border-radius: 5px;
+      background-color: #f4f4f4;
+      padding: 5px;
+      & .menu-item {
+        color: rgb(55, 53, 47);
+        fill: currentcolor;
+        line-height: 1.5;
+        pointer-events: auto;
+        outline: 0;
+        box-sizing: border-box;
+        user-select: none;
+        transition: background 20ms ease-in 0s;
+        cursor: pointer;
+        width: calc(100% - 8px);
+        margin-left: 4px;
+        margin-right: 4px;
+        border-radius: 4px;
+        background: rgba(55, 53, 47, 0.08);
+      }
+    }
   }
   & .tail {
     flex: 1;
@@ -134,3 +152,98 @@ body {
     }
   }
 }
+
+input {
+  max-width: 100%;
+  width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word;
+  caret-color: rgb(55, 53, 47);
+  padding: 3px 2px;
+  min-height: 1em;
+  color: rgb(55, 53, 47);
+  -webkit-text-fill-color: rgba(55, 53, 47, 0.5);
+  border: none; /* Optionally, to remove the default input border */
+  background-color: transparent; /* Optionally, to make the input background transparent */
+  border-radius: 8px;
+}
+
+input:focus {
+  outline: 0;
+  border-color: #3399ff;
+  box-shadow: 0 0 0 3px #b6daff;
+}
+
+.menu-item {
+  user-select: none;
+  transition: background 20ms ease-in 0s;
+  cursor: pointer;
+  width: calc(100% - 8px);
+  margin-left: 4px;
+  margin-right: 4px;
+  border-radius: 4px;
+  background: rgba(55, 53, 47, 0.08);
+}
+
+.menu-item-content {
+  display: flex;
+  align-items: center;
+  line-height: 120%;
+  width: 100%;
+  user-select: none;
+  min-height: 45px;
+  font-size: 14px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.menu-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  margin-right: 4px;
+  margin-top: 1px;
+  align-self: flex-start;
+}
+
+.icon-image {
+  display: block;
+  object-fit: cover;
+  border-radius: 4px;
+  background: white;
+  width: 46px;
+  height: 46px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px;
+}
+
+.menu-item-text {
+  margin-left: 6px;
+  margin-right: 12px;
+  min-width: 0px;
+  flex: 1 1 auto;
+}
+
+.text-container {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+}
+
+.text {
+  margin-right: 6px;
+}
+
+.description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgb(120, 119, 116);
+  margin-top: 2px;
+  font-size: 12px;
+}
+
