@@ -4,7 +4,6 @@ import { v4 } from "uuid";
 import StepManager from "./stepManager";
 import type { Node } from "../types";
 
-
 export default class StepNode {
   node: Node;
   rootNode: Node;

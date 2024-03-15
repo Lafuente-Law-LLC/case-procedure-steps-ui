@@ -41,10 +41,10 @@ export default class StepManager {
     return Array.from(this.registeredSteps).find((step) => step.id === id);
   }
 
-
   /**
-   * Given a node, returns the root node  
-   * @param node 
+   * Given a node, returns the root node
+   *
+   * @param node
    */
   static returnRootNode(node: Node) {
     return node.getPath().slice(0, 1)[0];

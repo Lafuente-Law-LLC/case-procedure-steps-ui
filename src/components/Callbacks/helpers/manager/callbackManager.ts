@@ -6,18 +6,6 @@ import {
 } from "../callbacksTableUtils";
 import { merge } from "lodash";
 
-/**
- * Manages a collection of callbacks, providing functionality to add, update,
- * find, and remove callbacks. This class ensures efficient handling of callback
- * objects throughout their lifecycle within an application, supporting
- * operations such as updating callback details, adding new callbacks based on
- * default configurations, removing callbacks by their unique identifiers, and
- * retrieving specific callbacks for inspection or further operations.
- *
- * @template T - A type extending CallbackWithId, specifying the structure of
- *   the callbacks managed by this class.
- */
-
 class CallbackManager {
   callbacks: CallbackWithId[] = [];
   defaultCallbackFn: () => CallbackWithId;

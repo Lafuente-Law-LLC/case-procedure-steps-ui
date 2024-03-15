@@ -2,7 +2,6 @@ import StepNode from "./stepNode";
 import StepManager from "./stepManager";
 import type { Callback } from "../types";
 
-
 class Step {
   title: string;
   summary: string;
@@ -87,7 +86,7 @@ class Step {
 
   get steps() {
     const stepsArray = this.stepNode.childrenNodes.map((node) =>
-      this.stepManager.searchById(node.model.id),
+      this.stepManager.searchById(node.model.id)
     );
 
     return stepsArray.filter((step) => step !== undefined);

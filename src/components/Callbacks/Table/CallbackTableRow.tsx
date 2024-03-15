@@ -23,7 +23,7 @@ const CallbackTableRow = ({
 
   const update = dispatchFunctionFactory(dispatcher).update;
   const remove = dispatchFunctionFactory(dispatcher).remove;
-  
+
   const returnOnChange = (key: string, value: string) => {
     return (e: React.ChangeEvent<HTMLInputElement>) => {
       update(callback.id, { args: { [key]: e.target.value } });
