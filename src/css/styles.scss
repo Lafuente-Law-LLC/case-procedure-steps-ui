@@ -116,43 +116,6 @@ body {
   }
 }
 
-.add-callbacks-button {
-  position: relative;
-  display: flex;
-
-  & .head {
-    & .menu {
-      min-height: 150px;
-      width: 100px;
-      border-radius: 5px;
-      background-color: #f4f4f4;
-      padding: 5px;
-      & .menu-item {
-        color: rgb(55, 53, 47);
-        fill: currentcolor;
-        line-height: 1.5;
-        pointer-events: auto;
-        outline: 0;
-        box-sizing: border-box;
-        user-select: none;
-        transition: background 20ms ease-in 0s;
-        cursor: pointer;
-        width: calc(100% - 8px);
-        margin-left: 4px;
-        margin-right: 4px;
-        border-radius: 4px;
-        background: rgba(55, 53, 47, 0.08);
-      }
-    }
-  }
-  & .tail {
-    flex: 1;
-    &.hover {
-      background-color: #f4f4f4;
-    }
-  }
-}
-
 input {
   max-width: 100%;
   width: 100%;
@@ -174,56 +137,55 @@ input:focus {
   box-shadow: 0 0 0 3px #b6daff;
 }
 
-.my-menu {
-  & .relative-container {
-    position: relative;
-    pointer-events: auto;
-  }
-
-  & .flex-column-reverse {
-    display: flex;
-    position: relative;
-    flex-direction: column-reverse;
-    opacity: 1;
-    transition: opacity 270ms ease;
-  }
-
-  & .dialog {
-    padding: 1px;
-    border-radius: 6px;
-    background: white;
-    position: relative;
-    max-width: calc(100vw - 24px);
-    min-width: 180px;
-    text-align: center;
-    box-shadow:
-      rgba(15, 15, 15, 0.05) 0px 0px 0px 1px,
-      rgba(15, 15, 15, 0.1) 0px 3px 6px,
-      rgba(15, 15, 15, 0.2) 0px 9px 24px;
-    overflow: hidden;
-  }
-
-  /* Styles for interactive elements */
-  & .menu-item {
-    user-select: none;
-    transition: background 20ms ease-in 0s;
+.callback-addition-button {
+  position: relative;
+  display: flex;
+  $callback-background: rgba(55, 53, 47, 0.2);
+  & .menu-wrapper {
     cursor: pointer;
-    width: calc(100% - 8px);
-    margin: 4px;
-    border-radius: 4px;
-    font-size: 14px;
-    line-height: 120%;
-  }
+    & .menu {
+      display: flex;
+      position: relative;
+      flex-direction: column-reverse;
+      opacity: 1;
+      transition: opacity 270ms ease;
 
-  & .menu-item:hover {
-    background: rgba(55, 53, 47, 0.2);
+      & .dialog {
+        padding: 1px;
+        border-radius: 6px;
+        background: white;
+        position: relative;
+        max-width: calc(100vw - 24px);
+        min-width: 180px;
+        text-align: center;
+        box-shadow:
+          rgba(15, 15, 15, 0.05) 0px 0px 0px 1px,
+          rgba(15, 15, 15, 0.1) 0px 3px 6px,
+          rgba(15, 15, 15, 0.2) 0px 9px 24px;
+        overflow: hidden;
+        & .menu-item {
+          user-select: none;
+          transition: background 20ms ease-in 0s;
+          cursor: pointer;
+          width: calc(100% - 8px);
+          margin: 4px;
+          border-radius: 4px;
+          font-size: 14px;
+          line-height: 120%;
+          &:hover {
+            background: $callback-background;
+          }
+        }
+      }
+    }
   }
-
-  & .icon {
-    width: 16px;
-    height: 16px;
-    display: block;
-    fill: rgba(55, 53, 47, 0.85);
-    flex-shrink: 0;
+  & .callback-area {
+    flex: 1;
+    &.hover{
+      background-color: $callback-background;
+    }
+    &:hover {
+      background-color: $callback-background;
+    }
   }
 }

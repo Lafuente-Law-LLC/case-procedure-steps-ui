@@ -5,7 +5,7 @@ import { processCallbacks } from "../helpers/callbacksTableUtils";
 import CallbackTableRow from "./CallbackTableRow";
 import reducer from "../helpers/reducer/reducerFunction";
 import dispatchFunctionFactory from "../helpers/reducer/dispatchFunctionFactory";
-import AddCallbacksMenu from "../../AddCallbacksMenu";
+import CallbackAdditionButton from "../../CallbackAdditionButton";
 import type { EventCallback, TaskCallback } from "../types";
 import { v4 } from "uuid";
 import { CallbackWithId } from "../../../types";
@@ -92,10 +92,10 @@ const CallbacksTable = ({ step }: { step: Step }) => {
           ))}
         </tbody>
       </Table>
-      <AddCallbacksMenu>
+      <CallbackAdditionButton>
         <MenuItem text="Add Event" defaultFn={addCallbackFn} type="event" />
         <MenuItem text="Add Task" defaultFn={addCallbackFn} type="task" />
-      </AddCallbacksMenu>
+      </CallbackAdditionButton>
     </>
   );
 };
