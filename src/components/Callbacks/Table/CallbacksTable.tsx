@@ -54,11 +54,8 @@ const MenuItem = ({ text, defaultFn, type }: MenuItemProps) => {
     defaultFn<CallbackWithId>(fn, {});
   };
   return (
-    <div className={'menu-item'}>
-    <div className="btn btn-sm btn-primary" onClick={addFn}>
+    <div className={"menu-item"} onClick={addFn}>
       {text}
-    </div>
-      
     </div>
   );
 };
@@ -98,20 +95,6 @@ const CallbacksTable = ({ step }: { step: Step }) => {
       <AddCallbacksMenu>
         <MenuItem text="Add Event" defaultFn={addCallbackFn} type="event" />
         <MenuItem text="Add Task" defaultFn={addCallbackFn} type="task" />
-        <div role="menuitem" tabindex="-1" id=":r2i:" class="menu-item">
-  <div class="menu-item-content">
-    <div class="menu-item-icon">
-      <img src="/images/blocks/text/en-US.png" referrerpolicy="same-origin" class="icon-image">
-    </div>
-    <div class="menu-item-text">
-      <div class="text-container">
-        <div class="text">Text</div>
-      </div>
-      <div class="description">Just start writing with plain text.</div>
-    </div>
-  </div>
-</div>
-
       </AddCallbacksMenu>
     </>
   );
