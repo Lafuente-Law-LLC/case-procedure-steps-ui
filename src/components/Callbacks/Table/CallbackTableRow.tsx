@@ -5,7 +5,7 @@ import LabelRow from "./LabelRow";
 import type { Dispatcher } from "../helpers/reducer/reducerFunction";
 import dispatchFunctionFactory from "../helpers/reducer/dispatchFunctionFactory";
 import { TableContext } from "./TableContext";
-import EventSelect, {Option} from "./EventSelect";
+import EventSelect, { Option } from "./EventSelect";
 
 const defaultOptions: Option[] = [
   { text: "After Complete", value: "after_complete" },
@@ -22,6 +22,8 @@ const CallbackTableRow = ({
   const { editMode } = useContext(TableContext) as { editMode: boolean };
 
   const update = dispatchFunctionFactory(dispatcher).update;
+  const remove = dispatchFunctionFactory(dispatcher).remove;
+  
   const returnOnChange = (key: string, value: string) => {
     return (e: React.ChangeEvent<HTMLInputElement>) => {
       update(callback.id, { args: { [key]: e.target.value } });
@@ -56,6 +58,15 @@ const CallbackTableRow = ({
             changeFunction={returnOnChange(keyValue.label, keyValue.value)}
           />
         ))}
+        <div>
+          <button
+            onClick={() => {
+              remove(callback.id);
+            }}
+          >
+            Delete
+          </button>
+        </div>
       </td>
     </tr>
   );

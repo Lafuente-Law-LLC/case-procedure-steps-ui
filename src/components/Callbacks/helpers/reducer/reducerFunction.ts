@@ -26,7 +26,7 @@ const reducer = (state: CallbackWithId[], action: Action) => {
       if (!isACallbackWithId(data)) return state;
       return [...state, data]
     case "remove":
-      if (!isACallbackWithId(data)) return state;
+      if (data.id === undefined) return state;  
       return state.filter((callback) => callback.id !== data.id);
     case "update":
       return state.map((callback) =>

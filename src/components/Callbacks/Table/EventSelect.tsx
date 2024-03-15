@@ -1,7 +1,6 @@
 import React from "react";
 import { Form } from "react-bootstrap";
 
-
 export type Option = {
   text: string;
   value: string;
@@ -10,7 +9,7 @@ export type Option = {
 type SelectProps = {
   options: Option[];
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onChange: (e: React.ChangeEvent<any>) => void;
 };
 
 const EventSelect = ({ options, value, onChange }: SelectProps) => {
@@ -24,6 +23,5 @@ const EventSelect = ({ options, value, onChange }: SelectProps) => {
     </Form.Control>
   );
 };
-
 
 export default EventSelect;
