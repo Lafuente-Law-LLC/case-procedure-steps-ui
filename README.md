@@ -74,10 +74,79 @@ Please refer to the JSDoc comments in the source code for detailed information o
 - `StepNode`: Manages the tree structure of a step.
 - `StepManager`: Handles registration and updates of steps within the entire tree.
 
-## Contributing
+### Classes
 
-Contributions to the Step Library are welcome. Please ensure to follow the existing coding style and add unit tests for any new or changed functionality. Create pull requests for any contributions.
+#### `Step`
 
-## License
+Represents a single step or node in the step hierarchy.
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+##### Constructor
+
+- `constructor(stepNode: StepNode)`: Initializes a new step with the given `StepNode`.
+
+##### Methods
+
+- `updateTitle(title: string)`: Updates the title of the step.
+- `updateSummary(summary: string)`: Updates the summary of the step.
+- `updateCallbacks(callbacks: Callback[])`: Updates the list of callback functions associated with the step.
+- `addNewStep()`: Adds a new child step to the current step and returns the new step.
+- `addAsChildStep(step: Step)`: Adds the given step as a child of the current step.
+- `isAncestorOf(step: Step)`: Determines if the current step is an ancestor of the given step.
+- `findStepById(id: string)`: Searches for and returns a step by its ID within the tree.
+- `moveStepAboveSelf(step: Step)`: Moves the given step to be a sibling above the current step.
+- `moveStepBelowSelf(step: Step)`: Moves the given step to be a sibling below the current step.
+- `remove()`: Removes the current step from the hierarchy.
+- `get parentStep()`: Returns the parent step of the current step.
+- `isRoot()`: Checks if the current step is the root of the tree.
+- `get steps()`: Returns an array of child steps.
+- `toJSON()`: Serializes the step (and its children) to JSON.
+
+#### `StepNode`
+
+Manages the tree structure of a step.
+
+##### Constructor
+
+- `constructor(node: Node, stepManager: StepManager)`: Initializes a new `StepNode` with a given tree node and step manager.
+
+##### Methods
+
+- `addNewChild()`: Adds a new child node to the current node and returns the associated step.
+- `addAsChild(treeNode: Node)`: Adds a given tree node as a child of the current node.
+- `removeSelf()`: Removes the current node (and therefore the step) from the tree.
+- `get parentNode()`: Returns the parent node of the current node.
+- `get childrenNodes()`: Returns an array of child nodes.
+- `get siblingNodes()`: Returns an array of sibling nodes.
+- `get indexAmongSiblings()`: Returns the index of the current node among its siblings.
+- `isAncestorOf(node: Node)`: Checks if the current node is an ancestor of the given node.
+- `moveNodeAboveSelf(node: Node)`: Moves a given node to be a sibling above the current node.
+- `moveNodeBelowSelf(node: Node)`: Moves a given node to be a sibling below the current node.
+- `findNodeById(id: string)`: Searches for and returns a node by its ID within the tree.
+
+#### `StepManager`
+
+Handles the registration and updates of steps within the tree.
+
+##### Constructor
+
+- `constructor()`: Initializes a new `StepManager`.
+
+##### Methods
+
+- `registerInstance(instance: Step)`: Registers a step instance with the manager.
+- `unregisterInstance(instance: Step)`: Unregisters a step instance from the manager.
+- `registerUpdateCallback(callback: () => void)`: Registers a callback function to be called when the step tree is updated.
+- `searchById(id: string)`: Searches for and returns a step by its ID.
+- `static returnRootNode(node: Node)`: Given a node, returns the root node of the tree.
+
+### Usage
+
+The Step Library is intended for use in applications where a structured, navigable hierarchy of steps, tasks, or actions is required. It can be applied in scenarios such as guided workflows, tutorials, project planning tools, and more.
+
+### Extending and Customizing
+
+The library is designed with extendibility in mind. Users can extend the `Step`, `StepNode`, and `StepManager` classes to add additional functionality or to tailor the library to specific requirements.
+
+### Integration
+
+The Step Library can be integrated into both frontend and backend JavaScript applications. It is framework-agnostic and can be used alongside any JavaScript framework or library.
