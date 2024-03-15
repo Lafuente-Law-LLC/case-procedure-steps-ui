@@ -20,10 +20,10 @@ import { merge } from "lodash";
 
 class CallbackManager {
   callbacks: CallbackWithId[] = [];
-  defaultCallbackFn: ()=> CallbackWithId;
+  defaultCallbackFn: () => CallbackWithId;
   constructor(
     callbacks: CallbackWithId[],
-    defaultCallbackFn: <T extends CallbackWithId>() => T,
+    defaultCallbackFn: <T extends CallbackWithId>() => T
   ) {
     this.defaultCallbackFn = defaultCallbackFn;
     this.callbacks = processCallbacks(callbacks);

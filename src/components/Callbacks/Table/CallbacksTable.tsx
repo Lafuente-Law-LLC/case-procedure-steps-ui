@@ -1,66 +1,15 @@
-import React, { useEffect, useReducer } from "react";
-import { Table } from "react-bootstrap";
+import React, { useEffect, useReducer, useState } from "react";
+import { Table, Form } from "react-bootstrap";
 import { Step } from "../../../step/step";
 import { processCallbacks } from "../helpers/callbacksTableUtils";
 import CallbackTableRow from "./CallbackTableRow";
 import reducer from "../helpers/reducer/reducerFunction";
 import dispatchFunctionFactory from "../helpers/reducer/dispatchFunctionFactory";
 import CallbackAdditionButton from "../../CallbackAdditionButton";
-import type { EventCallback, TaskCallback } from "../types";
-import { v4 } from "uuid";
-import { CallbackWithId } from "../../../types";
-
-type MenuItemProps = {
-  text: string;
-  defaultFn: <T extends CallbackWithId>(
-    defaultFn: () => T,
-    partial: Partial<T>
-  ) => void;
-  type: "event" | "task";
-};
-
-const eventCreationFn = (): EventCallback => {
-  return {
-    id: v4(),
-    event: "",
-    function: "create_future_event",
-    args: {
-      title: "",
-      summary: "",
-      date: "",
-    },
-  };
-};
-
-const taskCreationFn = (): TaskCallback => {
-  return {
-    id: v4(),
-    event: "",
-    function: "create_task",
-    args: {
-      title: "",
-      summary: "",
-    },
-  };
-};
-
-const MenuItem = ({ text, defaultFn, type }: MenuItemProps) => {
-  if (type !== "event" && type !== "task") {
-    throw new Error("Invalid type");
-  }
-  const fn = type === "event" ? eventCreationFn : taskCreationFn;
-
-  const addFn = (e: React.MouseEvent<HTMLElement>) => {
-    defaultFn<CallbackWithId>(fn, {});
-  };
-  return (
-    <div className={"menu-item"} onClick={addFn}>
-      {text}
-    </div>
-  );
-};
-
+import { TableContext } from "./TableContext";
+import MenuItem from "./MenuItem";
 const CallbacksTable = ({ step }: { step: Step }) => {
+  const [editMode, setEditMode] = useState(false);
   const [callbacks, callbacksDispatch] = useReducer(
     reducer,
     processCallbacks(step.callbacks)
@@ -73,8 +22,15 @@ const CallbacksTable = ({ step }: { step: Step }) => {
   }, [callbacks]);
 
   return (
-    <>
+    <TableContext.Provider value={{ editMode, setEditMode }}>
       <div className="callbacks-table-wrapper">
+        <div className="top-options">
+          <Form.Check
+            type="switch"
+            label="Edit Mode"
+            onChange={(e) => setEditMode(e.target.checked)}
+          />
+        </div>
         <Table>
           <thead>
             <tr>
@@ -94,12 +50,13 @@ const CallbacksTable = ({ step }: { step: Step }) => {
           </tbody>
         </Table>
       </div>
-
-      <CallbackAdditionButton>
-        <MenuItem text="Add Event" defaultFn={addCallbackFn} type="event" />
-        <MenuItem text="Add Task" defaultFn={addCallbackFn} type="task" />
-      </CallbackAdditionButton>
-    </>
+      {editMode && (
+        <CallbackAdditionButton>
+          <MenuItem text="Add Event" defaultFn={addCallbackFn} type="event" />
+          <MenuItem text="Add Task" defaultFn={addCallbackFn} type="task" />
+        </CallbackAdditionButton>
+      )}
+    </TableContext.Provider>
   );
 };
 
