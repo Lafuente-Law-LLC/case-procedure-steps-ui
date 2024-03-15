@@ -1,7 +1,7 @@
 import React from "react";
-import type {EventCallback, TaskCallback} from "../types";
-import {v4} from "uuid";
-import {CallbackWithId} from "../../../types";
+import type { EventCallback, TaskCallback } from "../types";
+import { v4 } from "uuid";
+import { CallbackWithId } from "../../../types";
 type MenuItemProps = {
   text: string;
   defaultFn: <T extends CallbackWithId>(
@@ -50,7 +50,5 @@ const MenuItem = ({ text, defaultFn, type }: MenuItemProps) => {
     </div>
   );
 };
-
-
 
 export default MenuItem;
