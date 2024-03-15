@@ -1,10 +1,10 @@
-# Step Library README
+# Read Me
 
-## Overview
+## Steps
 
 The Step Library provides a comprehensive solution for managing hierarchical step-based processes or workflows. It enables the creation, manipulation, and navigation of steps within a tree structure. This modular library is designed to be flexible, allowing for various use cases such as tutorials, process flows, or any hierarchical list of actions.
 
-## Features
+### Features
 
 - **Tree-Based Structure**: Utilizes a tree model to organize steps in a hierarchical manner, enabling complex structures.
 - **Dynamic Step Management**: Create, update, and delete steps dynamically within the workflow.
@@ -12,13 +12,9 @@ The Step Library provides a comprehensive solution for managing hierarchical ste
 - **Navigation and Manipulation**: Easily navigate through steps, find specific steps by ID, and reorder steps within the hierarchy.
 - **Serialization**: Convert your step structure into a JSON format for easy storage or transmission and rebuild it from the same.
 
-## Installation
+### Usage
 
-To use the Step Library in your project, copy the provided `step.js`, `stepNode.js`, and `stepManager.js` files into your project directory. Ensure that your environment supports ES6 modules if you're working in a Node.js or browser context.
-
-## Usage
-
-### Basic Example
+#### Basic Example
 
 ```javascript
 import RootStepConstructor from "./rootStepConstructor";
