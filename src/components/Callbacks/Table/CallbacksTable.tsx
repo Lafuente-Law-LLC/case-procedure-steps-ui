@@ -74,24 +74,27 @@ const CallbacksTable = ({ step }: { step: Step }) => {
 
   return (
     <>
-      <Table>
-        <thead>
-          <tr>
-            <th>Event</th>
-            <th>Function</th>
-            <th>Args</th>
-          </tr>
-        </thead>
-        <tbody>
-          {callbacks.map((callback) => (
-            <CallbackTableRow
-              key={callback.id}
-              callbackWithId={callback}
-              dispatcher={callbacksDispatch}
-            />
-          ))}
-        </tbody>
-      </Table>
+      <div className="callbacks-table-wrapper">
+        <Table>
+          <thead>
+            <tr>
+              <th>Event</th>
+              <th>Function</th>
+              <th>Args</th>
+            </tr>
+          </thead>
+          <tbody>
+            {callbacks.map((callback) => (
+              <CallbackTableRow
+                key={callback.id}
+                callbackWithId={callback}
+                dispatcher={callbacksDispatch}
+              />
+            ))}
+          </tbody>
+        </Table>
+      </div>
+
       <CallbackAdditionButton>
         <MenuItem text="Add Event" defaultFn={addCallbackFn} type="event" />
         <MenuItem text="Add Task" defaultFn={addCallbackFn} type="task" />
