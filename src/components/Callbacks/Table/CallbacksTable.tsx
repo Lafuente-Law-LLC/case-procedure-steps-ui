@@ -20,6 +20,7 @@ const CallbacksTable = ({ step }: { step: Step }) => {
 
   useEffect(() => {
     step.updateCallbacks(callbacks);
+    console.log(step)
   }, [callbacks]);
 
   return (

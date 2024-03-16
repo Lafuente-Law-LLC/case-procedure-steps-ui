@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, memo } from "react";
 import { Step } from "../../step/step";
 import { DragItemHead } from "./DragItemHead";
 import { DragItemBody } from "./DragItemBody";

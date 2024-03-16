@@ -1,0 +1,32 @@
+@import "bootstrap/scss/bootstrap.scss";
+@import "react-edit-text/dist/index.css";
+
+.window {
+  max-height: 75vh;
+  overflow-y: scroll;
+}
+
+body {
+  font-family: "Open-Sans", sans-serif;
+  font-size: 1.2em;
+  line-height: 1.5;
+  color: #333;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.label-row-component {
+  @extend .row;
+  & .label {
+    @extend .col-4;
+    @extend .text-secondary;
+  }
+  & .value {
+    @extend .col-8;
+  }
+}
+
+@import './styles/animations.scss';
+@import './styles/components/drag-item.scss';
+@import './styles/components/callback-component.scss';

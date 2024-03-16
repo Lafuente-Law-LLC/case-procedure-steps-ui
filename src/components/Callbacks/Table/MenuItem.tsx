@@ -11,6 +11,8 @@ type MenuItemProps = {
   type: "event" | "task";
 };
 
+
+//TODO
 const eventCreationFn = (): EventCallback => {
   return {
     id: v4(),
@@ -19,7 +21,7 @@ const eventCreationFn = (): EventCallback => {
     args: {
       title: "",
       summary: "",
-      date: "",
+      days: 0,
     },
   };
 };

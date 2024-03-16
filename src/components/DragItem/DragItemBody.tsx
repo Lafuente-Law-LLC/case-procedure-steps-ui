@@ -30,32 +30,32 @@ export const DragItemBody = ({ step }: DragItemOptions) => {
           returnDraggingElementAndCurrentTarget(e);
         throwIfCondition(
           !currentTarget.classList.contains("drag__item__body"),
-          "Current target is not a drag item body"
+          "Current target is not a drag item body",
         );
         const dragItemHeadChildren = getFilteredChildren<HTMLElement>(
           currentTarget,
           ".drag__item__head",
-          draggingElement
+          draggingElement,
         );
 
         const currentPoint = { x: e.clientX, y: e.clientY };
         const closestDragItemHead = closestElement(
           currentPoint,
-          dragItemHeadChildren
+          dragItemHeadChildren,
         );
         if (!closestDragItemHead) return;
 
         const aboveOrBelow = aboveOrBelowFromPoint(
           currentPoint,
-          closestDragItemHead
+          closestDragItemHead,
         );
         const draggingElementStep = returnStepFromElement(
           draggingElement,
-          step
+          step,
         );
         const dragItemHeadStep = returnStepFromElement(
           closestDragItemHead,
-          step
+          step,
         );
 
         aboveOrBelow === "above"
@@ -70,7 +70,7 @@ export const DragItemBody = ({ step }: DragItemOptions) => {
         return;
       }
     },
-    [step]
+    [step],
   );
 
   const onDragEnter = useCallback((e: React.DragEvent<HTMLElement>) => {
@@ -83,7 +83,7 @@ export const DragItemBody = ({ step }: DragItemOptions) => {
       const dragItemHeadChildren = getFilteredChildren<HTMLElement>(
         currentTarget,
         ".drag__item__head",
-        draggingElement
+        draggingElement,
       );
 
       const currentPoint = { x: e.clientX, y: e.clientY };

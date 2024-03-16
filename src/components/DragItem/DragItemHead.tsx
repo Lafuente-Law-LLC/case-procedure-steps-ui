@@ -1,8 +1,7 @@
 import React from "react";
-import { Button } from "react-bootstrap";
 import { Step } from "../../step/step";
-import { EditText, EditTextarea } from "react-edit-text";
-
+import { EditText} from "react-edit-text";
+import { IoMdAddCircle, IoMdRemoveCircle } from "react-icons/io";
 import { ArrowRight } from "react-bootstrap-icons";
 import { DragItemModal } from "./DragItemModal";
 import { removeClassesFromElements } from "./helpers/dragItemUtil";
@@ -15,10 +14,10 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
   const { title } = step;
   const addStep = () => {
     step.addNewStep();
-  }
+  };
   const removeStep = () => {
-    step.remove()
-  }
+    step.remove();
+  };
 
   const onDragStart = (e: React.DragEvent<HTMLElement>) => {
     e.currentTarget.classList.add("dragging");
@@ -47,7 +46,7 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
   };
 
   const onChangeTitle = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { value } = event.target;
     step.updateTitle(value);
@@ -72,12 +71,17 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
       </div>
       <div className="head__middle">
         <EditText value={title} onChange={onChangeTitle}></EditText>
+         <div className="meta-data">{`sub-steps: ${step.steps.length} | callbacks: ${step.callbacks.length || 0}`}</div>
       </div>
       <div className="head__end">
-        <DragItemModal step={step}></DragItemModal>
-        <div className="row pt-3">
-          <div className="col fs-6" onClick={addStep}>Add</div>
-          <div className="col fs-6" onClick={removeStep}>Delete</div>
+        <div className="modal-container">
+          <DragItemModal step={step}></DragItemModal>
+         
+        </div>
+
+        <div className="button-group">
+          <IoMdAddCircle className="add-icon" onClick={addStep} />
+          <IoMdRemoveCircle className="remove-icon" onClick={removeStep} />
         </div>
       </div>
     </div>

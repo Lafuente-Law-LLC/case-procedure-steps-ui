@@ -7,7 +7,7 @@ export interface EventCallback extends CallbackWithId {
   args: {
     title: string;
     summary: string;
-    date: string;
+    days: number;
   };
 }
 

@@ -4,7 +4,7 @@ import sampleStep from "../ignore/rootStep";
 import "bootstrap/scss/bootstrap.scss";
 import { Step } from "./step/step";
 import RootStepConstructor from "./step/rootStepConstructor";
-import "./css/styles.scss";
+import "./css/main.scss";
 import { DragItem } from "./components/DragItem/DragItem";
 
 const App: React.FC = () => {
