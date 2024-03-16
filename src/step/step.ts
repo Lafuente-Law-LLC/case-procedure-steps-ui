@@ -39,8 +39,7 @@ class Step {
 
   addNewStep() {
     const step = this.stepNode.addNewChild();
-    this.callupdateCallbacks();
-    return step;
+    this.callupdateCallbacks(); 
   }
 
   addAsChildStep(step: Step) {

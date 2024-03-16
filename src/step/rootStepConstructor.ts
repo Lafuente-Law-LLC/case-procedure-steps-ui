@@ -57,4 +57,8 @@ export default class RootStepConstructor {
   registerUpdateCallback(callback: () => void) {
     this.stepManager.registerUpdateCallback(callback);
   }
+
+  get StepManager() {
+    return this.stepManager;
+  }
 }

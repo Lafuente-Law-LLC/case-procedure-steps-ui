@@ -8,12 +8,15 @@ import { removeClassesFromElements } from "./helpers/dragItemUtil";
 
 type DragItemHeadOptions = {
   step: Step;
+  setCollapseOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  collapseOpen: boolean;
 };
 
-export const DragItemHead = ({ step }: DragItemHeadOptions) => {
+export const DragItemHead = ({ step, setCollapseOpen, collapseOpen }: DragItemHeadOptions) => {
   const { title } = step;
   const hasChildrenSteps = step.steps.length > 0;
   const addStep = () => {
+    if(!collapseOpen) setCollapseOpen(true);
     step.addNewStep();
   };
   const removeStep = () => {
@@ -47,11 +50,12 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
   };
 
   const onChangeTitle = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { value } = event.target;
     step.updateTitle(value);
   };
+
 
   return (
     <div
@@ -64,9 +68,9 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
       data-step-id={step.id}
     >
       <div
-        className="head__start collapse"
-        data-bs-toggle={"collapse"}
-        data-bs-target={`#body_${step.id}`}
+        className="head__start"
+        aria-expanded={collapseOpen}
+        onClick={() => setCollapseOpen((prev) => !prev)} 
       >
         <ArrowRight className="arrow-right" />
       </div>

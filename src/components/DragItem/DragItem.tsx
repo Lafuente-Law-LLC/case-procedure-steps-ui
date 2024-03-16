@@ -1,21 +1,23 @@
-import React, { useEffect, memo } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { Step } from "../../step/step";
 import { DragItemHead } from "./DragItemHead";
 import { DragItemBody } from "./DragItemBody";
 
-import { removeClassesFromElements } from "./helpers/dragItemUtil";
+
 type DragItemOptions = {
   step: Step;
 };
 
-export const DragItem = ({step}:DragItemOptions)=> {
-  useEffect(() => {
-    removeClassesFromElements(["dragging", "drag-over", "above", "below"]);
-  });
+export const DragItem = ({ step }: DragItemOptions) => {
+  const [collapseOpen, setCollapseOpen] = useState(false); 
   return (
-    <div className="drag__item" >
-      <DragItemHead step={step} />
-      <DragItemBody step={step} />
+    <div className="drag__item">
+      <DragItemHead
+        collapseOpen={collapseOpen}
+        setCollapseOpen={setCollapseOpen}
+        step={step}
+      />
+      <DragItemBody collapseOpen={collapseOpen} step={step} />
     </div>
   );
 };

@@ -1,8 +1,6 @@
 type Point = { x: number; y: number };
 import { Step } from "../../../step/step";
 
-
-
 export function removeClassesFromElements(classes: string[]) {
   classes.forEach((className) => {
     const elements = document.querySelectorAll<HTMLElement>(`.${className}`);
@@ -31,7 +29,7 @@ export function closestElement(
   if (!elements || !elements.length) return null;
 
   let targetRect: any;
-  if ("x" in target && "y" in target) { 
+  if ("x" in target && "y" in target) {
     targetRect = {
       left: target.x,
       top: target.y,
@@ -136,12 +134,16 @@ export const returnDraggingElementAndCurrentTarget = (
   throwErrorIfNoElement(draggingElement);
   const currentTarget = e.currentTarget;
   throwErrorIfNoElement(currentTarget);
-  throwIfCondition(currentTarget === draggingElement, "Current target is dragging element"); 
+  throwIfCondition(
+    currentTarget === draggingElement,
+    "Current target is dragging element"
+  );
   return { draggingElement, currentTarget };
+};
 
-}
-
-export function throwErrorIfNoElement<T>(element: T | null): asserts element is NonNullable<T> {
+export function throwErrorIfNoElement<T>(
+  element: T | null
+): asserts element is NonNullable<T> {
   if (!element) {
     throw new Error("No element found");
   }
@@ -153,13 +155,12 @@ export function throwIfCondition(condition: boolean, message: string) {
   }
 }
 
-
-
 /**
- * Return the step that corresponds to the element  
- * @param element 
- * @param step 
- * @returns 
+ * Return the step that corresponds to the element
+ *
+ * @param element
+ * @param step
+ * @returns
  */
 export const returnStepFromElement = (element: HTMLElement, step: Step) => {
   const elementStepId = element.getAttribute("data-step-id");
@@ -170,7 +171,9 @@ export const returnStepFromElement = (element: HTMLElement, step: Step) => {
 };
 
 /**
- *  Get all children of parentElement that match the selector, except for the filterElement
+ * Get all children of parentElement that match the selector, except for the
+ * filterElement
+ *
  * @param parentElement - The parent element to search for children
  * @param selector - The selector to match children
  * @param filterElement - The element to filter out of the results

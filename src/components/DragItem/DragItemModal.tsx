@@ -1,39 +1,19 @@
 import React, { useState } from "react";
 import { Step } from "../../step/step";
-import { Modal, ModalDialog, Tab, Table, Tabs } from "react-bootstrap";
+import { Modal, Tab, Tabs } from "react-bootstrap";
 import { ThreeDotsVertical } from "react-bootstrap-icons";
-import { EditText, EditTextarea } from "react-edit-text";
-import GhostAddButton from "../GhostAddButton";
+import { EditTextarea } from "react-edit-text";
+
 import CallbacksTable from "../Callbacks/Table/CallbacksTable";
-type DragItemOptions = {
-  step: Step;
-};
 
-export const LabelRow = ({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) => {
-  return (
-    <div className="row">
-      <div className="col-4 fw-semibold text-secondary">{label}</div>
-      <div className="col-8">{value}</div>
-    </div>
-  );
-};
-
-
-const ModalBody = ({ step }: DragItemOptions) => {
+const ModalBody = ({ step }: { step: Step }) => {
   const changeSummary = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { value } = event.target;
-    step.updateSummary(value);
+    step.updateSummary(event.target.value);
   };
   return (
-    <Tabs defaultActiveKey="summary" id="uncontrolled-tab-example">
+    <Tabs defaultActiveKey="summary">
       <Tab eventKey="summary" title="Summary">
         <div className="container mt-3">
           <EditTextarea
@@ -43,27 +23,27 @@ const ModalBody = ({ step }: DragItemOptions) => {
         </div>
       </Tab>
       <Tab eventKey="callbacks" title="Callbacks">
-        <CallbacksTable step={step} /> 
+        <CallbacksTable step={step} />
       </Tab>
     </Tabs>
   );
 };
 
-export const DragItemModal = ({ step }: DragItemOptions) => {
+export const DragItemModal = ({ step }: { step: Step }) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
-    <>
+    <div className="drag-item-modal">
       <ThreeDotsVertical className="three-dots-vertical" onClick={handleShow} />
       <Modal show={show} onHide={handleClose} size="lg">
-        <Modal.Header>
-          <Modal.Title>{step.title}</Modal.Title>
+        <Modal.Header closeButton={true}>
+          <Modal.Title as="div" className="h5" >{step.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ModalBody step={step}></ModalBody>
         </Modal.Body>
       </Modal>
-    </>
+    </div>
   );
 };
