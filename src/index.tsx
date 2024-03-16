@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import sampleStep from "../ignore/rootStep";
 import "bootstrap/scss/bootstrap.scss";
-import { Step } from "./step/step";
 import RootStepConstructor from "./step/rootStepConstructor";
 import "./css/main.scss";
 import { DragItem } from "./components/DragItem/DragItem";
@@ -24,7 +23,7 @@ const App: React.FC = () => {
           <DragItem step={step} key={step.id}></DragItem>
         ))}
       </div>
-      <button onClick={addStep}>Add</button>
+      <button className={"mui-button"} onClick={addStep}>Add</button>
     </>
   );
 };

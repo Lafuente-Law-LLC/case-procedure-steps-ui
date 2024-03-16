@@ -1,6 +1,6 @@
 import React from "react";
 import { Step } from "../../step/step";
-import { EditText} from "react-edit-text";
+import { EditText } from "react-edit-text";
 import { IoMdAddCircle, IoMdRemoveCircle } from "react-icons/io";
 import { ArrowRight } from "react-bootstrap-icons";
 import { DragItemModal } from "./DragItemModal";
@@ -12,6 +12,7 @@ type DragItemHeadOptions = {
 
 export const DragItemHead = ({ step }: DragItemHeadOptions) => {
   const { title } = step;
+  const hasChildrenSteps = step.steps.length > 0;
   const addStep = () => {
     step.addNewStep();
   };
@@ -71,17 +72,18 @@ export const DragItemHead = ({ step }: DragItemHeadOptions) => {
       </div>
       <div className="head__middle">
         <EditText value={title} onChange={onChangeTitle}></EditText>
-         <div className="meta-data">{`sub-steps: ${step.steps.length} | callbacks: ${step.callbacks.length || 0}`}</div>
+        <div className="meta-data">{`sub-steps: ${step.steps.length} | callbacks: ${step.callbacks.length || 0}`}</div>
       </div>
       <div className="head__end">
         <div className="modal-container">
           <DragItemModal step={step}></DragItemModal>
-         
         </div>
 
         <div className="button-group">
           <IoMdAddCircle className="add-icon" onClick={addStep} />
-          <IoMdRemoveCircle className="remove-icon" onClick={removeStep} />
+          {!hasChildrenSteps && (
+            <IoMdRemoveCircle className="remove-icon" onClick={removeStep} />
+          )}
         </div>
       </div>
     </div>

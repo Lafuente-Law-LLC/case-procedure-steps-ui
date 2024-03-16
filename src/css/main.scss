@@ -27,6 +27,48 @@ body {
   }
 }
 
+
+.mui-button {
+  background-color: #1976d2;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s;
+}
+
+.mui-button::before {
+  content: "";
+  position: absolute;
+  background: rgba(255, 255, 255, 0.2);
+  width: 300%;
+  height: 300%;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  transition: all 0.5s ease-out;
+  transform: translate(-50%, -50%);
+}
+
+.mui-button:hover::before {
+  width: 0;
+  height: 0;
+}
+
+.mui-button:hover {
+  background-color: #1565c0;
+}
+
+
 @import './styles/animations.scss';
 @import './styles/components/drag-item.scss';
 @import './styles/components/callback-component.scss';
