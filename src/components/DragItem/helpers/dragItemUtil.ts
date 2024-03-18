@@ -188,3 +188,21 @@ export function getFilteredChildren<T extends HTMLElement>(
     (element) => element !== filterElement
   );
 }
+/**
+ * Merges two arrays while preserving unique elements based on a mapping condition.
+ * If duplicate keys are found, elements from array2 override elements from array1.
+ * @param {T[]} array1 - The first array to merge.
+ * @param {T[]} array2 - The second array to merge. Elements from this array override array1 if duplicate keys are encountered.
+ * @param {(item: T) => [string, T]} mappingCondition - A mapping condition function that takes an element of type T and returns a tuple [string, T] where the string represents the key.
+ * @returns {T[]} The merged array containing unique elements based on the mapping condition.
+ * @template T
+ */
+export function mergeArraysWithOverride<T>(
+  array1: T[],
+  array2: T[],
+  mappingCondition: (item: T) => [string, T]
+): T[] {
+  const mergedMap = new Map([...array1, ...array2].map(mappingCondition));
+  return Array.from(mergedMap.values());
+}
+

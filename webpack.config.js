@@ -13,7 +13,7 @@ module.exports = {
   plugins: [
     new htmlWebpackPlugin({ template: path.resolve(__dirname, "index.html") }),
   ],
-  devtool: "source-map",
+  devtool: "eval-source-map",
   module: {
     rules: [
       {

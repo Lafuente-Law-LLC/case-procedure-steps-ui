@@ -1,31 +1,26 @@
 import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import sampleStep from "../ignore/rootStep";
 import "bootstrap/scss/bootstrap.scss";
 import RootStepConstructor from "./step/rootStepConstructor";
 import "./css/main.scss";
 import { DragItem } from "./components/DragItem/DragItem";
-import { removeClassesFromElements } from "./components/DragItem/helpers/dragItemUtil";
-
-const App: React.FC = () => {
-  const constructorRt = new RootStepConstructor(sampleStep);
-  const rt = constructorRt.rootStep;
-  const [steps, setSteps] = useState(rt.steps);
-
-  const addStep = () => {
-    rt?.addNewStep();
-  };
+import {
+  removeClassesFromElements, 
+} from "./components/DragItem/helpers/dragItemUtil";
+import { Step } from "./step/step";
+const App: React.FC = ({ rootStep }: { rootStep: Step }) => {
+  const [steps, setSteps] = useState(rootStep.steps);
 
   constructorRt.registerUpdateCallback(() => {
-    setSteps((prev) =>
-      [...prev, ...rt.steps].filter(
-        (step, index, self) =>
-          self.findIndex((s) => s.id === step.id) === index,
-      ),
-    );
+    setSteps(rootStep.steps);
   });
+  const addStep = () => {
+    rootStep.addNewStep();
+  };
 
   useEffect(() => {
+    debugger;
     removeClassesFromElements(["dragging", "drag-over", "above", "below"]);
   }, [
     document.querySelectorAll<HTMLElement>(`.dragging`),
@@ -47,4 +42,9 @@ const App: React.FC = () => {
   );
 };
 
-ReactDOM.render(<App></App>, document.getElementById("root"));
+const constructorRt = new RootStepConstructor(sampleStep);
+const rt = constructorRt.rootStep;
+
+const root = createRoot(document.getElementById("root"));
+
+root.render(<App rootStep={rt} />);

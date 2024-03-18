@@ -19,7 +19,7 @@ export const DragItemHead = ({ step, setCollapseOpen, collapseOpen }: DragItemHe
     if(!collapseOpen) setCollapseOpen(true);
     step.addNewStep();
   };
-  const removeStep = () => {
+  const removeStep = () => { 
     step.remove();
   };
 
