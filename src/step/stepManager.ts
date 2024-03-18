@@ -1,9 +1,11 @@
 import { Step } from "./step";
 import { Node } from "../types";
+import { stepValidator } from "../validator/validators";
 
 export default class StepManager {
   registeredSteps: Set<Step>;
   updateCallbacks: Set<() => void>;
+  stepValidator = stepValidator;
   constructor() {
     this.registeredSteps = new Set<Step>();
     this.updateCallbacks = new Set<() => void>();

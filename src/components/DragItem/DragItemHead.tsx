@@ -14,6 +14,9 @@ type DragItemHeadOptions = {
 
 export const DragItemHead = ({ step, setCollapseOpen, collapseOpen }: DragItemHeadOptions) => {
   const { title } = step;
+  const isValid = step.valid();
+  const validateObj = step.validate();
+  
   const hasChildrenSteps = step.steps.length > 0;
   const addStep = () => {
     if(!collapseOpen) setCollapseOpen(true);
@@ -59,7 +62,7 @@ export const DragItemHead = ({ step, setCollapseOpen, collapseOpen }: DragItemHe
 
   return (
     <div
-      className="drag__item__head"
+      className={`drag__item__head ${isValid ? "" : "invalid"}`}
       draggable
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}

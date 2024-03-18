@@ -1,48 +1,22 @@
 import React from "react";
-import type { EventCallback, TaskCallback } from "../types";
+import type { EventCallback, TaskCallback } from "../../../callback/types";
 import { v4 } from "uuid";
 import { CallbackWithId } from "../../../types";
+import CallbackManager from "../../../callback/callbackManager";
 type MenuItemProps = {
   text: string;
   defaultFn: <T extends CallbackWithId>(
     defaultFn: () => T,
-    partial: Partial<T>
+    partial: Partial<T>,
   ) => void;
-  type: "event" | "task";
-};
-
-
-//TODO
-const eventCreationFn = (): EventCallback => {
-  return {
-    id: v4(),
-    event: "",
-    function: "create_future_event",
-    args: {
-      title: "",
-      summary: "",
-      days: 0,
-    },
-  };
-};
-
-const taskCreationFn = (): TaskCallback => {
-  return {
-    id: v4(),
-    event: "",
-    function: "create_task",
-    args: {
-      title: "",
-      summary: "",
-    },
-  };
+  type: string;
 };
 
 const MenuItem = ({ text, defaultFn, type }: MenuItemProps) => {
-  if (type !== "event" && type !== "task") {
-    throw new Error("Invalid type");
+  const fn = CallbackManager.getCallbackManagementObj(type)?.createFn;
+  if (!fn) {
+    throw new Error("Callback type not registered");
   }
-  const fn = type === "event" ? eventCreationFn : taskCreationFn;
   const addFn = (e: React.MouseEvent<HTMLElement>) => {
     defaultFn<CallbackWithId>(fn, {});
   };

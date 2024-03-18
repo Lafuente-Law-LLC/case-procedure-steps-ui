@@ -54,8 +54,8 @@ const CallbacksTable = ({ step }: { step: Step }) => {
       </div>
       {editMode && (
         <CallbackAdditionButton>
-          <MenuItem text="Add Event" defaultFn={addCallbackFn} type="event" />
-          <MenuItem text="Add Task" defaultFn={addCallbackFn} type="task" />
+          <MenuItem text="Add Event" defaultFn={addCallbackFn} type="create_future_event" />
+          <MenuItem text="Add Task" defaultFn={addCallbackFn} type="create_task" />
         </CallbackAdditionButton>
       )}
     </TableContext.Provider>

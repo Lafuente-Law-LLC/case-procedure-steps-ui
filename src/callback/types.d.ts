@@ -1,5 +1,4 @@
-import type { CallbackWithId } from "../../types";
-
+import type { CallbackWithId } from "../types";
 
 export interface EventCallback extends CallbackWithId {
   event: string;

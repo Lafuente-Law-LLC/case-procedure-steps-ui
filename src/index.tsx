@@ -5,10 +5,12 @@ import "bootstrap/scss/bootstrap.scss";
 import RootStepConstructor from "./step/rootStepConstructor";
 import "./css/main.scss";
 import { DragItem } from "./components/DragItem/DragItem";
-import {
-  removeClassesFromElements, 
-} from "./components/DragItem/helpers/dragItemUtil";
+import { removeClassesFromElements } from "./components/DragItem/helpers/dragItemUtil";
 import { Step } from "./step/step";
+import {
+  eventCallbackManagementObj,
+  taskCallbackManagementObj,
+} from "./callback/callbackManager";
 const App: React.FC = ({ rootStep }: { rootStep: Step }) => {
   const [steps, setSteps] = useState(rootStep.steps);
 
@@ -20,7 +22,6 @@ const App: React.FC = ({ rootStep }: { rootStep: Step }) => {
   };
 
   useEffect(() => {
-    debugger;
     removeClassesFromElements(["dragging", "drag-over", "above", "below"]);
   }, [
     document.querySelectorAll<HTMLElement>(`.dragging`),
@@ -42,7 +43,11 @@ const App: React.FC = ({ rootStep }: { rootStep: Step }) => {
   );
 };
 
-const constructorRt = new RootStepConstructor(sampleStep);
+const createTaskManager = {};
+const constructorRt = new RootStepConstructor(sampleStep, [
+  eventCallbackManagementObj,
+  taskCallbackManagementObj,
+]);
 const rt = constructorRt.rootStep;
 
 const root = createRoot(document.getElementById("root"));

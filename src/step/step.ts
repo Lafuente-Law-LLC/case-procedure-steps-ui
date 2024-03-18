@@ -1,6 +1,7 @@
 import StepNode from "./stepNode";
 import StepManager from "./stepManager";
 import type { Callback } from "../types";
+import { stepValidator } from "../validator/validators";
 
 class Step {
   title: string;
@@ -9,6 +10,7 @@ class Step {
   callbacks: Callback[];
   stepNode: StepNode;
   stepManager: StepManager;
+  stepValidator: typeof stepValidator;
   constructor(stepNode: StepNode) {
     const dataObj = stepNode.node.model;
     if (!dataObj.id) {
@@ -20,7 +22,16 @@ class Step {
     this.callbacks = dataObj.callbacks || [];
     this.stepNode = stepNode;
     this.stepManager = this.stepNode.stepManager;
+    this.stepValidator = this.stepManager.stepValidator;
     this.stepManager.registerInstance(this);
+  }
+
+  validate() {
+    return this.stepValidator.validate(this);
+  }
+
+  valid(): boolean {
+    return this.validate()[0];
   }
 
   updateTitle(title: string) {
@@ -39,7 +50,7 @@ class Step {
 
   addNewStep() {
     const step = this.stepNode.addNewChild();
-    this.callupdateCallbacks(); 
+    this.callupdateCallbacks();
   }
 
   addAsChildStep(step: Step) {
@@ -85,7 +96,7 @@ class Step {
 
   get steps() {
     const stepsArray = this.stepNode.childrenNodes.map((node) =>
-      this.stepManager.searchById(node.model.id)
+      this.stepManager.searchById(node.model.id),
     );
 
     return stepsArray.filter((step) => step !== undefined);

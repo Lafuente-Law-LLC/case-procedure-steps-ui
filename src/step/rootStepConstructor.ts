@@ -1,9 +1,11 @@
 import { Step } from "./step";
-import type { FormattedStepObj } from "../types";
+import type { Callback, CallbackWithId, FormattedStepObj } from "../types";
 import TreeModel from "tree-model";
 import StepManager from "./stepManager";
 import StepNode from "./stepNode";
 import { v4 } from "uuid";
+import type { CallbackManagementObj } from "../callback/callbackManager";
+import CallbackManager from "../callback/callbackManager";
 
 const defaultSetupFunction = (data: any): FormattedStepObj => {
   data.title = data.title || "";
@@ -14,7 +16,7 @@ const defaultSetupFunction = (data: any): FormattedStepObj => {
   return data;
 };
 
-const validateData = (data: any) => {
+const validateData = function(this: RootStepConstructor, data: any){
   if (!data.title) {
     throw new Error("Title is required");
   }
@@ -24,20 +26,47 @@ const validateData = (data: any) => {
   if (!data.summary) {
     throw new Error("Summary is required");
   }
+  this.checkIfAllCallbackTypesRegistered();
 };
 
 export default class RootStepConstructor {
   rootNode: TreeModel.Node<FormattedStepObj>;
   stepManager = new StepManager();
-  constructor(data: any) {
+  callbackTypes = new Set<string>();
+
+  registerCallbackManagement<T extends CallbackManagementObj<any>>(obj: T) {
+    CallbackManager.registerCallbackManagementObj(obj);
+  }
+
+  constructor(data: any, callbackManagementObjs: CallbackManagementObj<any>[] = []) {
+    callbackManagementObjs.forEach((obj) => this.registerCallbackManagement(obj));
     const parsedData = this.parseData(data);
-    validateData(parsedData);
+    validateData.call(this, parsedData); 
     this.rootNode = new TreeModel().parse<FormattedStepObj>(parsedData);
     this.processStep(this.rootNode);
   }
 
+  checkIfAllCallbackTypesRegistered() {
+    this.callbackTypes.forEach((callbackType) => {
+      if (!CallbackManager.checkIfRegistered(callbackType)) {
+        throw new Error(`Callback type ${callbackType} not registered`);
+      }
+    });
+  }
+
+  getCallbackTypesFromData(data: any) {
+    if (!data.callbacks) {
+      return;
+    }
+    const callbacks = data.callbacks;
+    callbacks.forEach((callback: Callback) => {
+      this.callbackTypes.add(callback.function);
+    });
+  }
+
   parseData(data: any) {
     data = defaultSetupFunction(data);
+    this.getCallbackTypesFromData(data);
     data.children.forEach((child: any) => this.parseData(child));
     return data as FormattedStepObj;
   }

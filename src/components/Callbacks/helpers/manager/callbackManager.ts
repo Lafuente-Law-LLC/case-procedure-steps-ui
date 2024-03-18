@@ -39,4 +39,4 @@ class CallbackManager {
   }
 }
 
-export default CallbackManager;
+
