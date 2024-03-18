@@ -4,10 +4,10 @@ import { merge } from "lodash";
 
 const dispatchFunctionFactory = (dispatch: Dispatcher) => {
   const add = <T extends CallbackWithId>(
-    defaultFn: () => T,
+    createDefault: () => T,
     partial: Partial<T>,
   ) => {
-    const data = merge({}, defaultFn(), partial);
+    const data = merge({}, createDefault(), partial);
     dispatch({ type: "add", data });
   };
   const remove = (id: string) => {

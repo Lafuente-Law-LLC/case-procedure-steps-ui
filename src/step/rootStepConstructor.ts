@@ -1,54 +1,55 @@
 import { Step } from "./step";
-import type { Callback, CallbackWithId, FormattedStepObj } from "../types";
+import type { Callback, FormattedStepObj } from "../types";
 import TreeModel from "tree-model";
 import StepManager from "./stepManager";
 import StepNode from "./stepNode";
-import { v4 } from "uuid";
+import { v4 as generateUniqueId } from "uuid";
 import type { CallbackManagementObj } from "../callback/callbackManager";
-import CallbackManager from "../callback/callbackManager";
-
-const defaultSetupFunction = (data: any): FormattedStepObj => {
-  data.title = data.title || "";
-  data.id = data.id || v4();
-  data.summary = data.summary || "";
-  data.callbacks = data.callbacks || [];
-  data.children = data.steps || [];
-  return data;
-};
-
-const validateData = function(this: RootStepConstructor, data: any){
-  if (!data.title) {
-    throw new Error("Title is required");
-  }
-  if (!data.id) {
-    throw new Error("Id is required");
-  }
-  if (!data.summary) {
-    throw new Error("Summary is required");
-  }
-  this.checkIfAllCallbackTypesRegistered();
-};
 
 export default class RootStepConstructor {
   rootNode: TreeModel.Node<FormattedStepObj>;
   stepManager = new StepManager();
   callbackTypes = new Set<string>();
+  callbackManager = this.stepManager.callbackManager;
 
-  registerCallbackManagement<T extends CallbackManagementObj<any>>(obj: T) {
-    CallbackManager.registerCallbackManagementObj(obj);
-  }
-
-  constructor(data: any, callbackManagementObjs: CallbackManagementObj<any>[] = []) {
-    callbackManagementObjs.forEach((obj) => this.registerCallbackManagement(obj));
+  constructor(
+    data: any,
+    callbackManagementObjs: CallbackManagementObj<any>[] = [],
+  ) {
+    callbackManagementObjs.forEach((obj) =>
+      this.registerCallbackManagement(obj),
+    );
     const parsedData = this.parseData(data);
-    validateData.call(this, parsedData); 
+    this.validateData(parsedData);
     this.rootNode = new TreeModel().parse<FormattedStepObj>(parsedData);
     this.processStep(this.rootNode);
   }
 
+  defaultSetup(data: any): FormattedStepObj {
+    return {
+      title: data.title || "",
+      id: data.id || generateUniqueId(),
+      summary: data.summary || "",
+      callbacks: data.callbacks || [],
+      children: data.steps || [],
+    };
+  }
+
+  validateData = (data: any): void => {
+    const requiredFields = ["title", "id", "summary"];
+    requiredFields.forEach((field) => {
+      if (!data[field]) throw new Error(`${field} is required`);
+    });
+    this.checkIfAllCallbackTypesRegistered();
+  };
+
+  registerCallbackManagement<T extends CallbackManagementObj<any>>(obj: T) {
+    this.callbackManager.registerCallbackManagementObj(obj);
+  }
+
   checkIfAllCallbackTypesRegistered() {
     this.callbackTypes.forEach((callbackType) => {
-      if (!CallbackManager.checkIfRegistered(callbackType)) {
+      if (!this.callbackManager.checkIfRegistered(callbackType)) {
         throw new Error(`Callback type ${callbackType} not registered`);
       }
     });
@@ -65,7 +66,7 @@ export default class RootStepConstructor {
   }
 
   parseData(data: any) {
-    data = defaultSetupFunction(data);
+    data = this.defaultSetup(data);
     this.getCallbackTypesFromData(data);
     data.children.forEach((child: any) => this.parseData(child));
     return data as FormattedStepObj;
@@ -85,9 +86,5 @@ export default class RootStepConstructor {
 
   registerUpdateCallback(callback: () => void) {
     this.stepManager.registerUpdateCallback(callback);
-  }
-
-  get StepManager() {
-    return this.stepManager;
   }
 }

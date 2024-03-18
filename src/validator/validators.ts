@@ -15,7 +15,7 @@ const eventCallbackSchema = Joi.object({
   args: Joi.object({
     title: Joi.string().required(),
     summary: Joi.string().required(),
-    days: Joi.number().integer().min(0), // Only for EventCallback
+    days: Joi.number().integer().min(0),
   }),
 });
 

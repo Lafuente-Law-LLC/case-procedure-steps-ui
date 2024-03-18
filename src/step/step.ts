@@ -34,6 +34,11 @@ class Step {
     return this.validate()[0];
   }
 
+  get callbackManager () {
+    return this.stepManager.callbackManager;
+  }
+
+
   updateTitle(title: string) {
     this.title = title;
     this.callupdateCallbacks();
