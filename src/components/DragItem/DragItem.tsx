@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Step } from "../../step/step";
 import { DragItemHead } from "./DragItemHead";
 import { DragItemBody } from "./DragItemBody";
