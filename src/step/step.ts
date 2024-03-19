@@ -104,7 +104,7 @@ class Step {
       this.stepManager.searchById(node.model.id),
     );
 
-    return stepsArray.filter((step) => step !== undefined);
+    return stepsArray.filter((step) => step !== undefined) as Step[];
   }
 
   toJSON(): any {

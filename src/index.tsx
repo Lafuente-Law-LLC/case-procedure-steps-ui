@@ -7,11 +7,47 @@ import "./css/main.scss";
 import { DragItem } from "./components/DragItem/DragItem";
 import { removeClassesFromElements } from "./components/DragItem/helpers/dragItemUtil";
 import { Step } from "./step/step";
+import { CallbackManagementObj } from "./callback/callbackManager";
+import { v4 } from "uuid";
+import { EventCallback, TaskCallback } from "./callback/types";
 import {
-  eventCallbackManagementObj,
-  taskCallbackManagementObj,
-} from "./callback/callbackManager";
-const App: React.FC = ({ rootStep }: { rootStep: Step }) => {
+  eventCallbackValidator,
+  taskCallbackValidator,
+} from "./validator/validators";
+
+const eventCallbackManagementObj: CallbackManagementObj<EventCallback> = {
+  createFn: () => ({
+    id: v4(),
+    event: "",
+    function: "create_future_event",
+    args: {
+      title: "",
+      summary: "",
+      days: 0,
+    },
+  }),
+  type: "create_future_event",
+  validator: eventCallbackValidator,
+};
+
+const taskCallbackManagementObj: CallbackManagementObj<TaskCallback> = {
+  createFn: () => ({
+    id: v4(),
+    event: "",
+    function: "create_task",
+    args: {
+      title: "",
+      summary: "",
+    },
+  }),
+  type: "create_task",
+  validator: taskCallbackValidator,
+};
+
+interface AppProps {
+  rootStep: Step;
+}
+const App: React.FC<AppProps> = ({ rootStep }: { rootStep: Step }) => {
   const [steps, setSteps] = useState(rootStep.steps);
 
   constructorRt.registerUpdateCallback(() => {
@@ -43,13 +79,23 @@ const App: React.FC = ({ rootStep }: { rootStep: Step }) => {
   );
 };
 
-const createTaskManager = {};
+
 const constructorRt = new RootStepConstructor(sampleStep, [
   eventCallbackManagementObj,
   taskCallbackManagementObj,
 ]);
 const rt = constructorRt.rootStep;
 
-const root = createRoot(document.getElementById("root"));
+const element = document.getElementById("root");
+if (!element) {
+  throw new Error("No root element found");
+}
+
+const root = createRoot(element);
+if (rt === undefined) {
+  throw new Error("Root step is undefined");
+}
 
 root.render(<App rootStep={rt} />);
+
+

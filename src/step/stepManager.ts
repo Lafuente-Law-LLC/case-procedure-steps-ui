@@ -14,31 +14,16 @@ export default class StepManager {
     this.updateCallbacks = new Set<() => void>();
   }
 
-  /**
-   * Register a step instance
-   *
-   * @param instance
-   * @returns Void
-   */
   registerInstance(instance: Step) {
     this.registeredSteps.add(instance);
   }
 
-  /**
-   * Unregister a step instance
-   *
-   * @param instance
-   * @returns Void
-   */
+
   unregisterInstance(instance: Step) {
     this.registeredSteps.delete(instance);
   }
 
-  /**
-   * Call all the update callbacks
-   *
-   * @returns Void
-   */
+
   registerUpdateCallback(callback: () => void) {
     this.updateCallbacks.add(callback);
   }
@@ -46,11 +31,6 @@ export default class StepManager {
     return Array.from(this.registeredSteps).find((step) => step.id === id);
   }
 
-  /**
-   * Given a node, returns the root node
-   *
-   * @param node
-   */
   static returnRootNode(node: Node) {
     return node.getPath().slice(0, 1)[0];
   }

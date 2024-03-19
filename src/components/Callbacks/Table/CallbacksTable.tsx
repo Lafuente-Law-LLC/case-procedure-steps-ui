@@ -13,15 +13,16 @@ const CallbacksTable = ({ step }: { step: Step }) => {
   const [editMode, setEditMode] = useState(false);
   const [callbacks, callbacksDispatch] = useReducer(
     reducer,
-    processCallbacks(step.callbacks)
+    processCallbacks(step.callbacks),
   );
-
-  const addCallbackFn = dispatchFunctionFactory(callbacksDispatch).add;
 
   useEffect(() => {
     step.updateCallbacks(callbacks);
-    console.log(step);
   }, [callbacks]);
+
+  const {add} = dispatchFunctionFactory(callbacksDispatch);
+  const callbackManagementObjs = [...step.callbackManager.callbackManagementObjs.values()]
+  
 
   return (
     <TableContext.Provider value={{ editMode, setEditMode }}>
@@ -52,12 +53,22 @@ const CallbacksTable = ({ step }: { step: Step }) => {
           </tbody>
         </Table>
       </div>
-      {editMode && (
-        <CallbackAdditionButton>
-          <MenuItem text="Add Event" defaultFn={addCallbackFn} type="create_future_event" />
-          <MenuItem text="Add Task" defaultFn={addCallbackFn} type="create_task" />
-        </CallbackAdditionButton>
-      )}
+      {editMode && 
+       <CallbackAdditionButton>
+          {callbackManagementObjs.map((obj) => {
+            return (
+              <MenuItem
+                key={obj.type}
+                text={obj.type}
+                addFn={obj.createFn}
+                defaultFn={add}
+                type={obj.type}
+              />
+            );
+
+          })}
+        
+        </CallbackAdditionButton>}
     </TableContext.Provider>
   );
 };

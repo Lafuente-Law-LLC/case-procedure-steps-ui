@@ -20,19 +20,20 @@ export default class RootStepConstructor {
       this.registerCallbackManagement(obj),
     );
     const parsedData = this.parseData(data);
+
     this.validateData(parsedData);
     this.rootNode = new TreeModel().parse<FormattedStepObj>(parsedData);
     this.processStep(this.rootNode);
   }
 
   defaultSetup(data: any): FormattedStepObj {
-    return {
-      title: data.title || "",
-      id: data.id || generateUniqueId(),
-      summary: data.summary || "",
-      callbacks: data.callbacks || [],
-      children: data.steps || [],
-    };
+    data.title = data.title || "";
+    data.id = data.id || generateUniqueId();
+    data.summary = data.summary || "";
+    data.callbacks = data.callbacks || [];
+    data.children = data.steps || [];
+    delete data.steps;
+    return data;
   }
 
   validateData = (data: any): void => {
@@ -68,12 +69,16 @@ export default class RootStepConstructor {
   parseData(data: any) {
     data = this.defaultSetup(data);
     this.getCallbackTypesFromData(data);
-    data.children.forEach((child: any) => this.parseData(child));
+
+    data.children.forEach((child: any) => {
+      return this.parseData(child);
+    });
     return data as FormattedStepObj;
   }
 
   processStep(node: TreeModel.Node<FormattedStepObj>) {
     new Step(new StepNode(node, this.stepManager));
+
     const children = node.children as TreeModel.Node<FormattedStepObj>[];
     if (children) {
       children.forEach((child) => this.processStep(child));

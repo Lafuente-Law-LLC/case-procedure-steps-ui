@@ -1,12 +1,5 @@
 import Validator from "../validator/validator";
 import { CallbackWithId } from "../types";
-import type { EventCallback, TaskCallback } from "./types";
-import {
-  eventCallbackValidator,
-  taskCallbackValidator,
-} from "../validator/validators";
-import { v4 } from "uuid";
-
 
 export interface CallbackManagementObj<T extends CallbackWithId> {
   createFn: () => T;
@@ -42,38 +35,5 @@ class CallbackManager {
   }
 }
 
-const eventCallbackManagementObj: CallbackManagementObj<EventCallback> = {
-  createFn: () => ({
-    id: v4(),
-    event: "",
-    function: "create_future_event",
-    args: {
-      title: "",
-      summary: "",
-      days: 0,
-    },
-  }),
-  type: "create_future_event",
-  validator: eventCallbackValidator,
-};
 
-const taskCallbackManagementObj: CallbackManagementObj<TaskCallback> = {
-  createFn: () => ({
-    id: v4(),
-    event: "",
-    function: "create_task",
-    args: {
-      title: "",
-      summary: "",
-    },
-  }),
-  type: "create_task",
-  validator: taskCallbackValidator,
-};
-
-export {
-  CallbackManager,
-  eventCallbackManagementObj,
-  taskCallbackManagementObj,
-};
 export default CallbackManager;
