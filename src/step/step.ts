@@ -1,6 +1,6 @@
 import StepNode from "./stepNode";
 import StepManager from "./stepManager";
-import type { Callback } from "../types";
+import type Callback  from "../callback/callback";
 import { stepValidator } from "../validator/validators";
 
 class Step {
@@ -33,11 +33,6 @@ class Step {
   valid(): boolean {
     return this.validate()[0];
   }
-
-  get callbackManager () {
-    return this.stepManager.callbackManager;
-  }
-
 
   updateTitle(title: string) {
     this.title = title;

@@ -8,7 +8,7 @@ import dispatchFunctionFactory from "../helpers/reducer/dispatchFunctionFactory"
 import CallbackAdditionButton from "../../CallbackAdditionButton";
 import { TableContext } from "./TableContext";
 import MenuItem from "./MenuItem";
-
+import Callback from "../../../callback/callback";
 const CallbacksTable = ({ step }: { step: Step }) => {
   const [editMode, setEditMode] = useState(false);
   const [callbacks, callbacksDispatch] = useReducer(
@@ -21,7 +21,7 @@ const CallbacksTable = ({ step }: { step: Step }) => {
   }, [callbacks]);
 
   const {add} = dispatchFunctionFactory(callbacksDispatch);
-  const callbackManagementObjs = [...step.callbackManager.callbackManagementObjs.values()]
+  const callbackManagementObjs = [...Callback.callbackManagementObjs.values()]
   
 
   return (

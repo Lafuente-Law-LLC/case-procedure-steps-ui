@@ -1,14 +1,12 @@
 import { Step } from "./step";
 import { Node } from "../types";
 import { stepValidator } from "../validator/validators";
-import CallbackManager from "../callback/callbackManager";
-
 
 export default class StepManager {
   registeredSteps: Set<Step>;
   updateCallbacks: Set<() => void>;
   stepValidator = stepValidator;
-  callbackManager = new CallbackManager();
+
   constructor() {
     this.registeredSteps = new Set<Step>();
     this.updateCallbacks = new Set<() => void>();
@@ -18,11 +16,9 @@ export default class StepManager {
     this.registeredSteps.add(instance);
   }
 
-
   unregisterInstance(instance: Step) {
     this.registeredSteps.delete(instance);
   }
-
 
   registerUpdateCallback(callback: () => void) {
     this.updateCallbacks.add(callback);

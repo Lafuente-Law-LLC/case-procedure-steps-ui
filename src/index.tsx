@@ -7,15 +7,15 @@ import "./css/main.scss";
 import { DragItem } from "./components/DragItem/DragItem";
 import { removeClassesFromElements } from "./components/DragItem/helpers/dragItemUtil";
 import { Step } from "./step/step";
-import { CallbackManagementObj } from "./callback/callbackManager";
+
 import { v4 } from "uuid";
-import { EventCallback, TaskCallback } from "./callback/types";
 import {
   eventCallbackValidator,
   taskCallbackValidator,
 } from "./validator/validators";
+import Callback from "./callback/callback";
 
-const eventCallbackManagementObj: CallbackManagementObj<EventCallback> = {
+const eventCallbackManagementObj = {
   createFn: () => ({
     id: v4(),
     event: "",
@@ -26,11 +26,13 @@ const eventCallbackManagementObj: CallbackManagementObj<EventCallback> = {
       days: 0,
     },
   }),
-  type: "create_future_event",
+  type: "create_future_event", 
   validator: eventCallbackValidator,
 };
 
-const taskCallbackManagementObj: CallbackManagementObj<TaskCallback> = {
+
+
+const taskCallbackManagementObj = {
   createFn: () => ({
     id: v4(),
     event: "",
@@ -43,6 +45,11 @@ const taskCallbackManagementObj: CallbackManagementObj<TaskCallback> = {
   type: "create_task",
   validator: taskCallbackValidator,
 };
+
+Callback.registerCallbackManagementObj(eventCallbackManagementObj);
+Callback.registerCallbackManagementObj(taskCallbackManagementObj);
+
+
 
 interface AppProps {
   rootStep: Step;
@@ -80,10 +87,7 @@ const App: React.FC<AppProps> = ({ rootStep }: { rootStep: Step }) => {
 };
 
 
-const constructorRt = new RootStepConstructor(sampleStep, [
-  eventCallbackManagementObj,
-  taskCallbackManagementObj,
-]);
+const constructorRt = new RootStepConstructor(sampleStep);
 const rt = constructorRt.rootStep;
 
 const element = document.getElementById("root");

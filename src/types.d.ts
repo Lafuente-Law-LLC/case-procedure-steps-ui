@@ -1,23 +1,17 @@
 import type { Node } from "tree-model";
-
-/** Represent functions calls at specific points in the lifecycle of the Step */
-export interface Callback {
+import type Callback from "./callback/callback";
+export type CallbackObj = { 
   event: string;
   function: string;
   args: Record<string, any>;
-}
+};
 
-
-
-export interface CallbackWithId extends Callback{
-  id: string;
-}
 /** A pre-initialized Step which can contain steps as children */
 export type StepObj = {
   id: string;
   title: string;
   summary: string;
-  callbacks?: Callback[];
+  callbacks?: CallbackObj[];
   steps?: StepObj[];
 };
 
