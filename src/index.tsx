@@ -46,8 +46,8 @@ const taskCallbackManagementObj = {
   validator: taskCallbackValidator,
 };
 
-Callback.registerCallbackManagementObj(eventCallbackManagementObj);
-Callback.registerCallbackManagementObj(taskCallbackManagementObj);
+Callback.registerCallbackAdminObj(eventCallbackManagementObj);
+Callback.registerCallbackAdminObj(taskCallbackManagementObj);
 
 
 

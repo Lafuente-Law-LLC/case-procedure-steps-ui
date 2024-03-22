@@ -1,24 +1,41 @@
 import { v4 } from "uuid";
-import type Validator from "../validator/validator";
+import Validator from "../validator/validator";
 import { CallbackObj } from "../types";
+import { merge } from "lodash";
 
-export type CallbackManagementObj = {
+export type CallbackAdminObj = {
   type: string;
   createFn: () => CallbackObj & { id: string };
   validator: Validator;
 };
 
+const isValidCallbackManagementObj = (obj: any): obj is CallbackAdminObj => {
+  return (
+    typeof obj.type === "string" &&
+    typeof obj.createFn === "function" &&
+    typeof obj.validator === "object" &&
+    obj.validator instanceof Validator
+  );
+};
+
 class Callback {
-  static callbackManagementObjs = new Map<string, CallbackManagementObj>();
+  static callbackAdminObjs = new Map<string, CallbackAdminObj>();
   static checkIfRegistered(type: string) {
-    return this.callbackManagementObjs.has(type);
+    return this.callbackAdminObjs.has(type);
   }
-  static registerCallbackManagementObj(obj: CallbackManagementObj) {
-    if (this.callbackManagementObjs.has(obj.type)) {
+  static registerCallbackAdminObj(obj: CallbackAdminObj) {
+    if (!isValidCallbackManagementObj(obj)) {
+      throw new Error("Invalid callback management object");
+    }
+    if (this.callbackAdminObjs.has(obj.type)) {
       console.warn("Callback type already registered");
       return;
     }
-    this.callbackManagementObjs.set(obj.type, obj);
+    this.callbackAdminObjs.set(obj.type, obj);
+  }
+
+  static getCallbackAdminObj(type: string) {
+    return this.callbackAdminObjs.get(type);
   }
 
   id: string;
@@ -26,7 +43,7 @@ class Callback {
   function: string;
   args: Record<string, any>;
   validator: Validator;
-  constructor(data: any) {
+  constructor(data: CallbackObj & { id?: string }) {
     const { id, event, function: func, args } = data;
     this.id = id || v4();
     this.event = event;
@@ -35,12 +52,23 @@ class Callback {
     this.validator = this.getValidator();
   }
 
+
+
+
   private getValidator() {
-    const callbackMngObj = Callback.callbackManagementObjs.get(this.function);
-    if (!callbackMngObj) {
+    const callbackAdminObj = Callback.callbackAdminObjs.get(this.function);
+    if (!callbackAdminObj) {
       throw new Error("Callback type not registered");
     }
-    return callbackMngObj.validator;
+    return callbackAdminObj.validator;
+  }
+
+  update(data: Partial<CallbackObj>) {
+    const { event, args } = data;
+    this.event = event || this.event;
+    if (args) {
+      this.args = merge(this.args, args);
+    }
   }
 
   get type() {
@@ -54,9 +82,8 @@ class Callback {
     return this.validator.validate(this);
   }
 
-  json() {
+  toJSON(): CallbackObj {
     return {
-      id: this.id,
       event: this.event,
       function: this.function,
       args: this.args,

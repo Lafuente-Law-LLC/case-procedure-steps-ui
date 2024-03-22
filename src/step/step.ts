@@ -36,21 +36,21 @@ class Step {
 
   updateTitle(title: string) {
     this.title = title;
-    this.callupdateCallbacks();
+    this.informStepManager();
   }
 
   updateCallbacks(callbacks: Callback[]) {
     this.callbacks = callbacks;
-    this.callupdateCallbacks();
+    this.informStepManager();
   }
   updateSummary(summary: string) {
     this.summary = summary;
-    this.callupdateCallbacks();
+    this.informStepManager();
   }
 
   addNewStep() {
     const step = this.stepNode.addNewChild();
-    this.callupdateCallbacks();
+    this.informStepManager();
   }
 
   addAsChildStep(step: Step) {
@@ -67,18 +67,18 @@ class Step {
 
   moveStepAboveSelf(step: Step) {
     this.stepNode.moveNodeAboveSelf(step.stepNode.node);
-    this.callupdateCallbacks();
+    this.informStepManager();
   }
 
   moveStepBelowSelf(step: Step) {
     this.stepNode.moveNodeBelowSelf(step.stepNode.node);
-    this.callupdateCallbacks();
+    this.informStepManager();
   }
 
   remove() {
     this.stepNode.removeSelf();
     this.stepManager.unregisterInstance(this);
-    this.callupdateCallbacks();
+    this.informStepManager();
   }
 
   get parentStep(): Step | null {
@@ -90,8 +90,8 @@ class Step {
     return this.stepNode.node.getPath().length === 1;
   }
 
-  callupdateCallbacks() {
-    this.stepManager.updateCallbacks.forEach((callback) => callback());
+  informStepManager() {
+    this.stepManager.callbackFunctions.forEach((callback) => callback());
   }
 
   get steps() {
@@ -107,7 +107,7 @@ class Step {
       title: this.title,
       summary: this.summary,
       id: this.id,
-      callbacks: this.callbacks,
+      callbacks: this.callbacks.map((callback) => callback.toJSON()),
       steps: this.steps.map((step) => step && step.toJSON()),
     };
   }

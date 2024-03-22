@@ -4,12 +4,12 @@ import { stepValidator } from "../validator/validators";
 
 export default class StepManager {
   registeredSteps: Set<Step>;
-  updateCallbacks: Set<() => void>;
+  callbackFunctions: Set<() => void>;
   stepValidator = stepValidator;
 
   constructor() {
     this.registeredSteps = new Set<Step>();
-    this.updateCallbacks = new Set<() => void>();
+    this.callbackFunctions = new Set<() => void>();
   }
 
   registerInstance(instance: Step) {
@@ -21,7 +21,7 @@ export default class StepManager {
   }
 
   registerUpdateCallback(callback: () => void) {
-    this.updateCallbacks.add(callback);
+    this.callbackFunctions.add(callback);
   }
   searchById(id: string) {
     return Array.from(this.registeredSteps).find((step) => step.id === id);

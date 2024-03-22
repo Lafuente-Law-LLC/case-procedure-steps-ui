@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { CallbackWithId } from "../../../types";
+import Callback from "../../../callback/callback";
 import { extractKeyValues } from "../helpers/callbacksTableUtils";
 import LabelRow from "./LabelRow";
-import type { Dispatcher } from "../helpers/reducer/reducerFunction";
+import type { ReactDispatcher } from "../helpers/reducer/reducerFunction";
 import dispatchFunctionFactory from "../helpers/reducer/dispatchFunctionFactory";
 import { TableContext } from "./TableContext";
 import EventSelect, { Option } from "./EventSelect";
@@ -13,11 +13,11 @@ const defaultOptions: Option[] = [
 ];
 
 const CallbackTableRow = ({
-  callbackWithId: callback,
+  callback: callback,
   dispatcher,
 }: {
-  callbackWithId: CallbackWithId;
-  dispatcher: Dispatcher;
+  callback: Callback;
+  dispatcher: ReactDispatcher;
 }) => {
   const { editMode } = useContext(TableContext) as { editMode: boolean };
 
