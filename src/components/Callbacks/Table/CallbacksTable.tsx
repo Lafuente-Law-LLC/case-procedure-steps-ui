@@ -1,17 +1,13 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { Table, Form } from "react-bootstrap";
+import { Table, Form, Button } from "react-bootstrap";
 import { Step } from "../../../step/step";
 import CallbackTableRow from "./CallbackTableRow";
 import reducer, { Action } from "../helpers/reducer/reducerFunction";
 import dispatchFunctionFactory from "../helpers/reducer/dispatchFunctionFactory";
 import CallbackAdditionButton from "./CallbackAdditionButton";
 import { TableContext } from "./TableContext";
-import MenuItem from "./CallbackAdditionButton/MenuItem";
-
-import {
-  getValidatorFromAdminObj,
-  getFunctionFromAdminObj,
-} from "../helpers/callbacksTableUtils";
+import MenuItem, { onClickFn } from "./CallbackAdditionButton/MenuItem";
+import { getFunctionFromAdminObj } from "../helpers/callbacksTableUtils";
 
 const AboveTable = ({
   setEditMode,
@@ -29,21 +25,30 @@ const AboveTable = ({
   );
 };
 
-const MenuItemAddFutureEventCallback = ({
+const MenuItemAddFutureEvent = ({
   dispatcher,
 }: {
   dispatcher: React.Dispatch<Action>;
 }) => {
-
-  const fn = getFunctionFromAdminObj("create_future_event"); 
-  const validator = getValidatorFromAdminObj("create_future_event");
-
-
+  const defaultFn = getFunctionFromAdminObj("create_future_event");
   const { add: addFn } = dispatchFunctionFactory(dispatcher);
-  const defaultFn = eventCallbackAdminObj.createFn;
-  const text = "Add Future Event Callback";
-  const onClick = (e) => {
-    addFn({}, eventCallbackAdminObj.createFn());
+  const text = "Create Future Event";
+  const onClick: onClickFn = (e) => {
+    addFn({}, defaultFn());
+  };
+  return <MenuItem text={text} onClickFn={onClick} />;
+};
+
+const MenuItemAddCreateTask = ({
+  dispatcher,
+}: {
+  dispatcher: React.Dispatch<Action>;
+}) => {
+  const defaultFn = getFunctionFromAdminObj("create_task");
+  const { add: addFn } = dispatchFunctionFactory(dispatcher);
+  const text = "Create Task";
+  const onClick: onClickFn = (e) => {
+    addFn({}, defaultFn());
   };
   return <MenuItem text={text} onClickFn={onClick} />;
 };
@@ -51,22 +56,25 @@ const MenuItemAddFutureEventCallback = ({
 const BelowTable = ({
   editMode,
   children,
-}: { editMode: boolean } & React.PropsWithChildren) => {
+  setChangeCommit,
+  isValid,
+}: {
+  editMode: boolean;
+  setChangeCommit: React.Dispatch<React.SetStateAction<boolean>>;
+  isValid?: boolean;
+} & React.PropsWithChildren) => {
   return (
-    editMode && <CallbackAdditionButton>{children}</CallbackAdditionButton>
+    <>
+      {editMode && <CallbackAdditionButton>{children}</CallbackAdditionButton>}
+    </>
   );
 };
 
 const CallbacksTable = ({ step }: { step: Step }) => {
   const [editMode, setEditMode] = useState(false);
-  const [commitChange, setCommitChange] = useState(false);
+  const [commitable, setCommitChange] = useState(false);
   const [callbacks, callbacksDispatch] = useReducer(reducer, step.callbacks);
-
-  useEffect(() => {
-    step.updateCallbacks(callbacks);
-  }, [callbacks]);
-
-  const {} = dispatchFunctionFactory(callbacksDispatch);
+  const isValid = callbacks.every((callback) => callback.valid());
 
   return (
     <TableContext.Provider value={{ editMode, setEditMode }}>
@@ -78,6 +86,7 @@ const CallbacksTable = ({ step }: { step: Step }) => {
               <th>Event</th>
               <th>Function</th>
               <th>Args</th>
+              <th>Options</th>
             </tr>
           </thead>
           <tbody>
@@ -90,8 +99,11 @@ const CallbacksTable = ({ step }: { step: Step }) => {
             ))}
           </tbody>
         </Table>
-        <BelowTable editMode={editMode}></BelowTable>
       </div>
+      <BelowTable setChangeCommit={setCommitChange} editMode={editMode}>
+        <MenuItemAddFutureEvent dispatcher={callbacksDispatch} />
+        <MenuItemAddCreateTask dispatcher={callbacksDispatch} />
+      </BelowTable>
     </TableContext.Provider>
   );
 };

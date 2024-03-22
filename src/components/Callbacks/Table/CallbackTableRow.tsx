@@ -6,11 +6,21 @@ import type { ReactDispatcher } from "../helpers/reducer/reducerFunction";
 import dispatchFunctionFactory from "../helpers/reducer/dispatchFunctionFactory";
 import { TableContext } from "./TableContext";
 import EventSelect, { Option } from "./EventSelect";
+import { CiTrash } from "react-icons/ci";
 
 const defaultOptions: Option[] = [
   { text: "After Complete", value: "after_complete" },
   { text: "At initialize", value: "init" },
 ];
+
+const DeleteButton = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <div className="delete-button" onClick={onClick}>
+      <CiTrash> delete </CiTrash>
+      delete
+    </div>
+  );
+};
 
 const CallbackTableRow = ({
   callback: callback,
@@ -58,15 +68,9 @@ const CallbackTableRow = ({
             changeFunction={returnOnChange(keyValue.label, keyValue.value)}
           />
         ))}
-        <div>
-          <button
-            onClick={() => {
-              remove(callback.id);
-            }}
-          >
-            Delete
-          </button>
-        </div>
+      </td>
+      <td>
+        {editMode && <DeleteButton onClick={() => remove(callback.id)} />}
       </td>
     </tr>
   );

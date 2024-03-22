@@ -23,7 +23,7 @@ const eventCallbackManagementObj = {
     args: {
       title: "",
       summary: "",
-      days: 0,
+      days: 200,
     },
   }),
   type: "create_future_event", 

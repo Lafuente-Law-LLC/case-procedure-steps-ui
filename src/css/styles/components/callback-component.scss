@@ -1,17 +1,20 @@
+$callback-background: rgba(55, 53, 47, 0.2);
+
 .callback-addition-button {
   position: relative;
   display: flex;
-  $callback-background: rgba(55, 53, 47, 0.2);
-  & .menu-wrapper {
+
+  .menu-wrapper {
     cursor: pointer;
-    & .menu {
+
+    .menu {
       display: flex;
       position: relative;
       flex-direction: column-reverse;
       opacity: 1;
       transition: opacity 270ms ease;
 
-      & .dialog {
+      .dialog {
         padding: 1px;
         border-radius: 6px;
         background: white;
@@ -24,7 +27,8 @@
           rgba(15, 15, 15, 0.1) 0px 3px 6px,
           rgba(15, 15, 15, 0.2) 0px 9px 24px;
         overflow: hidden;
-        & .menu-item {
+
+        .menu-item {
           user-select: none;
           transition: background 20ms ease-in 0s;
           cursor: pointer;
@@ -40,12 +44,11 @@
       }
     }
   }
-  & .callback-area {
+
+  .callback-area {
     flex: 1;
+    &:hover,
     &.hover {
-      background-color: $callback-background;
-    }
-    &:hover {
       background-color: $callback-background;
     }
   }
@@ -55,27 +58,46 @@
   max-height: 45vh;
   overflow-y: scroll;
   overflow-x: hidden;
-  input {
-    max-width: 100%;
-    width: 100%;
-    white-space: pre-wrap;
-    word-break: break-word;
-    caret-color: rgb(55, 53, 47);
-    padding: 3px 2px;
-    min-height: 1em;
-    color: rgba(55, 53, 47, 0.5);
-    border: none;
-    background-color: transparent;
-    border-radius: 8px;
 
-    &:focus {
-      outline: 0;
-      border-color: #3399ff;
-      box-shadow: 0 0 0 3px #b6daff;
+  .delete-button {
+    &:hover {
+      background: $callback-background;
+      cursor: pointer;
     }
   }
 
-  & .above-table {
+  input {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.3em;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #6f6b7d;
+    appearance: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #dbdade;
+    border-radius: 0.25rem;
+    transition:
+      border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease;
+
+    &:focus {
+      color: #6f6b7d;
+      background-color: #fff;
+      border-color: var(--bs-primary);
+      outline: 0;
+      box-shadow: 0 0.125rem 0.25rem rgba(165, 163, 174, 0.3);
+    }
+
+    &::placeholder {
+      color: #6f6b7d;
+      opacity: 1;
+    }
+  }
+
+  .above-table {
     display: flex;
     justify-content: right;
     padding: 0.5em 0.5em;
