@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { Table, Form, Button } from "react-bootstrap";
+import Callback from "../../../callback/callback";
 import { Step } from "../../../step/step";
 import CallbackTableRow from "./CallbackTableRow";
 import reducer, { Action } from "../helpers/reducer/reducerFunction";
@@ -70,6 +71,37 @@ const BelowTable = ({
   );
 };
 
+const CallbackTable = ({
+  headers,
+  callbacks,
+  dispatcher,
+}: {
+  headers: string[];
+  callbacks: Callback[];
+  dispatcher: React.Dispatch<Action>;
+}) => {
+  return (
+    <Table>
+      <thead>
+        <tr>
+          {headers.map((header) => (
+            <th key={header}>{header}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {callbacks.map((callback) => (
+          <CallbackTableRow
+            key={callback.id}
+            callback={callback}
+            dispatcher={dispatcher}
+          />
+        ))}
+      </tbody>
+    </Table>
+  );
+};
+
 const CallbacksTable = ({ step }: { step: Step }) => {
   const [editMode, setEditMode] = useState(false);
   const [commitable, setCommitChange] = useState(false);
@@ -80,25 +112,11 @@ const CallbacksTable = ({ step }: { step: Step }) => {
     <TableContext.Provider value={{ editMode, setEditMode }}>
       <div className="callbacks-table-wrapper">
         <AboveTable setEditMode={setEditMode} />
-        <Table>
-          <thead>
-            <tr>
-              <th>Event</th>
-              <th>Function</th>
-              <th>Args</th>
-              <th>Options</th>
-            </tr>
-          </thead>
-          <tbody>
-            {callbacks.map((callback) => (
-              <CallbackTableRow
-                key={callback.id}
-                callback={callback}
-                dispatcher={callbacksDispatch}
-              />
-            ))}
-          </tbody>
-        </Table>
+        <CallbackTable
+          headers={["Event", "Function", "Arguments", "Options"]}
+          callbacks={callbacks}
+          dispatcher={callbacksDispatch}
+        />
       </div>
       <BelowTable setChangeCommit={setCommitChange} editMode={editMode}>
         <MenuItemAddFutureEvent dispatcher={callbacksDispatch} />

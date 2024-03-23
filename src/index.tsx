@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import sampleStep from "../ignore/rootStep";
 import "bootstrap/scss/bootstrap.scss";
 import RootStepConstructor from "./step/rootStepConstructor";
 import "./css/main.scss";
 import { DragItem } from "./components/DragItem/DragItem";
-import { removeClassesFromElements } from "./components/DragItem/helpers/dragItemUtil";
+import DragItemContainer from "./components/DragItem/DragItemContainer";
 import { Step } from "./step/step";
-
 import { v4 } from "uuid";
 import {
   eventCallbackValidator,
@@ -26,11 +25,9 @@ const eventCallbackManagementObj = {
       days: 200,
     },
   }),
-  type: "create_future_event", 
+  type: "create_future_event",
   validator: eventCallbackValidator,
 };
-
-
 
 const taskCallbackManagementObj = {
   createFn: () => ({
@@ -49,8 +46,6 @@ const taskCallbackManagementObj = {
 Callback.registerCallbackAdminObj(eventCallbackManagementObj);
 Callback.registerCallbackAdminObj(taskCallbackManagementObj);
 
-
-
 interface AppProps {
   rootStep: Step;
 }
@@ -64,28 +59,14 @@ const App: React.FC<AppProps> = ({ rootStep }: { rootStep: Step }) => {
     rootStep.addNewStep();
   };
 
-  useEffect(() => {
-    removeClassesFromElements(["dragging", "drag-over", "above", "below"]);
-  }, [
-    document.querySelectorAll<HTMLElement>(`.dragging`),
-    document.querySelectorAll<HTMLElement>(`.drag-over`),
-    document.querySelectorAll<HTMLElement>(`.above`),
-    document.querySelectorAll<HTMLElement>(`.below`),
-  ]);
   return (
-    <>
-      <div className="container pt-4 border border-dark window">
-        {steps.map((step) => (
-          <DragItem step={step} key={step.id}></DragItem>
-        ))}
-      </div>
+    <DragItemContainer steps={steps} options={{}}>
       <button className={"mui-button"} onClick={addStep}>
         Add
       </button>
-    </>
+    </DragItemContainer>
   );
 };
-
 
 const constructorRt = new RootStepConstructor(sampleStep);
 const rt = constructorRt.rootStep;
@@ -101,5 +82,3 @@ if (rt === undefined) {
 }
 
 root.render(<App rootStep={rt} />);
-
-

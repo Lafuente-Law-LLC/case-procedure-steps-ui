@@ -8,10 +8,7 @@ import { TableContext } from "./TableContext";
 import EventSelect, { Option } from "./EventSelect";
 import { CiTrash } from "react-icons/ci";
 
-const defaultOptions: Option[] = [
-  { text: "After Complete", value: "after_complete" },
-  { text: "At initialize", value: "init" },
-];
+
 
 const DeleteButton = ({ onClick }: { onClick: () => void }) => {
   return (

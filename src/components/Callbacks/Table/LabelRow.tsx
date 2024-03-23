@@ -10,7 +10,7 @@ const EditableInput = ({
   value: string;
   changeFunction: ChangeFunction;
 }) => {
-  const type = label === "date" ? "date" : "text";
+  const type = label === "days" ? "number" : "text";
   return (
 
       <input type={type} value={value} onChange={changeFunction} />
