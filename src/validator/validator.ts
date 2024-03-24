@@ -1,5 +1,5 @@
 import Joi from "joi";
-import type { AnySchema, ValidationError } from "joi";
+import type { ValidationError } from "joi";
 
 class Validator {
   mainSchema: Joi.AnySchema;

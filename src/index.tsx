@@ -4,55 +4,18 @@ import sampleStep from "../ignore/rootStep";
 import "bootstrap/scss/bootstrap.scss";
 import RootStepConstructor from "./step/rootStepConstructor";
 import "./css/main.scss";
-
 import DragItemContainer from "./components/DragItem/DragItemContainer";
 import { Step } from "./step/step";
 import { v4 } from "uuid";
-import {
-  eventCallbackValidator,
-  taskCallbackValidator,
-} from "./validator/validators";
-import Callback from "./callback/callback";
+
 import { setUpDefaults } from "./config/auxiliaryFunctions";
-import { taskCallbackConfig, futureEventCallbackConfig } from "./config/callbacks.config";
+import {
+  taskCallbackConfig,
+  futureEventCallbackConfig,
+} from "./config/callbacks.config";
 
 
 
-const eventCB = setUpDefaults(futureEventCallbackConfig);
-const taskCB = setUpDefaults(taskCallbackConfig);
-
-const eventCallbackManagementObj = {
-  createFn: () => ({
-    id: v4(),
-    event: "",
-    function: "create_future_event",
-    args: {
-      title: "",
-      summary: "",
-      days: 200,
-    },
-  }),
-  type: "create_future_event",
-  validator: eventCallbackValidator,
-};
-
-const taskCallbackManagementObj = {
-  createFn: () => ({
-    id: v4(),
-    event: "",
-    function: "create_task",
-    args: {
-      title: "",
-      summary: "",
-    },
-  }),
-  type: "create_task",
-  validator: taskCallbackValidator,
-};
-
-debugger
-Callback.registerCallbackAdminObj(eventCallbackManagementObj);
-Callback.registerCallbackAdminObj(taskCallbackManagementObj);
 
 interface AppProps {
   rootStep: Step;
