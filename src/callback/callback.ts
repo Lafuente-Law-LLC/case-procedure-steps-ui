@@ -41,7 +41,7 @@ class Callback {
   id: string;
   event: string;
   function: string;
-  args: Record<string, any>;
+  args: { [key: string]: any };
   validator: Validator;
   constructor(data: CallbackObj & { id?: string }) {
     const { id, event, function: func, args } = data;
@@ -51,9 +51,6 @@ class Callback {
     this.args = args;
     this.validator = this.getValidator();
   }
-
-
-
 
   private getValidator() {
     const callbackAdminObj = Callback.callbackAdminObjs.get(this.function);

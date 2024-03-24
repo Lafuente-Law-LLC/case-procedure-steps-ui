@@ -4,7 +4,7 @@ import sampleStep from "../ignore/rootStep";
 import "bootstrap/scss/bootstrap.scss";
 import RootStepConstructor from "./step/rootStepConstructor";
 import "./css/main.scss";
-import { DragItem } from "./components/DragItem/DragItem";
+
 import DragItemContainer from "./components/DragItem/DragItemContainer";
 import { Step } from "./step/step";
 import { v4 } from "uuid";
@@ -13,6 +13,13 @@ import {
   taskCallbackValidator,
 } from "./validator/validators";
 import Callback from "./callback/callback";
+import { setUpDefaults } from "./config/auxiliaryFunctions";
+import { taskCallbackConfig, futureEventCallbackConfig } from "./config/callbacks.config";
+
+
+
+const eventCB = setUpDefaults(futureEventCallbackConfig);
+const taskCB = setUpDefaults(taskCallbackConfig);
 
 const eventCallbackManagementObj = {
   createFn: () => ({
@@ -43,12 +50,14 @@ const taskCallbackManagementObj = {
   validator: taskCallbackValidator,
 };
 
+debugger
 Callback.registerCallbackAdminObj(eventCallbackManagementObj);
 Callback.registerCallbackAdminObj(taskCallbackManagementObj);
 
 interface AppProps {
   rootStep: Step;
 }
+
 const App: React.FC<AppProps> = ({ rootStep }: { rootStep: Step }) => {
   const [steps, setSteps] = useState(rootStep.steps);
 

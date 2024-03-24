@@ -1,5 +1,4 @@
 import Validator from "./validator";
-import { Step } from "../step/step";
 import Joi from "joi";
 
 const stepSchema = Joi.object({
@@ -25,7 +24,7 @@ const taskCallbackSchema = Joi.object({
   function: Joi.string().valid("create_task").required(),
   args: Joi.object({
     title: Joi.string().required(),
-    summary: Joi.string().required(), 
+    summary: Joi.string().required(),
   }),
 });
 
@@ -34,3 +33,4 @@ const eventCallbackValidator = new Validator(eventCallbackSchema);
 const taskCallbackValidator = new Validator(taskCallbackSchema);
 
 export { stepValidator, eventCallbackValidator, taskCallbackValidator };
+

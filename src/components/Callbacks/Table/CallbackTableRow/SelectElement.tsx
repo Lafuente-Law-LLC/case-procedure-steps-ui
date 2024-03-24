@@ -1,9 +1,8 @@
-import React, {useContext} from "react";
+import React from "react";
 import Callback from "../../../../callback/callback";
 import dispatchFunctionFactory from "../../helpers/reducer/dispatchFunctionFactory";
-import { DragItemsContext } from "../../../DragItem/DragItemsContext";
-import type { ReactDispatcher } from "../../helpers/reducer/reducerFunction";
 
+import type { ReactDispatcher } from "../../helpers/reducer/reducerFunction";
 
 export type SelectOption = {
   text: string;
