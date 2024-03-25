@@ -2,10 +2,12 @@ import React, { useReducer, useState } from "react";
 import { Step } from "../../../step/step";
 import reducer from "../helpers/reducer/reducerFunction";
 import { TableContext } from "./TableContext";
-import TableMenuItems from "./CallbacksTable/TableMenuItems";
-import AboveTable from "./CallbacksTable/AboveTable";
-import BelowTable from "./CallbacksTable/BelowTable";
-import MainTable from "./CallbacksTable/MainTable";
+import {
+  AboveTable,
+  BelowTable,
+  MainTable,
+  TableMenuItems,
+} from "./CallbacksTable/CallbacksTableComponents";
 
 const CallbacksTable = ({ step }: { step: Step }) => {
   const [editMode, setEditMode] = useState(false);
