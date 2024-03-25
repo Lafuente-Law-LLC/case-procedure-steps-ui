@@ -1,30 +1,13 @@
-import React, { useEffect, useReducer, useState } from "react";
-import { Table, Form, Button } from "react-bootstrap";
-import Callback from "../../../callback/callback";
+import React, { useReducer, useState } from "react";
 import { Step } from "../../../step/step";
-import CallbackTableRow from "./CallbackTableRow";
 import reducer, { Action } from "../helpers/reducer/reducerFunction";
 import dispatchFunctionFactory from "../helpers/reducer/dispatchFunctionFactory";
-import CallbackAdditionButton from "./CallbackAdditionButton";
 import { TableContext } from "./TableContext";
 import MenuItem, { onClickFn } from "./CallbackAdditionButton/MenuItem";
 import { getFunctionFromAdminObj } from "../helpers/callbacksTableUtils";
-
-const AboveTable = ({
-  setEditMode,
-}: {
-  setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
-  return (
-    <div className="above-table">
-      <Form.Check
-        type="switch"
-        label="Edit Mode"
-        onChange={(e) => setEditMode(e.target.checked)}
-      />
-    </div>
-  );
-};
+import AboveTable from "./CallbacksTable/AboveTable";
+import BelowTable from "./CallbacksTable/BelowTable";
+import MainTable from "./CallbacksTable/MainTable";
 
 const MenuItemAddFutureEvent = ({
   dispatcher,
@@ -54,54 +37,6 @@ const MenuItemAddCreateTask = ({
   return <MenuItem text={text} onClickFn={onClick} />;
 };
 
-const BelowTable = ({
-  editMode,
-  children,
-  setChangeCommit,
-  isValid,
-}: {
-  editMode: boolean;
-  setChangeCommit: React.Dispatch<React.SetStateAction<boolean>>;
-  isValid?: boolean;
-} & React.PropsWithChildren) => {
-  return (
-    <>
-      {editMode && <CallbackAdditionButton>{children}</CallbackAdditionButton>}
-    </>
-  );
-};
-
-const CallbackTable = ({
-  headers,
-  callbacks,
-  dispatcher,
-}: {
-  headers: string[];
-  callbacks: Callback[];
-  dispatcher: React.Dispatch<Action>;
-}) => {
-  return (
-    <Table>
-      <thead>
-        <tr>
-          {headers.map((header) => (
-            <th key={header}>{header}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {callbacks.map((callback) => (
-          <CallbackTableRow
-            key={callback.id}
-            callback={callback}
-            dispatcher={dispatcher}
-          />
-        ))}
-      </tbody>
-    </Table>
-  );
-};
-
 const CallbacksTable = ({ step }: { step: Step }) => {
   const [editMode, setEditMode] = useState(false);
   const [commitable, setCommitChange] = useState(false);
@@ -112,7 +47,7 @@ const CallbacksTable = ({ step }: { step: Step }) => {
     <TableContext.Provider value={{ editMode, setEditMode }}>
       <div className="callbacks-table-wrapper">
         <AboveTable setEditMode={setEditMode} />
-        <CallbackTable
+        <MainTable
           headers={["Event", "Function", "Arguments", "Options"]}
           callbacks={callbacks}
           dispatcher={callbacksDispatch}

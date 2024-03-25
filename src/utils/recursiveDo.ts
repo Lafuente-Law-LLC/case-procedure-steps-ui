@@ -1,19 +1,3 @@
-const _errorCatcher = (
-  obj: any,
-  conditionFn: (value: any) => boolean,
-  actionFn: (value: any) => void,
-) => {
-  if (typeof obj === "undefined" || null) {
-    throw new Error("obj is undefined or null");
-  }
-  if (typeof conditionFn === "undefined") {
-    throw new Error("conditionFn is undefined");
-  }
-  if (typeof actionFn === "undefined") {
-    throw new Error("actionFn is undefined");
-  }
-};
-
 export default function recursiveDo(
   obj: any,
   conditionFn: (value: any) => boolean,
@@ -36,3 +20,19 @@ export default function recursiveDo(
     }
   }
 }
+
+const _errorCatcher = (
+  obj: any,
+  conditionFn: (value: any) => boolean,
+  actionFn: (value: any) => void,
+) => {
+  if (typeof obj === "undefined" || null) {
+    throw new Error("obj is undefined or null");
+  }
+  if (typeof conditionFn === "undefined") {
+    throw new Error("conditionFn is undefined");
+  }
+  if (typeof actionFn === "undefined") {
+    throw new Error("actionFn is undefined");
+  }
+};
