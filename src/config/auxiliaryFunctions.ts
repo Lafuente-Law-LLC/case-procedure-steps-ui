@@ -3,7 +3,20 @@ import recursiveDo from "../utils/recursiveDo";
 import { BasicValidationConfig } from "./types";
 import Joi from "joi";
 const isObject = (value: any) => typeof value === "object" && value !== null;
+export type Input = { tag: "input"; attributes: { type: string } };
+export type CallbackArgs = { title: string; summary: string } & { [key: string]: any };
 
+export const buildBasicCallback = (
+  functionName: string,
+  event: string,
+  args: CallbackArgs,
+) => {
+  return {
+    event: event,
+    function: functionName,
+    args: args,
+  };
+};
 const setValidatorsOnObj = (callbackConfig: CallbackConfig) => {
   const conditionFn = (value: any) => isObject(value) && value.validations;
   const actionFn = (value: any) => {

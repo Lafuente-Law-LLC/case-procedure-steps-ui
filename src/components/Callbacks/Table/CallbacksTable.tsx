@@ -11,9 +11,9 @@ import {
 
 const CallbacksTable = ({ step }: { step: Step }) => {
   const [editMode, setEditMode] = useState(false);
-  const [commitable, setCommitChange] = useState(false);
+  const [commitChange, setCommitChange] = useState(false);
   const [callbacks, callbacksDispatch] = useReducer(reducer, step.callbacks);
-  const isValid = callbacks.every((callback) => callback.valid());
+  
 
   return (
     <TableContext.Provider value={{ editMode, setEditMode }}>

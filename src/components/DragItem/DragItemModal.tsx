@@ -3,7 +3,6 @@ import { Step } from "../../step/step";
 import { Modal, Tab, Tabs } from "react-bootstrap";
 import { ThreeDotsVertical } from "react-bootstrap-icons";
 import { EditTextarea } from "react-edit-text";
-
 import CallbacksTable from "../Callbacks/Table/CallbacksTable";
 
 const ModalBody = ({ step }: { step: Step }) => {

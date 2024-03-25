@@ -6,13 +6,6 @@ import RootStepConstructor from "./step/rootStepConstructor";
 import "./css/main.scss";
 import DragItemContainer from "./components/DragItem/DragItemContainer";
 import { Step } from "./step/step";
-import { v4 } from "uuid";
-
-import { setUpDefaults } from "./config/auxiliaryFunctions";
-import {
-  taskCallbackConfig,
-  futureEventCallbackConfig,
-} from "./config/callbacks.config";
 
 
 
