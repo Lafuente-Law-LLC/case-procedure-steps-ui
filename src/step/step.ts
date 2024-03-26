@@ -31,7 +31,7 @@ class Step {
   }
 
   valid(): boolean {
-    return this.validate()[0];
+   return  this.validate(); 
   }
 
   updateTitle(title: string) {

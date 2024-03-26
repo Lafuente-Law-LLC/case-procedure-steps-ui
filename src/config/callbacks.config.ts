@@ -1,4 +1,3 @@
-
 import { CallbackObj } from "../types";
 import { CallbackConfigObj } from "../callback/callbackManager";
 
@@ -6,7 +5,23 @@ import {
   eventCallbackValidator,
   taskCallbackValidator,
 } from "../validator/validators";
-import { buildBasicCallback } from "./auxiliaryFunctions";
+
+export type Input = { tag: "input"; attributes: { type: string } };
+export type CallbackArgs = { title: string; summary: string } & {
+  [key: string]: any;
+};
+
+export const buildBasicCallback = (
+  functionName: string,
+  event: string,
+  args: CallbackArgs,
+) => {
+  return {
+    event: event,
+    function: functionName,
+    args: args,
+  };
+};
 
 const possibleEvents = ["after_create", "after_initiate"];
 const DEFAULT_EVENT: (typeof possibleEvents)[number] = possibleEvents[0];
@@ -35,4 +50,4 @@ const eventConfig: CallbackConfigObj = {
   validator: eventCallbackValidator,
 };
 
-export { taskConfig, eventConfig }
+export { taskConfig, eventConfig };
