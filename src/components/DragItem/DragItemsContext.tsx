@@ -1,22 +1,13 @@
 import { createContext } from "react";
 import type { SelectOption } from "../Callbacks/Table/CallbackTableRow/SelectElement";
-import type { CallbackAdminObj } from "../../callback/callback";
+import CallbackManager from "../../callback/callbackManager";
 
 export type DragItemsOptions = {
-  callbacks: {
-    adminObjs: CallbackAdminObj[];
-    table: {
-      selectElementOptions: SelectOption[];
-      selectElementDefaultValue: string;
-    };
-  };
-};
+  callbackManager?: CallbackManager;
+}
 
 const defaultOptions = {
-  callbacks: {
-    adminObjs: [],
-    table: { selectElementOptions: [], selectElementDefaultValue: "" },
-  },
+  callbackManager:  undefined,
 };
 
 export const DragItemsContext = createContext<DragItemsOptions>(defaultOptions);

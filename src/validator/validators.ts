@@ -1,26 +1,25 @@
 import Joi from "joi";
 import Validator from "./validator";
 
-const baseArgsSchema = Joi.object({ 
+const baseArgsSchema = Joi.object({
   title: Joi.string().required(),
   summary: Joi.string().required(),
-}).unknown(true);
+});
 
 const eventCallbackSchema = Joi.object({
   event: Joi.string().required(),
   function: Joi.string().valid("create_future_event").required(),
-  args: Joi.object({
-    days: Joi.number().integer().min(0),
-    ...baseArgsSchema.extract(["title", "summary"]),
-  }).unknown(true),
+  args: baseArgsSchema
+    .keys({
+      days: Joi.number().integer().min(0),
+    })
+    .unknown(true),
 });
 
 const taskCallbackSchema = Joi.object({
   event: Joi.string().required(),
   function: Joi.string().valid("create_task").required(),
-  args: Joi.object({
-    ...baseArgsSchema.extract(["title", "summary"]),
-  }).unknown(true),
+  args: baseArgsSchema,
 });
 
 const StepSchema = Joi.object({

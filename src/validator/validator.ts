@@ -1,4 +1,3 @@
-import Callback from "../callback/callback";
 import Joi, { ObjectSchema } from "joi";
 
 const convertJoiResultToBoolean = (result: Joi.ValidationResult) => {

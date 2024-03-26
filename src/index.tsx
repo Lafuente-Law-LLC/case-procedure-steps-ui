@@ -6,13 +6,16 @@ import RootStepConstructor from "./step/rootStepConstructor";
 import "./css/main.scss";
 import DragItemContainer from "./components/DragItem/DragItemContainer";
 import { Step } from "./step/step";
-
-
-
+import CallbackManager from "./callback/callbackManager";
+import { taskConfig, eventConfig } from "./config/callbacks.config";
 
 interface AppProps {
   rootStep: Step;
 }
+
+const callbackManager = new CallbackManager();
+callbackManager.registerCallbackConfig("create_task", taskConfig);
+callbackManager.registerCallbackConfig("create_future_event", eventConfig);
 
 const App: React.FC<AppProps> = ({ rootStep }: { rootStep: Step }) => {
   const [steps, setSteps] = useState(rootStep.steps);
@@ -25,7 +28,10 @@ const App: React.FC<AppProps> = ({ rootStep }: { rootStep: Step }) => {
   };
 
   return (
-    <DragItemContainer steps={steps} options={{}}>
+    <DragItemContainer
+      steps={steps}
+      options={{ callbackManager: callbackManager }}
+    >
       <button className={"mui-button"} onClick={addStep}>
         Add
       </button>
