@@ -1,6 +1,9 @@
 import type { CallbackWithId } from "../types";
 import { CallbackObj } from "../types";
-
+type SelectOption = {
+  text: string;
+  value: string;
+};
 export interface EventCallback extends CallbackWithId {
   event: string;
   function: "create_future_event";
@@ -22,4 +25,5 @@ export interface TaskCallback extends CallbackWithId {
 export type CallbackConfigObj = {
   defaultFn: (...args: any[]) => CallbackObj;
   validator: Validator;
+  selectEventOptions: SelectOption[];
 };
