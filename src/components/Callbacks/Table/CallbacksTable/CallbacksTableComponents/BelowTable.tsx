@@ -1,5 +1,5 @@
 import React from "react";
-import CallbackAdditionButton from "./CallbackAdditionButton";
+import CallbackAdditionButton from "./BelowTable/CallbackAdditionButton";
 
 const BelowTable = ({
   editMode,

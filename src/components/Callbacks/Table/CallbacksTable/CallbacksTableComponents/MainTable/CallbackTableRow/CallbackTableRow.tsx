@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import Callback from "../../../../callback/callback";
-import { extractKeyValues } from "../../helpers/callbacksTableUtils";
+import Callback from "../../../../../../callback/callback";
+import { extractKeyValues } from "../../../../helpers/callbacksTableUtils";
 import LabelRow from "./LabelRow";
-import type { ReactDispatcher } from "../../helpers/reducer/reducerFunction";
-import dispatchFunctionFactory from "../../helpers/reducer/dispatchFunctionFactory";
-import { TableContext } from "../TableContext";
+import type { ReactDispatcher } from "../../../../helpers/reducer/reducerFunction";
+import dispatchFunctionFactory from "../../../../helpers/reducer/dispatchFunctionFactory";
+import { TableContext } from "../../../TableContext";
 import EventSelect from "./EventSelect";
 import { CiTrash } from "react-icons/ci";
 
@@ -23,6 +23,13 @@ const DeleteButton = ({ onClick }: { onClick: () => void }) => {
   );
 };
 
+
+const getUpdateAndRemoveFns = (dispatcher: ReactDispatcher) => {
+  const update = dispatchFunctionFactory(dispatcher).update;
+  const remove = dispatchFunctionFactory(dispatcher).remove;
+  return { update, remove };
+}
+
 const CallbackTableRow = ({
   callback: callback,
   dispatcher,
@@ -31,11 +38,11 @@ const CallbackTableRow = ({
   dispatcher: ReactDispatcher;
 }) => {
   const { editMode } = useContext(TableContext) as { editMode: boolean };
+  const { update, remove } = getUpdateAndRemoveFns(dispatcher);
 
-  const update = dispatchFunctionFactory(dispatcher).update;
-  const remove = dispatchFunctionFactory(dispatcher).remove;
 
-  const returnOnChange = (key: string, value: string) => {
+
+   const returnOnChange = (key: string, value: string) => {
     return (e: React.ChangeEvent<HTMLInputElement>) => {
       update(callback.id, { args: { [key]: e.target.value } });
     };

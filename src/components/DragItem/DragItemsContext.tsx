@@ -1,5 +1,4 @@
 import { createContext } from "react";
-import type { SelectOption } from "../Callbacks/Table/CallbackTableRow/SelectElement";
 import CallbackManager from "../../callback/callbackManager";
 
 export type DragItemsOptions = {

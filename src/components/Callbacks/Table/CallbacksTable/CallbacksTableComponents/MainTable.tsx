@@ -1,8 +1,8 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
-import CallbackTableRow from './CallbackTableRow';
-import Callback from '../../../../callback/callback';
-import { Action } from '../../helpers/reducer/reducerFunction';
+import CallbackTableRow from './MainTable/CallbackTableRow/CallbackTableRow';
+import Callback from '../../../../../callback/callback';
+import { Action } from '../../../helpers/reducer/reducerFunction';
 
 const MainTable = ({
     headers,
