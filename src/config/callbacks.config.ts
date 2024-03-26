@@ -1,5 +1,5 @@
 import { CallbackObj } from "../types";
-import { CallbackConfigObj } from "../callback/callbackManager";
+import { CallbackConfigObj } from "../callback/types";
 
 import {
   eventCallbackValidator,
@@ -28,14 +28,18 @@ const DEFAULT_EVENT: (typeof possibleEvents)[number] = possibleEvents[0];
 
 const buildTaskCallback = (
   event: string = DEFAULT_EVENT,
-  args: { title: string; summary: string; date: number },
+  args: { title: string; summary: string; days: number } = {
+    title: "",
+    summary: "",
+    days: 0,
+  },
 ): CallbackObj => {
   return buildBasicCallback("create_task", event, args);
 };
 
 const buildFutureEventCallback = (
   event: string = DEFAULT_EVENT,
-  args: { title: string; summary: string },
+  args: { title: string; summary: string } = { title: "", summary: "" },
 ): CallbackObj => {
   return buildBasicCallback("create_future_event", event, args);
 };

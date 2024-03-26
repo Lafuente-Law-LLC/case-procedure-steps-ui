@@ -1,4 +1,5 @@
 import type { CallbackWithId } from "../types";
+import { CallbackObj } from "../types";
 
 export interface EventCallback extends CallbackWithId {
   event: string;
@@ -18,3 +19,7 @@ export interface TaskCallback extends CallbackWithId {
     summary: string;
   };
 }
+export type CallbackConfigObj = {
+  defaultFn: (...args: any[]) => CallbackObj;
+  validator: Validator;
+};

@@ -1,30 +1,5 @@
 import Callback from "../../../callback/callback";
 
-export const getCallbackAdminObj = (functionName: string) => {
-  const callbackAdminObj = Callback.getCallbackAdminObj(functionName);
-  if (callbackAdminObj === undefined) {
-    console.error(`CallbackAdminObj for ${functionName} is not defined`);
-    throw new Error(`CallbackAdminObj for ${functionName} is not defined`);
-  }
-  return callbackAdminObj;
-};
-
-export const getValidatorFromAdminObj = (functionName: string) => {
-  const { validator } = getCallbackAdminObj(functionName);
-  if (validator === undefined) {
-    throw new Error(`Validator for ${functionName} is not defined`);
-  }
-  return validator;
-};
-
-export const getFunctionFromAdminObj = (functionName: string) => {
-  const { createFn } = getCallbackAdminObj(functionName);
-  if (createFn === undefined) {
-    throw new Error(`Create function for ${functionName} is not defined`);
-  }
-  return createFn;
-};
-
 export const findCallback = (
   id: string,
   callbacks: Callback[],

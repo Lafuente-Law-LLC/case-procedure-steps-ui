@@ -7,7 +7,7 @@ import {
   BelowTable,
   MainTable,
   TableMenuItems,
-} from "./CallbacksTable/CallbacksTableComponents";
+} from "./CallbacksTableComponents";
 
 const CallbacksTable = ({ step }: { step: Step }) => {
   const [editMode, setEditMode] = useState(false);

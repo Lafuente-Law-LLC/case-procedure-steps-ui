@@ -14,7 +14,6 @@ class Callback {
     this.id = id || v4();
     this.event = event;
     this.function = func;
-
     this.args = args;
   }
 

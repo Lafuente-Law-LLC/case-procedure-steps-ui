@@ -1,10 +1,7 @@
 import { CallbackObj } from "../types";
 import Validator from "../validator/validator";
+import type { CallbackConfigObj } from "./types";
 
-export type CallbackConfigObj = {
-  defaultFn: (...args: any[]) => CallbackObj;
-  validator: Validator;
-};
 class CallbackManager {
   callbackConfigObjs = new Map<string, CallbackConfigObj>();
 
@@ -25,7 +22,7 @@ class CallbackManager {
     if (!defaultFn) {
       throw new Error(`Default function ${name} not found`);
     }
-    return defaultFn();
+    return defaultFn;
   }
 }
 

@@ -1,13 +1,17 @@
 import React, { useContext } from "react";
-import Callback from "../../../callback/callback";
-import { extractKeyValues } from "../helpers/callbacksTableUtils";
+import Callback from "../../../../callback/callback";
+import { extractKeyValues } from "../../helpers/callbacksTableUtils";
 import LabelRow from "./LabelRow";
-import type { ReactDispatcher } from "../helpers/reducer/reducerFunction";
-import dispatchFunctionFactory from "../helpers/reducer/dispatchFunctionFactory";
-import { TableContext } from "./TableContext";
-import EventSelect, { Option } from "./EventSelect";
+import type { ReactDispatcher } from "../../helpers/reducer/reducerFunction";
+import dispatchFunctionFactory from "../../helpers/reducer/dispatchFunctionFactory";
+import { TableContext } from "../TableContext";
+import EventSelect from "./EventSelect";
 import { CiTrash } from "react-icons/ci";
 
+
+const defaultOptions = [
+{text: "onCreate", value: "onCreate"},
+{text: "onUpdate", value: "onUpdate"}]
 
 
 const DeleteButton = ({ onClick }: { onClick: () => void }) => {
@@ -60,9 +64,9 @@ const CallbackTableRow = ({
           <LabelRow
             editMode={editMode}
             key={index}
-            label={keyValue.label}
+            label={keyValue.label.toString()}
             value={keyValue.value}
-            changeFunction={returnOnChange(keyValue.label, keyValue.value)}
+            changeFunction={returnOnChange(keyValue.label.toString(), keyValue.value)}
           />
         ))}
       </td>

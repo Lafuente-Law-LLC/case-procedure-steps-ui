@@ -1,18 +1,24 @@
-import React from "react";
-import MenuItem, { onClickFn } from "../CallbackAdditionButton/MenuItem";
+import React, { useContext } from "react";
+import MenuItem, { onClickFn } from "./CallbackAdditionButton/MenuItem";
 import dispatchFunctionFactory from "../../helpers/reducer/dispatchFunctionFactory";
-import { getFunctionFromAdminObj } from "../../helpers/callbacksTableUtils";
 import type { Action } from "../../helpers/reducer/reducerFunction";
+import { DragItemsContext } from "../../../DragItem/DragItemsContext";
 
 const MenuItemAddFutureEvent = ({
   dispatcher,
 }: {
   dispatcher: React.Dispatch<Action>;
 }) => {
-  const defaultFn = getFunctionFromAdminObj("create_future_event");
+  const context = useContext(DragItemsContext);
+  const manager = context?.callbackManager;
+  const defaultFn = manager?.getDefaultCallback("create_future_event");
+  if (!defaultFn) {
+    throw new Error("Default function create_future_event not found");
+  }
   const { add: addFn } = dispatchFunctionFactory(dispatcher);
   const text = "Create Future Event";
-  const onClick: onClickFn = (e) => {
+  
+  const onClick: onClickFn = (e) => { 
     addFn({}, defaultFn());
   };
   return <MenuItem text={text} onClickFn={onClick} />;
@@ -23,9 +29,15 @@ const MenuItemAddCreateTask = ({
 }: {
   dispatcher: React.Dispatch<Action>;
 }) => {
-  const defaultFn = getFunctionFromAdminObj("create_task");
+  const context = useContext(DragItemsContext);
+  const manager = context.callbackManager;
+  const defaultFn = manager?.getDefaultCallback("create_task");
+  if (!defaultFn) {
+    throw new Error("Default function create_task not found");
+  }
   const { add: addFn } = dispatchFunctionFactory(dispatcher);
   const text = "Create Task";
+
   const onClick: onClickFn = (e) => {
     addFn({}, defaultFn());
   };
