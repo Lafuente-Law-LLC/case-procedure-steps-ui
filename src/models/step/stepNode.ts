@@ -2,7 +2,7 @@ import TreeModel from "tree-model";
 import { Step } from "./step";
 import { v4 } from "uuid";
 import StepManager from "./stepManager";
-import type { Node } from "../types";
+import { Node } from "../../types";
 
 export default class StepNode {
   node: Node;

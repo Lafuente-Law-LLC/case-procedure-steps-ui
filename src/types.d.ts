@@ -2,7 +2,7 @@ import type { Node } from "tree-model";
 import type Callback from "./callback/callback";
 export type CallbackObj = { 
   event: string;
-  function: string;
+  functionName: string;
   args: Record<string, any>;
 };
 

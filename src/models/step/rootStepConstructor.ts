@@ -1,11 +1,10 @@
 import { Step } from "./step";
 import Callback from "../callback/callback";
-import type { CallbackObj, FormattedStepObj } from "../types";
+import type { CallbackObj, FormattedStepObj } from "../../types";
 import TreeModel from "tree-model";
 import StepManager from "./stepManager";
 import StepNode from "./stepNode";
 import { v4 as generateUniqueId } from "uuid";
-
 
 export default class RootStepConstructor {
   rootNode: TreeModel.Node<FormattedStepObj>;
@@ -13,16 +12,22 @@ export default class RootStepConstructor {
 
   constructor(data: any) {
     const parsedData = this.parseData(data);
-    this.validateData(parsedData);
+    this.ensureRequirements(parsedData);
     this.rootNode = new TreeModel().parse<FormattedStepObj>(parsedData);
     this.processStep(this.rootNode);
   }
-
+  parseData(data: any) {
+    data = this.defaultSetup(data);
+    data.children.forEach((child: any) => {
+      return this.parseData(child);
+    });
+    return data as FormattedStepObj;
+  }
   defaultSetup(data: any): FormattedStepObj {
     data.title = data.title || "";
     data.id = data.id || generateUniqueId();
     data.summary = data.summary || "";
-    data.callbacks = this.tranformCallbackObjs(data.callbacks || []) 
+    data.callbacks = this.tranformCallbackObjs(data.callbacks || []);
     data.children = data.steps || [];
     delete data.steps;
     return data;
@@ -32,20 +37,14 @@ export default class RootStepConstructor {
     return callbackObjs.map((callbackObj) => new Callback(callbackObj));
   }
 
-  validateData = (data: any): void => {
+  ensureRequirements = (data: any): void => {
     const requiredFields = ["title", "id", "summary"];
     requiredFields.forEach((field) => {
       if (!data[field]) throw new Error(`${field} is required`);
     });
   };
 
-  parseData(data: any) {
-    data = this.defaultSetup(data);
-    data.children.forEach((child: any) => {
-      return this.parseData(child);
-    });
-    return data as FormattedStepObj;
-  }
+
 
   processStep(node: TreeModel.Node<FormattedStepObj>) {
     new Step(new StepNode(node, this.stepManager));

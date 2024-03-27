@@ -1,11 +1,9 @@
 import { Step } from "./step";
-import { Node } from "../types";
-import { stepValidator } from "../validator/validators";
+import { Node } from "../../types";
 
 export default class StepManager {
   registeredSteps: Set<Step>;
   callbackFunctions: Set<() => void>;
-  stepValidator = stepValidator;
 
   constructor() {
     this.registeredSteps = new Set<Step>();

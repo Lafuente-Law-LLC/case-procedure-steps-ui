@@ -1,5 +1,3 @@
-import { CallbackObj } from "../types";
-import Validator from "../validator/validator";
 import type { CallbackConfigObj } from "./types";
 
 class CallbackManager {
