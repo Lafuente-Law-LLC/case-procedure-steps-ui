@@ -1,79 +1,54 @@
 import React from "react";
-import { Step } from "../../step/step";
+import { Step } from "../../models/step/step";
 import { EditText } from "react-edit-text";
 import { IoMdAddCircle, IoMdRemoveCircle } from "react-icons/io";
 import { ArrowRight } from "react-bootstrap-icons";
 import { DragItemModal } from "./DragItemModal";
-import { removeClassesFromElements } from "./helpers/dragItemUtil";
 
-type DragItemHeadOptions = {
+
+
+export type DragItemHeadOptions = {
   step: Step;
   setCollapseOpen: React.Dispatch<React.SetStateAction<boolean>>;
   collapseOpen: boolean;
 };
 
-export const DragItemHead = ({ step, setCollapseOpen, collapseOpen }: DragItemHeadOptions) => {
+
+
+
+
+export const DragItemHead = ({
+  step,
+  setCollapseOpen,
+  collapseOpen,
+}: DragItemHeadOptions) => {
   const { title } = step;
-  const isValid = step.valid();
-  const validateObj = step.validate(); 
   const hasChildrenSteps = step.steps.length > 0;
 
   const addStep = () => {
-    if(!collapseOpen) setCollapseOpen(true);
+    if (!collapseOpen) setCollapseOpen(true);
     step.addNewStep();
   };
-  const removeStep = () => { 
+  const removeStep = () => {
     step.remove();
   };
 
-  const onDragStart = (e: React.DragEvent<HTMLElement>) => {
-    e.currentTarget.classList.add("dragging");
-    e.dataTransfer.effectAllowed = "move";
-  };
-
-  const onDragOver = (e: React.DragEvent<HTMLElement>) => {
-    e.preventDefault();
-  };
-
-  const onDragEnd = (e: React.DragEvent<HTMLElement>) => {
-    removeClassesFromElements(["dragging", "drag-over", "above", "below"]);
-  };
-
-  const onDragEnter = (e: React.DragEvent<HTMLElement>) => {
-    try {
-      e.preventDefault();
-      removeClassesFromElements(["drag-over"]);
-      const currentTarget = e.currentTarget;
-      if (currentTarget.classList.contains("drag__item__head"))
-        e.stopPropagation();
-      currentTarget.classList.add("drag-over");
-    } catch (e) {
-      return;
-    }
-  };
-
   const onChangeTitle = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { value } = event.target;
     step.updateTitle(value);
   };
 
-
   return (
     <div
       className={`drag__item__head ${isValid ? "" : "invalid"}`}
-      draggable
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
-      onDragOver={onDragOver}
-      onDragEnter={onDragEnter}
       data-step-id={step.id}
     >
       <div
         className="head__start"
         aria-expanded={collapseOpen}
-        onClick={() => setCollapseOpen((prev) => !prev)} 
+        onClick={() => setCollapseOpen((prev) => !prev)}
       >
         <ArrowRight className="arrow-right" />
       </div>

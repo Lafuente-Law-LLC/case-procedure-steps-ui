@@ -5,8 +5,9 @@ export type CallbackObj = {
   functionName: string;
   args: Record<string, any>;
 };
+export type ReactClickHandler = React.MouseEventHandler<HTMLDivElement | SVGElement>;
+export type ReactDragEvent =   React.DragEventHandler<HTMLDivElement | SVGElement>;
 
-/** A pre-initialized Step which can contain steps as children */
 export type StepObj = {
   id: string;
   title: string;
