@@ -17,8 +17,9 @@ class Callback {
     this.args = args;
   }
 
+  //TODO perhaps function should also be updated
   update(data: Partial<CallbackObj>) {
-    const { event, args } = data;
+    const { function: func, event, args } = data;
     this.event = event || this.event;
     if (args) {
       this.args = merge(this.args, args);
