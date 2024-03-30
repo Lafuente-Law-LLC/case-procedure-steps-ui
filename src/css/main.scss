@@ -27,7 +27,6 @@ body {
   }
 }
 
-
 .mui-button {
   background-color: var(--bs-primary);
   border: none;
@@ -68,7 +67,6 @@ body {
   background-color: var(--bs-primary);
 }
 
-
-@import './styles/animations.scss';
-@import './styles/components/drag-item.scss';
-@import './styles/components/callback-component.scss';
+@import "./styles/animations.scss";
+@import "./styles/components/drag-item.scss";
+@import "./styles/components/callback-component.scss";

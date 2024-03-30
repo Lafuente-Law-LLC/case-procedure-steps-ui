@@ -1,8 +1,9 @@
 import React from "react";
-import { Step } from "../../step/step";
+import { Step } from "../../models/step/step";
 import { DragItem } from "./DragItem";
 import { DragItemsContext } from "./DragItemsContext";
 import { DragItemsOptions } from "./DragItemsContext";
+import StepItem from "../StepItem/StepItem";
 
 type DragItemProps = {
   steps: Step[];
@@ -17,9 +18,12 @@ const DragItemContainer: React.FC<DragItemProps> = ({
 }: DragItemProps) => {
   return (
     <DragItemsContext.Provider value={options}>
-      <div className="drag_item_container">
+      <div
+        className="drag_item_container"
+      
+      >
         {steps.map((step) => (
-          <DragItem step={step} key={step.id}></DragItem>
+          <StepItem key={step.id} step={step} />
         ))}
       </div>
       {children}

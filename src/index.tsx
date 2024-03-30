@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import sampleStep from "../ignore/rootStep";
 import "bootstrap/scss/bootstrap.scss";
-import RootStepConstructor from "./step/rootStepConstructor";
+import RootStepConstructor from "./models/step/rootStepConstructor";
 import "./css/main.scss";
 import DragItemContainer from "./components/DragItem/DragItemContainer";
-import { Step } from "./step/step";
-import CallbackManager from "./callback/callbackManager";
+import { Step } from "./models/step/step";
+import CallbackManager from "./models/callback/callbackManager";
 import { taskConfig, eventConfig } from "./config/callbacks.config";
 
 interface AppProps {

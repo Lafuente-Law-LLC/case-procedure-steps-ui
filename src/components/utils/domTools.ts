@@ -1,44 +1,17 @@
 type Point = { x: number; y: number };
 
-
-export function removeClassesFromElements(classes: string[]) {
-  classes.forEach((className) => {
-    const elements = document.querySelectorAll<HTMLElement>(`.${className}`);
-    elements.forEach((element) => element.classList.remove(className));
-  });
+function isClientRect(obj: any): obj is ClientRect {
+  return (
+    typeof obj === "object" &&
+    "top" in obj &&
+    "right" in obj &&
+    "bottom" in obj &&
+    "left" in obj
+  );
 }
-
-export const addAboveStep = (step: Step, stepToAdd: Step) => {
-  if (step.isAncestorOf(stepToAdd)) return;
-  step.moveStepAboveSelf(stepToAdd);
-};
-
-export const addBelowStep = (step: Step, stepToAdd: Step) => {
-  if (step.isAncestorOf(stepToAdd)) return;
-  step.moveStepBelowSelf(stepToAdd);
-};
-
 export const aboveOrBelowFromPoint = (point: Point, element: HTMLElement) => {
   return compareVerticalPosition(point, element) == 1 ? "above" : "below";
 };
-/**
- * Return the step that corresponds to the element
- *
- * @param element
- * @param step
- * @returns
- */
-export const returnStepFromElement = (element: HTMLElement, step: Step) => {
-  const elementStepId = element.getAttribute("data-step-id");
-  if (!elementStepId) throw new Error("No step id found");
-  const step1 = step.findStepById(elementStepId);
-  if (!step1) throw new Error("No step found");
-  return step1;
-};
-
-
-
-
 export function closestElement(
   target: HTMLElement | Point,
   elements: HTMLElement[],
@@ -70,17 +43,6 @@ export function closestElement(
 
   return closestElement;
 }
-
-function isClientRect(obj: any): obj is ClientRect {
-  return (
-    typeof obj === "object" &&
-    "top" in obj &&
-    "right" in obj &&
-    "bottom" in obj &&
-    "left" in obj
-  );
-}
-
 
 function getDistance(targetRect: Point, element: HTMLElement): number {
   const rect = element.getBoundingClientRect();
@@ -170,9 +132,24 @@ export function throwIfCondition(condition: boolean, message: string) {
   }
 }
 
-
-
-
+/**
+ * Get all children of parentElement that match the selector, except for the
+ * filterElement
+ *
+ * @param parentElement - The parent element to search for children
+ * @param selector - The selector to match children
+ * @param filterElement - The element to filter out of the results
+ * @returns
+ */
+export function getFilteredChildren<T extends HTMLElement>(
+  parentElement: HTMLElement,
+  selector: string,
+  filterElement: HTMLElement,
+): T[] {
+  return Array.from(parentElement.querySelectorAll<T>(selector)).filter(
+    (element) => element !== filterElement,
+  );
+}
 /**
  * Merges two arrays while preserving unique elements based on a mapping
  * condition. If duplicate keys are found, elements from array2 override

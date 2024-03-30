@@ -6,7 +6,7 @@ export type CallbackObj = {
   args: Record<string, any>;
 };
 export type ReactClickHandler = React.MouseEventHandler<HTMLDivElement | SVGElement>;
-export type ReactDragEvent =   React.DragEventHandler<HTMLDivElement | SVGElement>;
+export type ReactDragEventHandler =   React.DragEventHandler<HTMLDivElement | SVGElement>;
 
 export type StepObj = {
   id: string;

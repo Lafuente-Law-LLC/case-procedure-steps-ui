@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Step } from "../../models/step/step";
 import StepItemHead from "./StepItemHead";
+import StepItemBody from "./StepItemBody";
 const CSS_CLASSES = {
   MAIN: "step-item",
 };
@@ -17,6 +18,9 @@ const StepItem: React.FC<{ step: Step }> = ({ step }) => {
         setCollapseOpen={setCollapseOpen}
         step={step}
       />
+      <StepItemBody collapseOpen={collapseOpen} step={step} />
     </div>
   );
 };
+
+export default StepItem;
