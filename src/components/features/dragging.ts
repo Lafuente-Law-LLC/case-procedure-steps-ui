@@ -1,8 +1,6 @@
-import {
-  closestElement,
-  aboveOrBelowFromPoint,
-  getFilteredChildren,
-} from "../utils/domTools";
+import { useCallback } from "react";
+import { Step } from "../../models/step/step";
+
 type DragEvent = React.DragEvent<HTMLElement>;
 type ReactDataRef = React.RefObject<HTMLElement>;
 const CSS_CLASSES = {
@@ -24,12 +22,6 @@ const addDraggingElement = (e: DragEvent) => {
   e.currentTarget.classList.add(CSS_CLASSES.dragging);
 };
 
-const getCurrentTarget = (e: DragEvent) => {
-  if (!e.currentTarget) throw new Error("No current target found");
-  if (!(e.currentTarget instanceof HTMLElement))
-    throw new Error("Current target is not an HTMLElement");
-  return e.currentTarget as HTMLElement;
-};
 const removeDraggingElement = (e: DragEvent) => {
   e.currentTarget.classList.remove(CSS_CLASSES.dragging);
 };
@@ -39,11 +31,7 @@ const addDataTransferEffectAllowed = (
 ) => {
   e.dataTransfer.effectAllowed = effect;
 };
-const returnDraggingElement = (e: DragEvent) => {
-  const draggingElement = document.querySelector<HTMLElement>(".dragging");
-  if (!draggingElement) throw new Error("No dragging element found");
-  return draggingElement;
-};
+
 const ePreventDefault = (e: DragEvent) => {
   e.preventDefault();
 };
@@ -55,89 +43,85 @@ const currentTargetContainsClasses = (e: DragEvent, classes: string[]) => {
   );
 };
 
-const StepItemHeadDragProps = (refElement: ReactDataRef) => {
+export const StepItemHeadDragProps = (refElement: ReactDataRef) => {
   return {
     draggable: true,
-    onDragOver: (e: DragEvent) => {
-      ePreventDefault(e);
-    },
     onDragStart: (e: DragEvent) => {
       addDraggingElement(e);
       addDataTransferEffectAllowed(e, "move");
+      e.dataTransfer.setData("text", refElement.current!.dataset.stepId!);
     },
-    onDragEnd: (e: DragEvent) => {
-      removeDraggingElement(e);
-      removeClassesFromElements([
-        CSS_CLASSES.dragOver,
-        CSS_CLASSES.above,
-        CSS_CLASSES.below,
-      ]);
-    },
-    onDragLeave: (e: DragEvent) => {
-      try {
-        ePreventDefault(e);
-        const currentTarget = getCurrentTarget(e);
-        if (currentTarget.classList.contains(CSS_CLASSES.itemHead))
-          e.stopPropagation();
-        currentTarget.classList.remove(CSS_CLASSES.dragOver);
-      } catch (e) {
-        return;
-      }
+    onDragOver: (e: DragEvent) => {
+      ePreventDefault(e);
+      refElement.current!.classList.add(CSS_CLASSES.dragOver);
     },
     onDragEnter: (e: DragEvent) => {
-      try {
-        ePreventDefault(e);
-        removeClassesFromElements([CSS_CLASSES.dragOver]);
-        const currentTarget = getCurrentTarget(e);
-        if (currentTarget.classList.contains(CSS_CLASSES.itemHead))
-          e.stopPropagation();
-        currentTarget.classList.add(CSS_CLASSES.dragOver);
-      } catch (e) {
-        return;
-      }
+      if (currentTargetContainsClasses(e, [CSS_CLASSES.itemHead])) return;
+    },
+    onDragLeave: (e: DragEvent) => {
+      refElement.current!.classList.remove(CSS_CLASSES.dragOver);
+      refElement.current!.classList.remove(CSS_CLASSES.above);
+      refElement.current!.classList.remove(CSS_CLASSES.below);
+    },
+    onDragEnd: (e: DragEvent) => {
+      refElement.current!.classList.remove(CSS_CLASSES.dragOver);
+      removeDraggingElement(e);
     },
   };
 };
 
-const test = (e: DragEvent) => {
-  try {
-    ePreventDefault(e);
-    removeClassesFromElements([CSS_CLASSES.above, CSS_CLASSES.below]);
-    const draggingElement = returnDraggingElement(e);
-    const currentTarget = getCurrentTarget(e);
-
-    const dragItemHeadChildren = getFilteredChildren<HTMLElement>(
-      currentTarget,
-      `.${CSS_CLASSES.itemHead}`,
-      draggingElement,
-    );
-
-    const currentPoint = { x: e.clientX, y: e.clientY };
-    const dragItemHead = closestElement(currentPoint, dragItemHeadChildren);
-    if (!dragItemHead) return;
-
-    const aboveOrBelow = aboveOrBelowFromPoint(currentPoint, dragItemHead);
-    dragItemHead.classList.add(aboveOrBelow);
-  } catch (e) {
-    return;
-  }
-};
-
-export const StepItemBodyDragProps = (refElement: ReactDataRef) => {
+export const StepItemDividerDragProps = (
+  refElement: ReactDataRef,
+  step: Step,
+  setDragOver: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
+  const parentStep = step.parentStep;
+  if (!parentStep) throw new Error("Parent step is not defined");
+  const childIndex = step.stepNode.indexAmongSiblings;
   return {
-    onDragEnter: (e: DragEvent) => {
-      const dragging = document.querySelector<HTMLElement>(".dragging");
-      const point = { x: e.clientX, y: e.clientY };
-      refElement.current?.classList.add(CSS_CLASSES.dragOver);
-      const aboveOrBelow = aboveOrBelowFromPoint(point, refElement.current);
-      
-    },
-    onDragOver: (e: DragEvent) => {
-      ePreventDefault(e);
-    },
-    onDrop: (e: DragEvent) => {
-      const dataObj = e.dataTransfer.getData("text");
-      
-    },
+    onDragOver: useCallback((e: DragEvent) => {
+      e.preventDefault();
+    }, []),
+    onDragEnter: useCallback(
+      (e: DragEvent) => {
+        setDragOver(true);
+      },
+      [setDragOver],
+    ),
+    onDragLeave: useCallback(
+      (e: DragEvent) => {
+        if (refElement.current == e.currentTarget) {
+          setDragOver(false);
+        }
+      },
+      [setDragOver, refElement],
+    ),
+    onDrop: useCallback(
+      (e: DragEvent) => {
+        e.preventDefault();
+        const stepId = e.dataTransfer.getData("text");
+        if (stepId === "") return;
+        const step = parentStep.stepManager.searchById(stepId);
+        if (!step) return;
+        parentStep.addStepToIndex(step, childIndex);
+        const draggingSelector = `.${CSS_CLASSES.dragging}`;
+        const draggingElement = document.querySelector(draggingSelector);
+        if (draggingElement) {
+          draggingElement.classList.remove(draggingSelector);
+          draggingElement.classList.add("flash");
+          setTimeout(() => {
+            draggingElement.classList.remove("flash");
+          }, 1000);
+        }
+        setDragOver(false);
+      },
+      [parentStep, childIndex, setDragOver],
+    ),
+    onDragEnd: useCallback(
+      (e: DragEvent) => {
+        setDragOver(false);
+      },
+      [setDragOver],
+    ),
   };
 };

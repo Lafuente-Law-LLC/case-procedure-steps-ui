@@ -56,6 +56,25 @@ export default class StepNode {
   siblingAtGivenIndex(index: number) {
     return this.siblingNodes[index];
   }
+  addNodeToIndex(node: Node, index: number) {
+    try {
+      const isChild = this.isChild(node);
+      if (isChild) {
+        return node.setIndex(index);
+      } else {
+        node.drop();
+        return this.node.addChildAtIndex(node, index);
+      }
+    } catch (e) {
+      debugger;
+      console.warn(e);
+    }
+  }
+
+
+  isChild(node: Node) {
+    return this.node.children.includes(node);
+  }
 
   moveNodeAboveSelf(node: Node) {
     try {

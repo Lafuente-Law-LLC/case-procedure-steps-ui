@@ -12,7 +12,12 @@ export type SetCollapseOpen = React.Dispatch<React.SetStateAction<boolean>>;
 const StepItem: React.FC<{ step: Step }> = ({ step }) => {
   const [collapseOpen, setCollapseOpen] = useState(false);
   return (
-    <div className={CSS_CLASSES.MAIN}>
+    <div
+      className={CSS_CLASSES.MAIN}
+      onDragOver={(e) => {
+        e.preventDefault();
+      }}
+    >
       <StepItemHead
         collapseOpen={collapseOpen}
         setCollapseOpen={setCollapseOpen}

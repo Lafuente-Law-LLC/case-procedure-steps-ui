@@ -55,6 +55,11 @@ class Step {
     return this.stepManager.searchById(id);
   }
 
+  addStepToIndex(step: Step, index: number) {
+    this.stepNode.addNodeToIndex(step.stepNode.node, index);
+    this.informStepManager();
+  }
+
   moveStepAboveSelf(step: Step) {
     this.stepNode.moveNodeAboveSelf(step.stepNode.node);
     this.informStepManager();
