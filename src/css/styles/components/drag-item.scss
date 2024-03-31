@@ -12,8 +12,7 @@
   @extend .shadow;
   border: grey 1px solid;
   border-radius: 1em;
-  transition: margin 0.3s ease;
-  outline: purple 1px solid;
+  transition: margin 0.3s ease; 
   &.drag-over {
     margin: 14px;
   }
@@ -47,8 +46,7 @@
 }
 .step-item-body {
   padding-top: 1em;
-  padding-bottom: .5em;
-  outline: green 1px solid;
+  padding-bottom: 0.5em;
 }
 .three-dots-vertical {
   cursor: pointer;
@@ -72,10 +70,6 @@ $set-border: 4px solid rgb(11, 141, 228);
 
 .below {
   border-bottom: $set-border;
-}
-.drag-over {
-  
-  //margin: 2em;
 }
 
 .modal-container,

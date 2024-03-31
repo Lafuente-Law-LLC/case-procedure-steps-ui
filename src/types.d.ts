@@ -2,7 +2,7 @@ import type { Node } from "tree-model";
 import type Callback from "./callback/callback";
 export type CallbackObj = { 
   event: string;
-  functionName: string;
+  function: string;
   args: Record<string, any>;
 };
 export type ReactClickHandler = React.MouseEventHandler<HTMLDivElement | SVGElement>;

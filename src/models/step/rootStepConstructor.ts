@@ -5,6 +5,8 @@ import TreeModel from "tree-model";
 import StepManager from "./stepManager";
 import StepNode from "./stepNode";
 import { v4 as generateUniqueId } from "uuid";
+import CallbackFactory from "../callback/callbackFactory";
+
 
 export default class RootStepConstructor {
   rootNode: TreeModel.Node<FormattedStepObj>;
@@ -34,7 +36,14 @@ export default class RootStepConstructor {
   }
 
   tranformCallbackObjs(callbackObjs: CallbackObj[]): Callback[] {
-    return callbackObjs.map((callbackObj) => new Callback(callbackObj));
+    return callbackObjs.map(
+      (callbackObj) => CallbackFactory.createCallback(callbackObj.function, callbackObj.event, callbackObj.args )
+    );
+  }
+
+  //TODO - explore how the shape of the obj affects this function
+  transformToCallableObj(obj: CallbackObj) {
+    return { eventName: obj.event, functionName: obj.function, args: obj.args };
   }
 
   ensureRequirements = (data: any): void => {
@@ -43,8 +52,6 @@ export default class RootStepConstructor {
       if (!data[field]) throw new Error(`${field} is required`);
     });
   };
-
-
 
   processStep(node: TreeModel.Node<FormattedStepObj>) {
     new Step(new StepNode(node, this.stepManager));

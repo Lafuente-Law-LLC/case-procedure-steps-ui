@@ -2,28 +2,28 @@ import { v4 as uuidv4 } from "uuid";
 import { merge } from "lodash";
 import { CallbackObj } from "../../types";
 
-type CallbackProps = {
+export type CallbackProps = {
   id?: string;
-  event: string;
+  eventName: string;
   functionName: string;
   args: Record<string, any>;
 };
 
 class Callback {
   id: string;
-  event: string;
+  eventName: string;
   functionName: string;
   args: Record<string, any>;
 
-  constructor({ id, event, functionName, args }: CallbackProps) {
+  constructor({ id, eventName, functionName, args }: CallbackProps) {
     this.id = id || uuidv4();
-    this.event = event;
+    this.eventName = eventName;
     this.functionName = functionName;
     this.args = args;
   }
 
   updateEvent(event: string) {
-    this.event = event;
+    this.eventName = event;
   }
   updateArgs(args: Record<string, any>) {
     this.args = args;
@@ -31,7 +31,7 @@ class Callback {
 
   update({ functionName, event, args }: Partial<CallbackObj>) {
     this.functionName = functionName ?? this.functionName;
-    this.event = event ?? this.event;
+    this.eventName = event ?? this.eventName;
     this.args = args ? merge(this.args, args) : this.args;
   }
 
@@ -41,7 +41,7 @@ class Callback {
 
   toJSON(): CallbackObj {
     return {
-      event: this.event,
+      event: this.eventName,
       functionName: this.functionName,
       args: this.args,
     };
