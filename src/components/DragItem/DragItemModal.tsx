@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Step } from "../../step/step";
+import { Step } from "../../models/step/step";
 import { Modal, Tab, Tabs } from "react-bootstrap";
 import { ThreeDotsVertical } from "react-bootstrap-icons";
 import { EditTextarea } from "react-edit-text";
@@ -22,7 +22,7 @@ const ModalBody = ({ step }: { step: Step }) => {
         </div>
       </Tab>
       <Tab eventKey="callbacks" title="Callbacks">
-        <CallbacksTable step={step} />
+      
       </Tab>
     </Tabs>
   );

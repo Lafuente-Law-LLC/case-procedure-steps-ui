@@ -1,5 +1,5 @@
 import type { Action } from "./reducerFunction";
-import Callback from "../../../../callback/callback";
+import Callback from "../../../../models/callback/callback";
 import { merge } from "lodash";
 import {CallbackObj} from "../../../../types";
 export type ReactDispatcher = React.Dispatch<Action>;

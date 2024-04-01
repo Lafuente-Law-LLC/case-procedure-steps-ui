@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Step } from "../../models/step/step";
 import { StepItemDividerDragProps } from "../features/dragging";
+import { DRAGGING_CSS_CLASSES } from "../features/dragging";
 const CSS_CLASSES = {
   MAIN: "step-item-divider",
 };
@@ -11,7 +12,7 @@ const StepItemDivider = ({ step }: { step: Step }) => {
   return (
     <div
       ref={refElement}
-      className={CSS_CLASSES.MAIN + (dragOver ? " drag-over" : "")}
+      className={CSS_CLASSES.MAIN + (dragOver ? ` ${DRAGGING_CSS_CLASSES.dragOver}` : "")}
       {...StepItemDividerDragProps(refElement, step, setDragOver)}
     />
   );

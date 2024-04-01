@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import CallbackTableRow from './MainTable/CallbackTableRow/CallbackTableRow';
-import Callback from '../../../../../callback/callback';
+import Callback from '../../../../../models/callback/callback';
 import { Action } from '../../../helpers/reducer/reducerFunction';
 
 const MainTable = ({
@@ -24,11 +24,7 @@ const MainTable = ({
         </thead>
         <tbody>
           {callbacks.map((callback) => (
-            <CallbackTableRow
-              key={callback.id}
-              callback={callback}
-              dispatcher={dispatcher}
-            />
+            callback && callback.functionName + callback.eventName 
           ))}
         </tbody>
       </Table>

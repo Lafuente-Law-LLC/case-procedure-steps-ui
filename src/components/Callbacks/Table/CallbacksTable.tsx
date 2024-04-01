@@ -1,12 +1,13 @@
 import React, { useReducer, useState } from "react";
-import { Step } from "../../../step/step";
+import { Step } from "../../../models/step/step";
 import reducer from "../helpers/reducer/reducerFunction";
 import { TableContext } from "./TableContext";
+import CallbackFactory from "../../../models/callback/callbackFactory";
 import {
   AboveTable,
   BelowTable,
   MainTable,
-  TableMenuItems,
+  
 } from "./CallbacksTableComponents";
 
 const CallbacksTable = ({ step }: { step: Step }) => {
@@ -26,7 +27,12 @@ const CallbacksTable = ({ step }: { step: Step }) => {
         />
       </div>
       <BelowTable setChangeCommit={setCommitChange} editMode={editMode}>
-        <TableMenuItems dispatcher={callbacksDispatch} />
+      <button onClick={(e)=>{
+        const callback = CallbackFactory.createCallback("create_task");
+        step.addCallback(callback);
+        console.log(step);
+
+      }}>Create New Task</button> 
       </BelowTable>
     </TableContext.Provider>
   );

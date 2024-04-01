@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import Callback from "../../../../../../../callback/callback";
+import Callback from "../../../../../../../models/callback/callback";
 import { extractKeyValues } from "../../../../../helpers/callbacksTableUtils";
 import LabelRow from "./LabelRow";
 import type { ReactDispatcher } from "../../../../../helpers/reducer/reducerFunction";
@@ -7,7 +7,7 @@ import dispatchFunctionFactory from "../../../../../helpers/reducer/dispatchFunc
 import { TableContext } from "../../../../TableContext";
 import EventSelect from "./EventSelect";
 import { CiTrash } from "react-icons/ci";
-import CallbackManager from "../../../../../../../callback/callbackManager";
+import CallbackManager from "../../../../../../../models/callback/callbackManager";
 import { DragItemsContext } from "../../../../../../DragItem/DragItemsContext";
 const defaultOptions = [
   { text: "onCreate", value: "onCreate" },

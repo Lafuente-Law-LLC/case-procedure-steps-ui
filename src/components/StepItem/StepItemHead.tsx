@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Step } from "../../models/step/step";
 import { EditText } from "react-edit-text";
 import { IoMdAddCircle, IoMdRemoveCircle } from "react-icons/io";
@@ -6,36 +6,13 @@ import { ArrowRight } from "react-bootstrap-icons";
 import type { SetCollapseOpen, CollapseOpen } from "./StepItem";
 import { DragItemModal } from "../DragItem/DragItemModal";
 import type { ReactClickHandler } from "../../types";
-import { ref } from "joi";
-import { aboveOrBelowFromPoint, closestElement } from "../utils/domTools";
 import { StepItemHeadDragProps } from "../features/dragging";
-import { set } from "date-fns";
+import StepItemModal from "./StepItemModal";
 export type StepItemHeadProps = {
   step: Step;
   setCollapseOpen: SetCollapseOpen;
   collapseOpen: boolean;
 };
-
-const areRealted = (element: HTMLElement, related: HTMLElement) => {
-  return element.dataset.stepId === related.dataset.stepId;
-};
-function isPointAboveOrBelowElement(
-  point: { x: number; y: number },
-  element: HTMLElement,
-): string {
-  // Get the bounding rectangle of the element
-  const rect = element.getBoundingClientRect();
-
-  // Calculate the midpoint of the element
-  const elementMidpointY = rect.top + window.scrollY + rect.height / 2;
-
-  // Determine if the point is above or below the midpoint of the element
-  if (point.y < elementMidpointY) {
-    return "above";
-  } else {
-    return "below";
-  }
-}
 
 const CSS_CLASSES = {
   MAIN: "step-item-head",
@@ -94,7 +71,9 @@ const ItemHeadEnd = ({
 }) => {
   return (
     <div className={CSS_CLASSES.END}>
-      <div className="modal-container"></div>
+      <div className="modal-container">
+        <StepItemModal step={step} />
+      </div>
       <div className="button-group">
         <IoMdAddCircle className="add-icon" onClick={addStep} />
         {stepHasChildren && (
@@ -110,9 +89,6 @@ const StepItemHead: React.FC<StepItemHeadProps> = ({
   setCollapseOpen,
   collapseOpen,
 }) => {
-  const [dragging, setDragging] = useState(false);
-  const [dragOver, setDragOver] = useState(false);
-
   const showSubStepsAndCallbacks = (step: Step) => {
     return `sub-steps: ${step.steps.length} | callbacks: ${step.callbacks.length || 0}`;
   };
@@ -130,11 +106,7 @@ const StepItemHead: React.FC<StepItemHeadProps> = ({
   return (
     <div
       ref={refElement}
-      className={
-        CSS_CLASSES.MAIN +
-        (dragOver ? " drag-over" : "") +
-        (dragging ? " dragging" : "")
-      }
+      className={CSS_CLASSES.MAIN}
       data-step-id={step.id}
       {...StepItemHeadDragProps(refElement)}
     >

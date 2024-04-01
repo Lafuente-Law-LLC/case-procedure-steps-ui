@@ -1,4 +1,4 @@
-import Callback from "../../../../callback/callback";
+import Callback from "../../../../models/callback/callback";
 import type { CallbackObj } from "../../../../types";
 
 

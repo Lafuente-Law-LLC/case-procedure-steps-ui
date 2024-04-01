@@ -29,9 +29,9 @@ class Callback {
     this.args = args;
   }
 
-  update({ functionName, event, args }: Partial<CallbackObj>) {
+  update({ functionName, eventName, args }: Partial<Callback>) {
     this.functionName = functionName ?? this.functionName;
-    this.eventName = event ?? this.eventName;
+    this.eventName = eventName ?? this.eventName;
     this.args = args ? merge(this.args, args) : this.args;
   }
 
@@ -42,7 +42,7 @@ class Callback {
   toJSON(): CallbackObj {
     return {
       event: this.eventName,
-      functionName: this.functionName,
+      function: this.functionName,
       args: this.args,
     };
   }

@@ -29,6 +29,29 @@ class Step {
     this.informStepManager();
   }
 
+  addCallback(callback: Callback) {
+    this.callbacks.push(callback);
+    this.informStepManager();
+  }
+
+
+  removeCallback(callback: Callback) {
+    const index = this.callbacks.indexOf(callback);
+    if (index === -1) {
+      return false;
+    }
+    this.callbacks.splice(index, 1);
+    this.informStepManager();
+  }
+
+  updateCallback(callback: Callback, partial: Partial<Callback>) {
+    if (!this.callbacks.includes(callback)) {
+      return false;
+    }
+    callback.update(partial);
+    this.informStepManager();
+  }
+
   updateCallbacks(callbacks: Callback[]) {
     this.callbacks = callbacks;
     this.informStepManager();
@@ -37,6 +60,7 @@ class Step {
     this.summary = summary;
     this.informStepManager();
   }
+  
 
   addNewStep() {
     const step = this.stepNode.addNewChild();

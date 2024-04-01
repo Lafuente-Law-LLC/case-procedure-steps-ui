@@ -3,12 +3,13 @@ import { Step } from "../../models/step/step";
 
 type DragEvent = React.DragEvent<HTMLElement>;
 type ReactDataRef = React.RefObject<HTMLElement>;
-const CSS_CLASSES = {
+
+export const DRAGGING_CSS_CLASSES = {
   dragging: "dragging",
   dragOver: "drag-over",
   above: "above",
   below: "below",
-  itemHead: "drag__item__head",
+  
 };
 
 export function removeClassesFromElements(classes: string[]) {
@@ -19,11 +20,11 @@ export function removeClassesFromElements(classes: string[]) {
 }
 
 const addDraggingElement = (e: DragEvent) => {
-  e.currentTarget.classList.add(CSS_CLASSES.dragging);
+  e.currentTarget.classList.add(DRAGGING_CSS_CLASSES.dragging);
 };
 
 const removeDraggingElement = (e: DragEvent) => {
-  e.currentTarget.classList.remove(CSS_CLASSES.dragging);
+  e.currentTarget.classList.remove(DRAGGING_CSS_CLASSES.dragging);
 };
 const addDataTransferEffectAllowed = (
   e: DragEvent,
@@ -36,12 +37,7 @@ const ePreventDefault = (e: DragEvent) => {
   e.preventDefault();
 };
 
-const currentTargetContainsClasses = (e: DragEvent, classes: string[]) => {
-  const currentTarget = e.currentTarget;
-  return classes.every((className) =>
-    currentTarget.classList.contains(className),
-  );
-};
+
 
 export const StepItemHeadDragProps = (refElement: ReactDataRef) => {
   return {
@@ -53,18 +49,18 @@ export const StepItemHeadDragProps = (refElement: ReactDataRef) => {
     },
     onDragOver: (e: DragEvent) => {
       ePreventDefault(e);
-      refElement.current!.classList.add(CSS_CLASSES.dragOver);
+      refElement.current!.classList.add(DRAGGING_CSS_CLASSES.dragOver);
     },
     onDragEnter: (e: DragEvent) => {
-      if (currentTargetContainsClasses(e, [CSS_CLASSES.itemHead])) return;
+      
     },
     onDragLeave: (e: DragEvent) => {
-      refElement.current!.classList.remove(CSS_CLASSES.dragOver);
-      refElement.current!.classList.remove(CSS_CLASSES.above);
-      refElement.current!.classList.remove(CSS_CLASSES.below);
+      refElement.current!.classList.remove(DRAGGING_CSS_CLASSES.dragOver);
+      refElement.current!.classList.remove(DRAGGING_CSS_CLASSES.above);
+      refElement.current!.classList.remove(DRAGGING_CSS_CLASSES.below);
     },
     onDragEnd: (e: DragEvent) => {
-      refElement.current!.classList.remove(CSS_CLASSES.dragOver);
+      refElement.current!.classList.remove(DRAGGING_CSS_CLASSES.dragOver);
       removeDraggingElement(e);
     },
   };
@@ -104,7 +100,7 @@ export const StepItemDividerDragProps = (
         const step = parentStep.stepManager.searchById(stepId);
         if (!step) return;
         parentStep.addStepToIndex(step, childIndex);
-        const draggingSelector = `.${CSS_CLASSES.dragging}`;
+        const draggingSelector = `.${DRAGGING_CSS_CLASSES.dragging}`;
         const draggingElement = document.querySelector(draggingSelector);
         if (draggingElement) {
           draggingElement.classList.remove(draggingSelector);
