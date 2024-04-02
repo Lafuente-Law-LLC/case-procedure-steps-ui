@@ -15,8 +15,7 @@ interface AppProps {
   rootStep: Step;
 }
 
-
-const  createFutureEvent: FunctionArgsPair = {
+const createFutureEvent: FunctionArgsPair = {
   name: "create_future_event",
   args: [
     { name: "title", type: "string", required: true, default: "New Title" },
@@ -26,19 +25,17 @@ const  createFutureEvent: FunctionArgsPair = {
 };
 
 const createTask: FunctionArgsPair = {
-    name: "create_task",
-    args: [
-        { name: "title", type: "string", required: true, default: "New Title" },
-        { name: "summary", type: "string", required: true, default: "New Summary" }, 
-    ]}
+  name: "create_task",
+  args: [
+    { name: "title", type: "string", required: true, default: "New Title" },
+    { name: "summary", type: "string", required: true, default: "New Summary" },
+  ],
+};
 
-    CallbackFactory.registerFunctionArgsPair(createFutureEvent);
-    CallbackFactory.registerFunctionArgsPair(createTask);
-    CallbackFactory.registerEventName("after_create");
-    CallbackFactory.registerEventName("complete");
-const callbackManager = new CallbackManager();
-callbackManager.registerCallbackConfig("create_task", taskConfig);
-callbackManager.registerCallbackConfig("create_future_event", eventConfig);
+CallbackFactory.registerFunctionArgsPair(createFutureEvent);
+CallbackFactory.registerFunctionArgsPair(createTask);
+CallbackFactory.registerEventName("after_create");
+CallbackFactory.registerEventName("complete");
 
 const App: React.FC<AppProps> = ({ rootStep }: { rootStep: Step }) => {
   const [steps, setSteps] = useState(rootStep.steps);
@@ -51,10 +48,7 @@ const App: React.FC<AppProps> = ({ rootStep }: { rootStep: Step }) => {
   };
 
   return (
-    <DragItemContainer
-      steps={steps}
-      options={{ callbackManager: callbackManager }}
-    >
+    <DragItemContainer steps={steps} options={{}}>
       <button className={"mui-button"} onClick={addStep}>
         Add
       </button>

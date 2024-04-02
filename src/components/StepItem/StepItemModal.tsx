@@ -3,7 +3,7 @@ import { Step } from "../../models/step/step";
 import { Modal, Tab, Tabs } from "react-bootstrap";
 import { ThreeDotsVertical } from "react-bootstrap-icons";
 import { EditTextarea } from "react-edit-text";
-import CallbacksTable from "../Callbacks/Table/CallbacksTable";
+import CallbacksTable from "../CallbacksTable/CallbacksTable";
 const CSS_CLASSES = {
   MAIN: "step-item-modal",
   button: "three-dots-vertical",
@@ -36,7 +36,7 @@ const StepItemModal: React.FC<{ step: Step }> = ({ step }) => {
               </div>
             </Tab>
             <Tab eventKey="callbacks" title="Callbacks">
-                <CallbacksTable step={step} />
+              <CallbacksTable step={step} /> 
             </Tab>
           </Tabs>
         </Modal.Body>
