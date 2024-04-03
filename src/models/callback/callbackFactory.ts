@@ -5,6 +5,8 @@ import { returnFuncValueObj } from "./funtionArgsPair";
 export default class CallbackFactory {
   static functionNames = new Set<string>();
   static registeredEventNames = new Set<string>();
+  static functionArgsPairs = new Map<string, FunctionArgsPair>();
+
   static registerEventName(eventName: string) {
     this.registeredEventNames.add(eventName);
   }
@@ -12,11 +14,12 @@ export default class CallbackFactory {
   static isInEventNames(eventName: string) {
     return this.registeredEventNames.has(eventName);
   }
-  static functionArgsPairs = new Map<string, FunctionArgsPair>();
+
   static registerFunctionArgsPair(funcArgsPair: FunctionArgsPair) {
     this.functionNames.add(funcArgsPair.name);
     this.functionArgsPairs.set(funcArgsPair.name, funcArgsPair);
   }
+
   static getFunctionArgsPair(functionName: string) {
     return this.functionArgsPairs.get(functionName);
   }
@@ -40,9 +43,7 @@ export default class CallbackFactory {
       throw new Error("Invalid function name");
     }
 
-    args = !args ? returnFuncValueObj(funcArgsPair) : args;
-    const cb = new Callback({ eventName: eventName || "", functionName, args });
-    console.log(cb);
-    return cb;
+    args = !args ? returnFuncValueObj(funcArgsPair).args : args;
+    return new Callback({ eventName: eventName || "", functionName, args });
   }
 }

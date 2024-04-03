@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
-import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import { Step } from "../../models/step/step";
-import CallbackAdditionButton from "../Callbacks/Table/CallbacksTable/CallbacksTableComponents/BelowTable/CallbackAdditionButton";
+import CallbackAdditionButton from "./CallbackAdditionButton";
 import CallbackFactory from "../../models/callback/callbackFactory";
 import CallbacksTableContext from "./CallbacksTableContext";
 import TableRow from "./TableRow";
@@ -11,16 +10,20 @@ type CallbacksTableProps = {
   step: Step;
 };
 
+const CSS_CLASSES = {
+  MAIN: "callbacks-table-wrapper",
+};
+
 const CallbacksTable = ({ step }: CallbacksTableProps) => {
-  const [editMode, setEditMode] = useState(true);
+  const [editMode, setEditMode] = useState(false);
 
   return (
     <CallbacksTableContext.Provider value={{ step }}>
-      <div>
-         <Form.Check
+      <div className={CSS_CLASSES.MAIN}>
+        <Form.Check
           type="switch"
           label="Edit Mode"
-          onChange={(e) => setEditMode(e.target.checked)}
+          onChange={(e) => setEditMode((prev) => !prev)}
         />
         <Table striped bordered hover>
           <thead>
@@ -37,14 +40,24 @@ const CallbacksTable = ({ step }: CallbacksTableProps) => {
           </tbody>
         </Table>
         <CallbackAdditionButton>
-          <Button
-            variant="primary"
+          <div
+            className="menu-item"
             onClick={(e) => {
               step.addCallback(CallbackFactory.createCallback("create_task"));
             }}
           >
             Add Task Based
-          </Button>
+          </div>
+          <div
+            className="menu-item"
+            onClick={(e) => {
+              step.addCallback(
+                CallbackFactory.createCallback("create_future_event"),
+              );
+            }}
+          >
+            Add Event Based
+          </div>
         </CallbackAdditionButton>
       </div>
     </CallbacksTableContext.Provider>

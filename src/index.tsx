@@ -4,10 +4,9 @@ import sampleStep from "../ignore/rootStep";
 import "bootstrap/scss/bootstrap.scss";
 import RootStepConstructor from "./models/step/rootStepConstructor";
 import "./css/main.scss";
-import DragItemContainer from "./components/DragItem/DragItemContainer";
+import StepItemContainer from "./components/StepItem/StepItemContainer";
 import { Step } from "./models/step/step";
-import CallbackManager from "./models/callback/callbackManager";
-import { taskConfig, eventConfig } from "./config/callbacks.config";
+
 import type { FunctionArgsPair } from "./models/callback/funtionArgsPair";
 import CallbackFactory from "./models/callback/callbackFactory";
 
@@ -48,11 +47,11 @@ const App: React.FC<AppProps> = ({ rootStep }: { rootStep: Step }) => {
   };
 
   return (
-    <DragItemContainer steps={steps} options={{}}>
+    <StepItemContainer steps={steps}>
       <button className={"mui-button"} onClick={addStep}>
         Add
       </button>
-    </DragItemContainer>
+    </StepItemContainer>
   );
 };
 
