@@ -6,7 +6,6 @@ import RootStepConstructor from "./models/step/rootStepConstructor";
 import "./css/main.scss";
 import StepItemContainer from "./components/StepItem/StepItemContainer";
 import { Step } from "./models/step/step";
-
 import type { FunctionArgsPair } from "./models/callback/funtionArgsPair";
 import CallbackFactory from "./models/callback/callbackFactory";
 
