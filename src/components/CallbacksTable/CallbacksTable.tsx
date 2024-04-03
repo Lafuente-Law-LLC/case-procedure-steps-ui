@@ -39,27 +39,27 @@ const CallbacksTable = ({ step }: CallbacksTableProps) => {
             ))}
           </tbody>
         </Table>
-        <CallbackAdditionButton>
-          <div
-            className="menu-item"
-            onClick={(e) => {
-              step.addCallback(CallbackFactory.createCallback("create_task"));
-            }}
-          >
-            Add Task Based
-          </div>
-          <div
-            className="menu-item"
-            onClick={(e) => {
-              step.addCallback(
-                CallbackFactory.createCallback("create_future_event"),
-              );
-            }}
-          >
-            Add Event Based
-          </div>
-        </CallbackAdditionButton>
       </div>
+      <CallbackAdditionButton>
+        <div
+          className="menu-item"
+          onClick={(e) => {
+            step.addCallback(CallbackFactory.createCallback("create_task"));
+          }}
+        >
+          Add Task Based
+        </div>
+        <div
+          className="menu-item"
+          onClick={(e) => {
+            step.addCallback(
+              CallbackFactory.createCallback("create_future_event"),
+            );
+          }}
+        >
+          Add Event Based
+        </div>
+      </CallbackAdditionButton>
     </CallbacksTableContext.Provider>
   );
 };

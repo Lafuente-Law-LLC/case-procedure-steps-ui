@@ -1,10 +1,9 @@
 import React from "react";
-import type { FunctionArgsPair } from "../../models/callback/funtionArgsPair";
+import type { FunctionArgsPair } from "../../models/callback/utils";
 import { Form } from "react-bootstrap";
 import { Step } from "../../models/step/step";
 import Callback from "../../models/callback/callback";
 import CallbackFactory from "../../models/callback/callbackFactory";
-
 
 const getArgsType = (funcArgsPair: FunctionArgsPair, argName: string) => {
   const arg = funcArgsPair.args.find((arg) => arg.name === argName);
@@ -41,16 +40,18 @@ const EditableInput = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   editMode: boolean;
 }) => {
-  return(<div className="label-row-component">
-    <div className="label">{label}</div>
-    <div className="value">
-      {!editMode ? (
-        value
-      ) : (
-        <Form.Control type={type} value={value} onChange={onChange} />
-      )}
+  return (
+    <div className="label-row-component">
+      <div className="label">{label}</div>
+      <div className="value">
+        {!editMode ? (
+          value
+        ) : (
+          <Form.Control type={type} value={value} onChange={onChange} />
+        )}
+      </div>
     </div>
-  </div>);
+  );
 };
 
 export const ArgsCell = ({
@@ -106,8 +107,13 @@ export const EventNameCell = ({
   }) => {
     return (
       <Form.Control as="select" onChange={onChangeHandler} value={value}>
-        <option value="after_create">After Create</option>
-        <option value="complete">Complete</option>
+        {CallbackFactory.getEventNameDescriptors().map((eventName) => {
+          return (
+            <option key={eventName.name} value={eventName.name}>
+              {eventName.label}
+            </option>
+          );
+        })}
       </Form.Control>
     );
   };

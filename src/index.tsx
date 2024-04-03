@@ -6,7 +6,7 @@ import RootStepConstructor from "./models/step/rootStepConstructor";
 import "./css/main.scss";
 import StepItemContainer from "./components/StepItem/StepItemContainer";
 import { Step } from "./models/step/step";
-import type { FunctionArgsPair } from "./models/callback/funtionArgsPair";
+import type { FunctionArgsPair } from "./models/callback/utils";
 import CallbackFactory from "./models/callback/callbackFactory";
 
 interface AppProps {
@@ -32,8 +32,11 @@ const createTask: FunctionArgsPair = {
 
 CallbackFactory.registerFunctionArgsPair(createFutureEvent);
 CallbackFactory.registerFunctionArgsPair(createTask);
-CallbackFactory.registerEventName("after_create");
-CallbackFactory.registerEventName("complete");
+CallbackFactory.registerEventName({ name: "complete", label: "Complete" });
+CallbackFactory.registerEventName({
+  name: "after_create",
+  label: "After Create",
+});
 
 const App: React.FC<AppProps> = ({ rootStep }: { rootStep: Step }) => {
   const [steps, setSteps] = useState(rootStep.steps);

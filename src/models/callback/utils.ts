@@ -1,3 +1,8 @@
+export type EventNameDescriptor = {
+  name: string;
+  label: string;
+};
+
 /** Represents a pair of function name and its arguments. */
 export type FunctionArgsPair = {
   name: string;

@@ -4,6 +4,7 @@ import { Modal, Tab, Tabs } from "react-bootstrap";
 import { ThreeDotsVertical } from "react-bootstrap-icons";
 import { EditTextarea } from "react-edit-text";
 import CallbacksTable from "../CallbacksTable/CallbacksTable";
+
 const CSS_CLASSES = {
   MAIN: "step-item-modal",
   button: "three-dots-vertical",

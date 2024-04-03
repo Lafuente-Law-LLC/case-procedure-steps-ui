@@ -1,5 +1,5 @@
 import type { Node } from "tree-model";
-import type Callback from "./callback/callback";
+import Callback from "./models/callback/callback";
 export type CallbackObj = { 
   event: string;
   function: string;

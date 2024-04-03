@@ -1,16 +1,21 @@
 import Callback from "./callback";
-import type { FunctionArgsPair } from "./funtionArgsPair";
-import { returnFuncValueObj } from "./funtionArgsPair";
+import type { FunctionArgsPair, EventNameDescriptor } from "./utils";
+import { returnFuncValueObj } from "./utils";
 
 export default class CallbackFactory {
   static functionNames = new Set<string>();
-  static registeredEventNames = new Set<string>();
+  static registeredEventNames = new Map<string, EventNameDescriptor>();
   static functionArgsPairs = new Map<string, FunctionArgsPair>();
 
-  static registerEventName(eventName: string) {
-    this.registeredEventNames.add(eventName);
+  
+  static registerEventName(eventName: EventNameDescriptor) {
+    const { name } = eventName;
+    this.registeredEventNames.set(name, eventName);
   }
 
+  static getEventNameDescriptors() {
+    return Array.from(this.registeredEventNames.values());
+  }
   static isInEventNames(eventName: string) {
     return this.registeredEventNames.has(eventName);
   }
