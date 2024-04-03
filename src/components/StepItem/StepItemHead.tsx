@@ -4,10 +4,11 @@ import { EditText } from "react-edit-text";
 import { IoMdAddCircle, IoMdRemoveCircle } from "react-icons/io";
 import { ArrowRight } from "react-bootstrap-icons";
 import type { SetCollapseOpen, CollapseOpen } from "./StepItem";
-import { DragItemModal } from "../DragItem/DragItemModal";
 import type { ReactClickHandler } from "../../types";
 import { StepItemHeadDragProps } from "../features/dragging";
 import StepItemModal from "./StepItemModal";
+
+
 export type StepItemHeadProps = {
   step: Step;
   setCollapseOpen: SetCollapseOpen;

@@ -9,15 +9,7 @@ export const DRAGGING_CSS_CLASSES = {
   dragOver: "drag-over",
   above: "above",
   below: "below",
-  
 };
-
-export function removeClassesFromElements(classes: string[]) {
-  classes.forEach((className) => {
-    const elements = document.querySelectorAll<HTMLElement>(`.${className}`);
-    elements.forEach((element) => element.classList.remove(className));
-  });
-}
 
 const addDraggingElement = (e: DragEvent) => {
   e.currentTarget.classList.add(DRAGGING_CSS_CLASSES.dragging);
@@ -37,8 +29,6 @@ const ePreventDefault = (e: DragEvent) => {
   e.preventDefault();
 };
 
-
-
 export const StepItemHeadDragProps = (refElement: ReactDataRef) => {
   return {
     draggable: true,
@@ -51,9 +41,7 @@ export const StepItemHeadDragProps = (refElement: ReactDataRef) => {
       ePreventDefault(e);
       refElement.current!.classList.add(DRAGGING_CSS_CLASSES.dragOver);
     },
-    onDragEnter: (e: DragEvent) => {
-      
-    },
+    onDragEnter: (e: DragEvent) => {},
     onDragLeave: (e: DragEvent) => {
       refElement.current!.classList.remove(DRAGGING_CSS_CLASSES.dragOver);
       refElement.current!.classList.remove(DRAGGING_CSS_CLASSES.above);
