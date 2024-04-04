@@ -33,15 +33,18 @@ const EditableInput = ({
   type,
   onChange,
   editMode,
+  valid,
 }: {
   label: string;
   value: string;
   type: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   editMode: boolean;
+  valid?: boolean;
 }) => {
   return (
-    <div className="label-row-component">
+    <div className={`label-row-component ${valid === false ? "invalid" : ""}`}>
+      {valid === false && <div className="error">Invalid</div>}
       <div className="label">{label}</div>
       <div className="value">
         {!editMode ? (
@@ -69,10 +72,21 @@ export const ArgsCell = ({
   if (!funcArgsPair) {
     return null;
   }
+  const validator = funcArgsPair.validator
+    ? funcArgsPair.validator(callback)
+    : null;
+
   return (
     <td>
       {Object.entries(args).map(([argName, value]) => {
         const type = getArgsType(funcArgsPair, argName);
+        let valid = undefined;
+        if (validator && validator.argsValidator.errorInField(argName)) {
+          console.log(
+            validator.argsValidator.findErrorMessageForField(argName),
+            valid = false
+          );
+        }
         const onChange = createOnChangeHandler({ step, callback, argName });
         return (
           <EditableInput
@@ -82,6 +96,7 @@ export const ArgsCell = ({
             type={type}
             onChange={onChange}
             editMode={editMode}
+            valid={valid}
           />
         );
       })}

@@ -25,6 +25,15 @@ body {
   & .value {
     @extend .col-8;
   }
+  &.invalid{
+    & .label {
+      @extend .text-danger;
+    }
+    & .value {
+      @extend .text-danger;
+    }
+
+  }
 }
 
 .mui-button {

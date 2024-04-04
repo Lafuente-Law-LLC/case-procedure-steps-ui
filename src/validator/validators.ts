@@ -1,5 +1,18 @@
-import Joi from "joi";
+import Joi, { ObjectSchema } from "joi";
 import Validator from "./validator";
+import { Step } from "../models/step/step";
+import Callback from "../models/callback/callback";
+
+export class CallbackValidator extends Validator {
+  argsValidator: Validator;
+  constructor(schema: Joi.ObjectSchema, subject: any) {
+    super(schema, subject);
+    this.argsValidator = new Validator(
+      this.schema.extract("args") as ObjectSchema,
+      this.subject.args,
+    );
+  }
+}
 
 const baseArgsSchema = Joi.object({
   title: Joi.string().required(),
@@ -7,8 +20,8 @@ const baseArgsSchema = Joi.object({
 });
 
 const eventCallbackSchema = Joi.object({
-  event: Joi.string().required(),
-  function: Joi.string().valid("create_future_event").required(),
+  eventName: Joi.string().required(),
+  functionName: Joi.string().valid("create_future_event").required(),
   args: baseArgsSchema
     .keys({
       days: Joi.number().integer().min(0),
@@ -17,9 +30,9 @@ const eventCallbackSchema = Joi.object({
 });
 
 const taskCallbackSchema = Joi.object({
-  event: Joi.string().required(),
-  function: Joi.string().valid("create_task").required(),
-  args: baseArgsSchema,
+  eventName: Joi.string().required(),
+  functionName: Joi.string().valid("create_task").required(),
+  args: baseArgsSchema.unknown(true),
 });
 
 const StepSchema = Joi.object({
@@ -28,8 +41,14 @@ const StepSchema = Joi.object({
   summary: Joi.string().required(),
 }).unknown(true);
 
-const stepValidator = new Validator(StepSchema);
-const eventCallbackValidator = new Validator(eventCallbackSchema);
-const taskCallbackValidator = new Validator(taskCallbackSchema);
+const stepValidator = (step: Step) => {
+  return new Validator(StepSchema, step);
+};
+const eventCallbackValidator = (callback: Callback) => {
+  return new CallbackValidator(eventCallbackSchema, callback);
+};
+const taskCallbackValidator = (callback: Callback) => {
+  return new CallbackValidator(taskCallbackSchema, callback);
+};
 
 export { stepValidator, eventCallbackValidator, taskCallbackValidator };

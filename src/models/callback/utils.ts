@@ -1,3 +1,5 @@
+import { CallbackValidator } from "../../validator/validators";
+import Callback from "./callback";
 export type EventNameDescriptor = {
   name: string;
   label: string;
@@ -7,6 +9,7 @@ export type EventNameDescriptor = {
 export type FunctionArgsPair = {
   name: string;
   args: ArgDescriptor[];
+  validator?: (callback: Callback) => CallbackValidator;
 };
 
 /** Represents the descriptor of an argument. */

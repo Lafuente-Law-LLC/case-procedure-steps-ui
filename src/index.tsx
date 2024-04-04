@@ -8,7 +8,10 @@ import StepItemContainer from "./components/StepItem/StepItemContainer";
 import { Step } from "./models/step/step";
 import type { FunctionArgsPair } from "./models/callback/utils";
 import CallbackFactory from "./models/callback/callbackFactory";
-
+import {
+  eventCallbackValidator,
+  taskCallbackValidator,
+} from "./validator/validators";
 interface AppProps {
   rootStep: Step;
 }
@@ -20,6 +23,7 @@ const createFutureEvent: FunctionArgsPair = {
     { name: "summary", type: "string", required: true, default: "New Summary" },
     { name: "days", type: "number", required: true, default: 0 },
   ],
+  validator: eventCallbackValidator,
 };
 
 const createTask: FunctionArgsPair = {
@@ -28,6 +32,7 @@ const createTask: FunctionArgsPair = {
     { name: "title", type: "string", required: true, default: "New Title" },
     { name: "summary", type: "string", required: true, default: "New Summary" },
   ],
+  validator: taskCallbackValidator,
 };
 
 CallbackFactory.registerFunctionArgsPair(createFutureEvent);
