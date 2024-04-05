@@ -19,6 +19,9 @@
   &.invalid {
     border: red 1px solid;
   }
+  & .start{
+    position: relative;
+  }
   & .start,
   & .end {
     flex: 1;

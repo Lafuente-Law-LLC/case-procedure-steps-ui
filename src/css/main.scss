@@ -25,14 +25,25 @@ body {
   & .value {
     @extend .col-8;
   }
-  &.invalid{
+  &.invalid {
     & .label {
       @extend .text-danger;
     }
     & .value {
       @extend .text-danger;
     }
+  }
+}
 
+.error-badge {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem; 
+  border-radius: 0;
+  & .text {
+     transform: rotate(90deg);
   }
 }
 

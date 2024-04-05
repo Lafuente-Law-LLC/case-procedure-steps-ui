@@ -7,7 +7,9 @@ import type { SetCollapseOpen, CollapseOpen } from "./StepItem";
 import type { ReactClickHandler } from "../../types";
 import { StepItemHeadDragProps } from "../features/dragging";
 import StepItemModal from "./StepItemModal";
-
+import type { ValidationObject } from "../../types";
+import { stepValidator } from "../../validator/validators";
+import StepItemErrorBadge from "./StepItemErrorBadge";
 
 export type StepItemHeadProps = {
   step: Step;
@@ -25,9 +27,11 @@ const CSS_CLASSES = {
 const ItemHeadStart = ({
   collapseOpen,
   onClickHandler,
+  validationObject,
 }: {
   collapseOpen: CollapseOpen;
   onClickHandler: ReactClickHandler;
+  validationObject: ValidationObject;
 }) => {
   return (
     <div
@@ -35,6 +39,7 @@ const ItemHeadStart = ({
       onClick={onClickHandler}
       aria-expanded={collapseOpen}
     >
+      <StepItemErrorBadge {...validationObject} />
       <ArrowRight className={"arrow-right"} />
     </div>
   );
@@ -103,7 +108,7 @@ const StepItemHead: React.FC<StepItemHeadProps> = ({
   };
 
   const refElement = useRef<HTMLDivElement>(null);
-
+  const validator = stepValidator(step);
   return (
     <div
       ref={refElement}
@@ -112,6 +117,7 @@ const StepItemHead: React.FC<StepItemHeadProps> = ({
       {...StepItemHeadDragProps(refElement)}
     >
       <ItemHeadStart
+        validationObject={validator.valid()}
         collapseOpen={collapseOpen}
         onClickHandler={() => setCollapseOpen((prev) => !prev)}
       />
