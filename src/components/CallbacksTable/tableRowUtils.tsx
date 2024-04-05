@@ -73,12 +73,12 @@ export const EditableInput = ({
   type,
   onChange,
   editMode,
-  validObj,
+  validationObject,
 }: EditableInputObj & {
   editMode: boolean;
-  validObj: ValidationObject;
+  validationObject: ValidationObject;
 }) => {
-  const { valid, message } = validObj;
+  const { valid, message } = validationObject;
   return (
     <div className={`label-row-component ${valid === false ? "invalid" : ""}`}>
       <div className="label">{label}</div>
@@ -92,7 +92,6 @@ export const EditableInput = ({
     </div>
   );
 };
-
 
 export const getArgsValidator = (callback: Callback) => {
   return getValidatorFromCallback(callback).argsValidator;

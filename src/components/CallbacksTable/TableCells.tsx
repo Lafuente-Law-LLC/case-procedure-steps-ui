@@ -14,9 +14,10 @@ import { ValidationObject } from "../../types";
 type ArgsCellProps = {
   argName: string;
   value: string;
-  callback: Callback;
-  step: Step;
   editMode: boolean;
+  type: string;
+  validationObject: ValidationObject;
+  onChangeHandler: React.ChangeEventHandler<HTMLInputElement>;
 };
 
 type EventNameCellProps = {
@@ -29,8 +30,10 @@ type EventNameCellProps = {
 const ArgsCell = ({
   argName,
   value,
-  callback,
-  step,
+  type,
+  validationObject,
+  onChangeHandler,
+
   editMode,
 }: ArgsCellProps) => {
   return (
@@ -38,10 +41,10 @@ const ArgsCell = ({
       key={argName}
       label={argName}
       value={value}
-      type={getArgsTypeFormCB(callback, argName)}
-      onChange={createArgsHandler({ step, callback, argName })}
+      type={type}
+      onChange={onChangeHandler}
       editMode={editMode}
-      validObj={getArgsValidator(callback).validField(argName)}
+      validationObject={validationObject}
     />
   );
 };
@@ -63,8 +66,9 @@ export const ArgsCellGroup = ({
             key={argName}
             argName={argName}
             value={value}
-            callback={callback}
-            step={step}
+            type={getArgsTypeFormCB(callback, argName)}
+            validationObject={getArgsValidator(callback).validField(argName)}
+            onChangeHandler={createArgsHandler({ step, callback, argName })}
             editMode={editMode}
           />
         );
