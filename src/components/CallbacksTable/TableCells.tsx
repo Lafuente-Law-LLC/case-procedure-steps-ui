@@ -1,63 +1,52 @@
 import React from "react";
-import type { FunctionArgsPair } from "../../models/callback/utils";
-import { Form } from "react-bootstrap";
 import { Step } from "../../models/step/step";
 import Callback from "../../models/callback/callback";
-import CallbackFactory from "../../models/callback/callbackFactory";
 
-const getArgsType = (funcArgsPair: FunctionArgsPair, argName: string) => {
-  const arg = funcArgsPair.args.find((arg) => arg.name === argName);
-  return arg ? arg.type : "string";
-};
+import {
+  EditableInput,
+  getArgsTypeFormCB,
+  createArgsHandler,
+  getArgsValidator,
+  SelectControl,
+} from "./tableRowUtils";
+import { ValidationObject } from "../../types";
 
-const createOnChangeHandler = ({
-  step,
-  callback,
-  argName,
-}: {
-  step: Step;
-  callback: Callback;
+type ArgsCellProps = {
   argName: string;
-}) => {
-  return (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    step.updateCallback(callback, {
-      args: { ...callback.args, [argName]: value },
-    });
-  };
+  value: string;
+  callback: Callback;
+  step: Step;
+  editMode: boolean;
 };
 
-const EditableInput = ({
-  label,
-  value,
-  type,
-  onChange,
-  editMode,
-  valid,
-}: {
-  label: string;
-  value: string;
-  type: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+type EventNameCellProps = {
+  eventNameValue: string;
   editMode: boolean;
-  valid?: boolean;
-}) => {
+  onChangeHandler: React.ChangeEventHandler<HTMLSelectElement>;
+  validationObject: ValidationObject;
+} & React.PropsWithChildren;
+
+const ArgsCell = ({
+  argName,
+  value,
+  callback,
+  step,
+  editMode,
+}: ArgsCellProps) => {
   return (
-    <div className={`label-row-component ${valid === false ? "invalid" : ""}`}>
-      {valid === false && <div className="error">Invalid</div>}
-      <div className="label">{label}</div>
-      <div className="value">
-        {!editMode ? (
-          value
-        ) : (
-          <Form.Control type={type} value={value} onChange={onChange} />
-        )}
-      </div>
-    </div>
+    <EditableInput
+      key={argName}
+      label={argName}
+      value={value}
+      type={getArgsTypeFormCB(callback, argName)}
+      onChange={createArgsHandler({ step, callback, argName })}
+      editMode={editMode}
+      validObj={getArgsValidator(callback).validField(argName)}
+    />
   );
 };
 
-export const ArgsCell = ({
+export const ArgsCellGroup = ({
   callback,
   step,
   editMode,
@@ -66,82 +55,41 @@ export const ArgsCell = ({
   step: Step;
   editMode: boolean;
 }) => {
-  const { args } = callback;
-  const { functionName } = callback;
-  const funcArgsPair = CallbackFactory.getFunctionArgsPair(functionName);
-  if (!funcArgsPair) {
-    return null;
-  }
-  const validator = funcArgsPair.validator
-    ? funcArgsPair.validator(callback)
-    : null;
-
   return (
     <td>
-      {Object.entries(args).map(([argName, value]) => {
-        const type = getArgsType(funcArgsPair, argName);
-        let valid = undefined;
-        if (validator && validator.argsValidator.errorInField(argName)) {
-          console.log(
-            validator.argsValidator.findErrorMessageForField(argName),
-            valid = false
-          );
-        }
-        const onChange = createOnChangeHandler({ step, callback, argName });
+      {Object.entries(callback.args).map(([argName, value]) => {
         return (
-          <EditableInput
+          <ArgsCell
             key={argName}
-            label={argName}
+            argName={argName}
             value={value}
-            type={type}
-            onChange={onChange}
+            callback={callback}
+            step={step}
             editMode={editMode}
-            valid={valid}
           />
         );
       })}
     </td>
   );
 };
-
 export const EventNameCell = ({
-  callback,
+  eventNameValue,
   editMode,
   onChangeHandler,
-}: {
-  callback: Callback;
-  editMode: boolean;
-  onChangeHandler: React.ChangeEventHandler<HTMLSelectElement>;
-}) => {
-  const SelectControl = ({
-    onChangeHandler,
-    value,
-  }: {
-    onChangeHandler: any;
-    value?: string;
-  }) => {
-    return (
-      <Form.Control as="select" onChange={onChangeHandler} value={value}>
-        {CallbackFactory.getEventNameDescriptors().map((eventName) => {
-          return (
-            <option key={eventName.name} value={eventName.name}>
-              {eventName.label}
-            </option>
-          );
-        })}
-      </Form.Control>
-    );
-  };
+  validationObject,
+}: EventNameCellProps) => {
+  const { valid, message } = validationObject;
 
   return (
     <td>
+      {!valid && <div className="error-message">{message}</div>}
       {editMode ? (
         <SelectControl
           onChangeHandler={onChangeHandler}
-          value={callback.eventName}
+          value={eventNameValue}
         />
       ) : (
-        callback.eventName
+        eventNameValue
       )}
     </td>
   );

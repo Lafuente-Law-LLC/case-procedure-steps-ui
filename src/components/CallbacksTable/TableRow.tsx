@@ -1,30 +1,35 @@
-import React, { useContext } from "react";
+import React from "react";
 import Callback from "../../models/callback/callback";
-import CallbacksTableContext from "./CallbacksTableContext";
 import { Step } from "../../models/step/step";
-import { EventNameCell, FunctionNameCell, ArgsCell } from "./TableCells";
-
+import { EventNameCell, FunctionNameCell, ArgsCellGroup } from "./TableCells";
+import {
+  createEventNameCellHandler,
+  getValidatorFromCallback,
+} from "./tableRowUtils";
 
 const TableRow = ({
   callback,
   editMode,
+  step
 }: {
   callback: Callback;
   editMode: boolean;
+  step: Step;
 }) => {
-  const { step } = useContext(CallbacksTableContext) as { step: Step };
-  const EventNameChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    step.updateCallback(callback, { eventName: e.target.value });
-  }; 
+  
+
   return (
     <tr>
       <EventNameCell
-        onChangeHandler={EventNameChangeHandler}
+        onChangeHandler={createEventNameCellHandler(step, callback)}
         editMode={editMode}
-        callback={callback}
+        eventNameValue={callback.eventName}
+        validationObject={getValidatorFromCallback(callback).validField(
+          "eventName",
+        )}
       />
       <FunctionNameCell functionName={callback.functionName} />
-      <ArgsCell callback={callback} step={step} editMode={editMode} />
+      <ArgsCellGroup callback={callback} step={step} editMode={editMode} />
     </tr>
   );
 };

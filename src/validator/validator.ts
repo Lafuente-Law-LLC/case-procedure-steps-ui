@@ -1,4 +1,5 @@
 import Joi, { ObjectSchema } from "joi";
+import { ValidationObject } from "../types";
 
 export default class Validator {
   schema: ObjectSchema;
@@ -33,7 +34,19 @@ export default class Validator {
     );
   }
 
-  valid() {
-    return this.validationObject.error === null;
+  validField(fieldName: string):ValidationObject {
+    const error = this.findErrorForField(fieldName);
+    return {
+      valid: error === undefined,
+      message: error?.message ?? "",
+    };
+  }
+
+
+  valid():ValidationObject {
+    return {
+      valid: this.validationObject.error === undefined,
+      message: this.errorMessages.join(", "),
+    };
   }
 }

@@ -16,6 +16,12 @@ export type StepObj = {
   steps?: StepObj[];
 };
 
+export type ValidationObject = {
+  valid: boolean;
+  message: string;
+};
+
+
 /** A pre-initialized Step with children instead of steps */
 export interface FormattedStepObj extends StepObj {
   callbacks: Callback[];

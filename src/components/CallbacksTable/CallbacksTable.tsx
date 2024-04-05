@@ -4,8 +4,8 @@ import Table from "react-bootstrap/Table";
 import { Step } from "../../models/step/step";
 import CallbackAdditionButton from "./CallbackAdditionButton";
 import CallbackFactory from "../../models/callback/callbackFactory";
-import CallbacksTableContext from "./CallbacksTableContext";
 import TableRow from "./TableRow";
+
 type CallbacksTableProps = {
   step: Step;
 };
@@ -18,7 +18,7 @@ const CallbacksTable = ({ step }: CallbacksTableProps) => {
   const [editMode, setEditMode] = useState(false);
 
   return (
-    <CallbacksTableContext.Provider value={{ step }}>
+    <>
       <div className={CSS_CLASSES.MAIN}>
         <Form.Check
           type="switch"
@@ -35,7 +35,12 @@ const CallbacksTable = ({ step }: CallbacksTableProps) => {
           </thead>
           <tbody>
             {step.callbacks.map((callback, index) => (
-              <TableRow key={index} callback={callback} editMode={editMode} />
+              <TableRow
+                step={step}
+                key={index}
+                callback={callback}
+                editMode={editMode}
+              />
             ))}
           </tbody>
         </Table>
@@ -60,7 +65,7 @@ const CallbacksTable = ({ step }: CallbacksTableProps) => {
           Add Event Based
         </div>
       </CallbackAdditionButton>
-    </CallbacksTableContext.Provider>
+    </>
   );
 };
 
