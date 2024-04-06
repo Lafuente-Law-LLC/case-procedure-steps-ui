@@ -27,13 +27,13 @@ const eventCallbackSchema = Joi.object({
       days: Joi.number().integer().min(0),
     })
     .unknown(true),
-});
+}).unknown(true);
 
 const taskCallbackSchema = Joi.object({
   eventName: Joi.string().required(),
   functionName: Joi.string().valid("create_task").required(),
   args: baseArgsSchema.unknown(true),
-});
+}).unknown(true);
 
 const StepSchema = Joi.object({
   id: Joi.string().guid({ version: "uuidv4" }).required(),

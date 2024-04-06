@@ -117,7 +117,7 @@ const StepItemHead: React.FC<StepItemHeadProps> = ({
       {...StepItemHeadDragProps(refElement)}
     >
       <ItemHeadStart
-        validationObject={validator.valid()}
+        validationObject={validator.validate()}
         collapseOpen={collapseOpen}
         onClickHandler={() => setCollapseOpen((prev) => !prev)}
       />

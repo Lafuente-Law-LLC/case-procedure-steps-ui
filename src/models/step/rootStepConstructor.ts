@@ -6,7 +6,7 @@ import StepManager from "./stepManager";
 import StepNode from "./stepNode";
 import { v4 as generateUniqueId } from "uuid";
 import CallbackFactory from "../callback/callbackFactory";
-
+import StepsValidator from "../../validator/stepsValidator";
 
 export default class RootStepConstructor {
   rootNode: TreeModel.Node<FormattedStepObj>;
@@ -36,8 +36,12 @@ export default class RootStepConstructor {
   }
 
   tranformCallbackObjs(callbackObjs: CallbackObj[]): Callback[] {
-    return callbackObjs.map(
-      (callbackObj) => CallbackFactory.createCallback(callbackObj.function, callbackObj.event, callbackObj.args )
+    return callbackObjs.map((callbackObj) =>
+      CallbackFactory.createCallback(
+        callbackObj.function,
+        callbackObj.event,
+        callbackObj.args,
+      ),
     );
   }
 
@@ -68,5 +72,11 @@ export default class RootStepConstructor {
 
   registerUpdateCallback(callback: () => void) {
     this.stepManager.registerUpdateCallback(callback);
+  }
+
+  get stepsValidator() {
+    const stepsValidator = new StepsValidator(this.stepManager);
+    stepsValidator.validate();
+    return stepsValidator;
   }
 }

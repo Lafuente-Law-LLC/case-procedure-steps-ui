@@ -49,14 +49,21 @@ const App: React.FC<AppProps> = ({ rootStep }: { rootStep: Step }) => {
   constructorRt.registerUpdateCallback(() => {
     setSteps(rootStep.steps);
   });
-  const addStep = () => {
+  const addStep = () => {    
     rootStep.addNewStep();
   };
+
+  const stepsValidator = constructorRt.stepsValidator;
+  console.log(stepsValidator.getInvalidSteps());
 
   return (
     <StepItemContainer steps={steps}>
       <button className={"mui-button"} onClick={addStep}>
         Add
+      </button>
+
+      <button className={"mui-button"} onClick={() => stepsValidator.validate()}>
+        Validate
       </button>
     </StepItemContainer>
   );
@@ -64,6 +71,7 @@ const App: React.FC<AppProps> = ({ rootStep }: { rootStep: Step }) => {
 
 const constructorRt = new RootStepConstructor(sampleStep);
 const rt = constructorRt.rootStep;
+
 
 const element = document.getElementById("root");
 if (!element) {

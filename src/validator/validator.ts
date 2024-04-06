@@ -43,7 +43,7 @@ export default class Validator {
   }
 
 
-  valid():ValidationObject {
+  validate():ValidationObject {
     return {
       valid: this.validationObject.error === undefined,
       message: this.errorMessages.join(", "),
