@@ -1,5 +1,6 @@
 import { CallbackValidator } from "../../validator/validators";
 import Callback from "./callback";
+
 export type EventNameDescriptor = {
   name: string;
   label: string;
