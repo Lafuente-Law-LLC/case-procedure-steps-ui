@@ -1,13 +1,16 @@
-import { useState} from "react";
-import { useFloating, useHover, useInteractions, safePolygon } from "@floating-ui/react";
+import { useState } from "react";
+import {
+  useFloating,
+  useHover,
+  useInteractions,
+  } from "@floating-ui/react";
 
 function usePopper() {
   const [isOpen, setIsOpen] = useState(false);
   const { refs, floatingStyles, context } = useFloating({
     open: isOpen,
     onOpenChange: setIsOpen,
-    placement: "right-start", 
-    
+    placement: "right-start",
   });
 
   const hover = useHover(context);
@@ -18,8 +21,8 @@ function usePopper() {
       referenceProps: {
         ref: refs.setReference,
         ...getReferenceProps({
-          onMouseEnter: () => setIsOpen(true), // Open the popper on hover
-          onMouseLeave: () => setIsOpen(false), // Close the popper when leaving
+          onMouseEnter: () => setIsOpen(true),
+          onMouseLeave: () => setIsOpen(false),
         }),
       },
       floatingProps: {
