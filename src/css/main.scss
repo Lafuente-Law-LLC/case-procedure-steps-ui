@@ -40,10 +40,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1rem; 
+  width: 1rem;
   border-radius: 0;
+  cursor:help;
   & .text {
-     transform: rotate(90deg);
+    
+    transform: rotate(90deg);
+  }
+  & .popper-dialog{
+    border-radius: 3px;
+    padding: 5px;
+    margin-top: 5px; 
+    background-color: grey;
+    
   }
 }
 
