@@ -82,7 +82,7 @@ const ItemHeadEnd = ({
       </div>
       <div className="button-group">
         <IoMdAddCircle className="add-icon" onClick={addStep} />
-        {stepHasChildren && (
+        {!stepHasChildren && (
           <IoMdRemoveCircle className="remove-icon" onClick={removeStep} />
         )}
       </div>

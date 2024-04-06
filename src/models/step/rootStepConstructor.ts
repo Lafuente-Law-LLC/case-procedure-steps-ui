@@ -45,13 +45,8 @@ export default class RootStepConstructor {
     );
   }
 
-  //TODO - explore how the shape of the obj affects this function
-  transformToCallableObj(obj: CallbackObj) {
-    return { eventName: obj.event, functionName: obj.function, args: obj.args };
-  }
-
   ensureRequirements = (data: any): void => {
-    const requiredFields = ["title", "id", "summary"];
+    const requiredFields = ["id"];
     requiredFields.forEach((field) => {
       if (!data[field]) throw new Error(`${field} is required`);
     });

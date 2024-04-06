@@ -4,7 +4,7 @@ import { getValidatorFromCallback } from "../components/CallbacksTable/tableRowU
 import { stepValidator } from "./validators";
 import StepManager from "../models/step/stepManager";
 
-type ValidatedStepObj = {
+export type ValidatedStepObj = {
   step: Step;
   validationObject: ValidationObject;
   callbackValidationObjects: ValidationObject[];

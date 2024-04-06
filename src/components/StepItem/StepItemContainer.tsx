@@ -8,13 +8,15 @@ type StepItemContainerProps = {
   children?: React.ReactNode;
 };
 
+const CSS_CLASS = "step-item-container";
+
 const StepItemContainer: React.FC<StepItemContainerProps> = ({
   steps,
   children,
 }: StepItemContainerProps) => {
   return (
     <>
-      <div className="drag_item_container">
+      <div className={CSS_CLASS}>
         {steps.map((step) => (
           <StepItem key={step.id} step={step} />
         ))}
