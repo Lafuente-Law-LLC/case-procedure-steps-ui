@@ -1,9 +1,8 @@
-jest.mock("../src/models/step/stepNode");
-jest.mock("../src/models/step/stepManager");
-const StepNode = require("../src/models/step/stepNode").default;
-const StepManager = require("../src/models/step/stepManager").default;
+jest.mock("../../../src/models/step/stepNode");
+jest.mock("../../../src/models/step/stepManager");
+import StepNode from "../../../src/models/step/stepNode";
+import StepManager from "../../../src/models/step/stepManager";
 
-// Mock Callback for use in tests
 class MockCallback {
   constructor() {
     this.updated = false;
@@ -19,7 +18,7 @@ class MockCallback {
   }
 }
 
-const { Step } = require("../src/models/step/step");
+import { Step } from "../../../src/models/step/step";
 
 describe("Step class tests", () => {
   let stepNodeMock, stepManagerMock, step;

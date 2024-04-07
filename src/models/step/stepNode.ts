@@ -1,100 +1,131 @@
 import TreeModel from "tree-model";
-import { Step } from "./step";
 import { v4 } from "uuid";
-import StepManager from "./stepManager";
-import { Node } from "../../types";
+import type { TreeNode } from "../../types";
+
+const defaultNewStepShape = () => {
+  return { id: v4() };
+};
+
+const returnRootNode = (node: TreeNode) => {
+  if (node.getPath().length == 1) {
+    return node;
+  }
+  return node.getPath().slice(0, 1)[0];
+};
+
+const returnParentNode = (node: TreeNode) => {
+  if (node.getPath().length == 1) {
+    return node;
+  }
+  return node.getPath().slice(-2, -1)[0];
+};
+
+const returnNewTreeNode = () => {
+  return new TreeModel().parse(defaultNewStepShape());
+};
+
+const disconnectNode = (node: TreeNode) => {
+  node.drop();
+};
+
+export const addChildToTreeNode = (
+  parentNode: TreeNode,
+  childNode: TreeNode,
+) => {
+  return parentNode.addChild(childNode);
+};
 
 export default class StepNode {
-  node: Node;
-  rootNode: Node;
-  stepManager: StepManager;
-  constructor(node: Node, stepManager: StepManager) {
+  treeNode: TreeNode;
+  rootTreeNode: TreeNode;
+
+  constructor(node: TreeNode) {
     if (!node) throw new Error("Node is required");
-    this.node = node;
-    this.rootNode = StepManager.returnRootNode(node);
-    this.stepManager = stepManager;
+    this.treeNode = node;
+    this.rootTreeNode = returnRootNode(node);
   }
 
-  addNewChild() {
-    const newId = v4();
-    const newNode = this.node.addChild(new TreeModel().parse({ id: newId }));
-    const manager = this.stepManager;
-    return new Step(new StepNode(newNode, manager));
+  addNewChildNodeToTreeNode() {
+    return addChildToTreeNode(this.treeNode, returnNewTreeNode());
   }
 
-  addAsChild(treeNode: Node) {
-    treeNode.drop();
-    this.node.addChild(treeNode);
+  addNodeToTree(treeNode: TreeNode) {
+    disconnectNode(treeNode);
+    addChildToTreeNode(this.treeNode, treeNode);
   }
 
-  removeSelf() {
-    return this.node.drop();
+
+  newStepNodeChild() {
+    return new StepNode(this.addNewChildNodeToTreeNode());
+  }
+  disconnectSelfFromTree() {
+    return disconnectNode(this.treeNode);
   }
 
-  get parentNode() {
-    if (this.node.getPath().length == 1) {
-      return this.rootNode;
-    }
-    return this.node.getPath().slice(-2, -1)[0];
+  get parentTreeNode() {
+    return returnParentNode(this.treeNode);
   }
 
-  get childrenNodes(): Node[] {
-    return this.node.children;
+  get childrenTreeNodes(): TreeNode[] {
+    return this.treeNode.children;
   }
 
-  get siblingNodes(): Node[] {
-    return this.parentNode.children;
+  get siblingTreeNodes(): TreeNode[] {
+    return this.parentTreeNode.children;
   }
 
   get indexAmongSiblings() {
-    return this.node.getIndex();
+    return this.treeNode.getIndex();
   }
 
-  isAncestorOf(node: Node) {
-    return this.node.getPath().includes(node);
+  isAncestorOf(node: TreeNode) {
+    return this.treeNode.getPath().includes(node);
   }
-  siblingAtGivenIndex(index: number) {
-    return this.siblingNodes[index];
+
+  siblingTreeNodeAtIndex(index: number) {
+    return this.siblingTreeNodes[index];
   }
-  addNodeToIndex(node: Node, index: number) {
+
+  addTreeNodeAtIndex(node: TreeNode, index: number) {
     try {
       const isChild = this.isChild(node);
       if (isChild) {
         return node.setIndex(index);
       } else {
         node.drop();
-        return this.node.addChildAtIndex(node, index);
+        return this.treeNode.addChildAtIndex(node, index);
       }
     } catch (e) {
-      debugger;
       console.warn(e);
     }
   }
 
-
-  isChild(node: Node) {
-    return this.node.children.includes(node);
+  isChild(node: TreeNode) {
+    return this.treeNode.children.includes(node);
   }
 
-  moveNodeAboveSelf(node: Node) {
+  moveNodeAboveSelf(node: TreeNode) {
     try {
-      node.drop();
-      return this.parentNode.addChildAtIndex(node, this.indexAmongSiblings);
+      disconnectNode(node);
+      return this.parentTreeNode.addChildAtIndex(node, this.indexAmongSiblings);
     } catch (e) {
       console.warn(e);
     }
   }
 
-  moveNodeBelowSelf(node: Node) {
+  moveNodeBelowSelf(node: TreeNode) {
     try {
-      node.drop();
-      return this.parentNode.addChildAtIndex(node, this.indexAmongSiblings + 1);
+      disconnectNode(node);
+      return this.parentTreeNode.addChildAtIndex(
+        node,
+        this.indexAmongSiblings + 1,
+      );
     } catch (e) {
       console.warn(e);
     }
   }
 
-  findNodeById(id: string) {
-    return this.rootNode.first((node) => node.model.id === id);
+  findTreeNodeById(id: string) {
+    return this.rootTreeNode.first((node) => node.model.id === id);
   }
 }

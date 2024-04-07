@@ -53,7 +53,7 @@ export default class RootStepConstructor {
   };
 
   processStep(node: TreeModel.Node<FormattedStepObj>) {
-    new Step(new StepNode(node, this.stepManager));
+    new Step(new StepNode(node ), this.stepManager);
 
     const children = node.children as TreeModel.Node<FormattedStepObj>[];
     if (children) {

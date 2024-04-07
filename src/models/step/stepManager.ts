@@ -1,5 +1,11 @@
 import { Step } from "./step";
-import { Node } from "../../types";
+
+
+const ensureIsStep = (instance: Step) => {
+  if (!(instance instanceof Step)) {
+    throw new Error("Instance must be of type Step");
+  }
+};
 
 export default class StepManager {
   registeredSteps: Set<Step>;
@@ -11,6 +17,7 @@ export default class StepManager {
   }
 
   registerInstance(instance: Step) {
+    ensureIsStep(instance);
     this.registeredSteps.add(instance);
   }
 
@@ -25,7 +32,9 @@ export default class StepManager {
     return Array.from(this.registeredSteps).find((step) => step.id === id);
   }
 
-  static returnRootNode(node: Node) {
-    return node.getPath().slice(0, 1)[0];
+  makeNewChildForStep(step: Step) { 
+    return new Step(step.stepNode.newStepNodeChild(), this);
   }
+
+
 }

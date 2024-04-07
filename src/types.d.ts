@@ -1,12 +1,18 @@
 import type { Node } from "tree-model";
 import Callback from "./models/callback/callback";
-export type CallbackObj = { 
+
+
+export type CallbackObj = {
   event: string;
   function: string;
   args: Record<string, any>;
 };
-export type ReactClickHandler = React.MouseEventHandler<HTMLDivElement | SVGElement>;
-export type ReactDragEventHandler =   React.DragEventHandler<HTMLDivElement | SVGElement>;
+export type ReactClickHandler = React.MouseEventHandler<
+  HTMLDivElement | SVGElement
+>;
+export type ReactDragEventHandler = React.DragEventHandler<
+  HTMLDivElement | SVGElement
+>;
 
 export type StepObj = {
   id: string;
@@ -21,7 +27,6 @@ export type ValidationObject = {
   message: string;
 };
 
-
 /** A pre-initialized Step with children instead of steps */
 export interface FormattedStepObj extends StepObj {
   callbacks: Callback[];
@@ -29,4 +34,4 @@ export interface FormattedStepObj extends StepObj {
 }
 
 /** A node containing all functions from the tree-model library */
-export type Node = Node<FormattedStepObj>;
+export type TreeNode = Node<FormattedStepObj>;

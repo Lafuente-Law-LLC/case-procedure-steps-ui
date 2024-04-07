@@ -2,6 +2,7 @@ import StepNode from "./stepNode";
 import StepManager from "./stepManager";
 import type Callback from "../callback/callback";
 
+
 class Step {
   title: string;
   summary: string;
@@ -10,8 +11,8 @@ class Step {
   stepNode: StepNode;
   stepManager: StepManager;
 
-  constructor(stepNode: StepNode) {
-    const dataObj = stepNode.node.model;
+  constructor(stepNode: StepNode, stepManager: StepManager) {
+    const dataObj = stepNode.treeNode.model;
     if (!dataObj.id) {
       throw new Error("Step id is required");
     }
@@ -20,7 +21,7 @@ class Step {
     this.id = dataObj.id;
     this.callbacks = dataObj.callbacks || [];
     this.stepNode = stepNode;
-    this.stepManager = this.stepNode.stepManager;
+    this.stepManager = stepManager;
     this.stepManager.registerInstance(this);
   }
 
@@ -61,18 +62,21 @@ class Step {
     this.informStepManager();
   }
   
+  get treeNode () {
+    return this.stepNode.treeNode;
+  }
 
   addNewStep() {
-    const step = this.stepNode.addNewChild();
+    this.stepManager.makeNewChildForStep(this);
     this.informStepManager();
   }
 
   addAsChildStep(step: Step) {
-    this.stepNode.addAsChild(step.stepNode.node);
+    this.stepNode.addNodeToTree(step.treeNode);
   }
 
   isAncestorOf(step: Step) {
-    return this.stepNode.isAncestorOf(step.stepNode.node);
+    return this.stepNode.isAncestorOf(step.treeNode);
   }
 
   findStepById(id: string) {
@@ -80,33 +84,33 @@ class Step {
   }
 
   addStepToIndex(step: Step, index: number) {
-    this.stepNode.addNodeToIndex(step.stepNode.node, index);
+    this.stepNode.addTreeNodeAtIndex(step.treeNode, index);
     this.informStepManager();
   }
 
   moveStepAboveSelf(step: Step) {
-    this.stepNode.moveNodeAboveSelf(step.stepNode.node);
+    this.stepNode.moveNodeAboveSelf(step.treeNode);
     this.informStepManager();
   }
 
   moveStepBelowSelf(step: Step) {
-    this.stepNode.moveNodeBelowSelf(step.stepNode.node);
+    this.stepNode.moveNodeBelowSelf(step.treeNode);
     this.informStepManager();
   }
 
   remove() {
-    this.stepNode.removeSelf();
+    this.stepNode.disconnectSelfFromTree();
     this.stepManager.unregisterInstance(this);
     this.informStepManager();
   }
 
   get parentStep(): Step | null {
-    const parent = this.stepNode.parentNode;
+    const parent = this.stepNode.parentTreeNode;
     return this.stepManager.searchById(parent.model.id) || null;
   }
 
   isRoot() {
-    return this.stepNode.node.getPath().length === 1;
+    return this.stepNode.treeNode.getPath().length === 1;
   }
 
   informStepManager() {
@@ -114,7 +118,7 @@ class Step {
   }
 
   get steps() {
-    const stepsArray = this.stepNode.childrenNodes.map((node) =>
+    const stepsArray = this.stepNode.childrenTreeNodes.map((node) =>
       this.stepManager.searchById(node.model.id),
     );
 
