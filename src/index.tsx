@@ -29,6 +29,7 @@ const App = ({ rootStep }: { rootStep: Step }) => {
   );
 };
 
+
 const constructorRt = new RootStepConstructor({});
 const rt = constructorRt.rootStep;
 
@@ -43,3 +44,4 @@ if (rt === undefined) {
 }
 
 root.render(<App rootStep={rt} />);
+export default App; 
