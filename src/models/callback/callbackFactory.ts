@@ -30,7 +30,9 @@ export default class CallbackFactory {
   }
   static isFunctionName(functionName: string) {
     return this.functionNames.has(functionName);
+ 
   }
+
 
   static createCallback(
     functionName: string,

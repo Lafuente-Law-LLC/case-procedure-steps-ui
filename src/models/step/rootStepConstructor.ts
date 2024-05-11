@@ -18,6 +18,7 @@ export default class RootStepConstructor {
     this.rootNode = new TreeModel().parse<FormattedStepObj>(parsedData);
     this.processStep(this.rootNode);
   }
+
   parseData(data: any) {
     data = this.defaultSetup(data);
     data.children.forEach((child: any) => {
@@ -39,8 +40,8 @@ export default class RootStepConstructor {
   tranformCallbackObjs(callbackObjs: CallbackObj[]): Callback[] {
     return callbackObjs.map((callbackObj) =>
       CallbackFactory.createCallback(
-        callbackObj.function,
-        callbackObj.event,
+        callbackObj.functionName,
+        callbackObj.eventName,
         callbackObj.args,
       ),
     );
@@ -54,7 +55,7 @@ export default class RootStepConstructor {
   };
 
   processStep(node: TreeModel.Node<FormattedStepObj>) {
-    new Step(new StepNode(node ), this.stepManager);
+    new Step(new StepNode(node), this.stepManager);
 
     const children = node.children as TreeModel.Node<FormattedStepObj>[];
     if (children) {

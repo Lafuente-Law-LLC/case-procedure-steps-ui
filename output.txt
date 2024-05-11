@@ -1,0 +1,404 @@
+import { Step } from "./step";
+
+
+const ensureIsStep = (instance: Step) => {
+  if (!(instance instanceof Step)) {
+    throw new Error("Instance must be of type Step");
+  }
+};
+
+export default class StepManager {
+  registeredSteps: Set<Step>;
+  callbackFunctions: Set<() => void>;
+
+  constructor() {
+    this.registeredSteps = new Set<Step>();
+    this.callbackFunctions = new Set<() => void>();
+  }
+
+  registerInstance(instance: Step) {
+    ensureIsStep(instance);
+    this.registeredSteps.add(instance);
+  }
+
+  unregisterInstance(instance: Step) {
+    this.registeredSteps.delete(instance);
+  }
+
+  registerUpdateCallback(callback: () => void) {
+    this.callbackFunctions.add(callback);
+  }
+  searchById(id: string) {
+    return Array.from(this.registeredSteps).find((step) => step.id === id);
+  }
+
+  makeNewChildForStep(step: Step) { 
+    return new Step(step.stepNode.newStepNodeChild(), this);
+  }
+
+
+}
+import StepNode from "./stepNode";
+import StepManager from "./stepManager";
+import type Callback from "../callback/callback";
+
+class Step {
+  title: string;
+  summary: string;
+  id: string;
+  callbacks: Callback[];
+  stepNode: StepNode;
+  stepManager: StepManager;
+
+  constructor(stepNode: StepNode, stepManager: StepManager) {
+    const dataObj = stepNode.basicStepObject();
+    if (!dataObj.id) {
+      throw new Error("Step id is required");
+    }
+    const { id, title, summary, callbacks } = dataObj;
+    this.id = id;
+    this.title = title || "";
+    this.summary = summary || "";
+    this.callbacks = callbacks || [];
+    this.stepNode = stepNode;
+    this.stepManager = stepManager;
+    this.stepManager.registerInstance(this);
+  }
+
+  get treeNode() {
+    return this.stepNode.treeNode;
+  }
+
+  get steps() {
+    const stepsArray = this.stepNode.childrenTreeNodes.map((node) =>
+      this.stepManager.searchById(node.model.id),
+    );
+
+    return stepsArray.filter((step) => step !== undefined) as Step[];
+  }
+  get parentStep(): Step | null {
+    const parent = this.stepNode.parentTreeNode;
+    return this.stepManager.searchById(parent.model.id) || null;
+  }
+
+  updateTitle(title: string) {
+    this.title = title;
+    this.informStepManager();
+  }
+
+  updateSummary(summary: string) {
+    this.summary = summary;
+    this.informStepManager();
+  }
+
+  addCallback(callback: Callback) {
+    this.callbacks.push(callback);
+    this.informStepManager();
+  }
+
+  removeCallback(callback: Callback) {
+    const index = this.callbacks.indexOf(callback);
+    if (index === -1) {
+      return false;
+    }
+    this.callbacks.splice(index, 1);
+    this.informStepManager();
+    return true;
+  }
+
+  updateCallback(callback: Callback, partial: Partial<Callback>) {
+    if (!this.callbacks.includes(callback)) {
+      return false;
+    }
+    callback.update(partial);
+    this.informStepManager();
+    return true;
+  }
+
+  replaceCallbacks(callbacks: Callback[]) {
+    this.callbacks = callbacks;
+    this.informStepManager();
+    return true;
+  }
+
+  addNewStep() {
+    this.stepManager.makeNewChildForStep(this);
+    this.informStepManager();
+  }
+
+  addAsChildStep(step: Step) {
+    this.stepNode.addNodeToTree(step.treeNode);
+  }
+
+  isAncestorOf(step: Step) {
+    return this.stepNode.isAncestorOf(step.treeNode);
+  }
+
+  findStepById(id: string) {
+    return this.stepManager.searchById(id);
+  }
+
+  addStepToIndex(step: Step, index: number) {
+    this.stepNode.addTreeNodeAtIndex(step.treeNode, index);
+    this.informStepManager();
+  }
+
+  moveStepAboveSelf(step: Step) {
+    this.stepNode.moveNodeAboveSelf(step.treeNode);
+    this.informStepManager();
+  }
+
+  moveStepBelowSelf(step: Step) {
+    this.stepNode.moveNodeBelowSelf(step.treeNode);
+    this.informStepManager();
+  }
+
+  remove() {
+    this.stepNode.disconnectSelfFromTree();
+    this.stepManager.unregisterInstance(this);
+    this.informStepManager();
+  }
+
+  isRoot() {
+    return this.stepNode.treeNode.getPath().length === 1;
+  }
+
+  informStepManager() {
+    this.stepManager.callbackFunctions.forEach((callback) => callback());
+  }
+
+  toJSON(): any {
+    let { title, summary, id } = this;
+    const steps = this.steps.map((step) => step && step.toJSON());
+    const callbacks = this.callbacks.map((callback) => callback.toJSON());
+    return {
+      id,
+      title,
+      summary,
+      steps,
+      callbacks,
+    };
+  }
+}
+
+export { Step };
+import TreeModel from "tree-model";
+import { v4 } from "uuid";
+import type { TreeNode } from "../../types";
+
+const defaultNewStepShape = () => {
+  return { id: v4() };
+};
+
+const returnRootNode = (node: TreeNode) => {
+  if (node.getPath().length == 1) {
+    return node;
+  }
+  return node.getPath().slice(0, 1)[0];
+};
+
+const returnParentNode = (node: TreeNode) => {
+  if (node.getPath().length == 1) {
+    return node;
+  }
+  return node.getPath().slice(-2, -1)[0];
+};
+
+const returnNewTreeNode = () => {
+  return new TreeModel().parse(defaultNewStepShape());
+};
+
+const disconnectNode = (node: TreeNode) => {
+  node.drop();
+};
+
+export const addChildToTreeNode = (
+  parentNode: TreeNode,
+  childNode: TreeNode,
+) => {
+  return parentNode.addChild(childNode);
+};
+
+/**
+ * This class is a wrapper around the TreeNode class from the tree-model
+ * library. It provides a more intuitive interface for interacting with the tree
+ * structure.
+ */
+export default class StepNode {
+  treeNode: TreeNode;
+  rootTreeNode: TreeNode;
+
+  constructor(node: TreeNode) {
+    if (!node) throw new Error("Node is required");
+    this.treeNode = node;
+    this.rootTreeNode = returnRootNode(node);
+  }
+
+  addNewChildNodeToTreeNode() {
+    return addChildToTreeNode(this.treeNode, returnNewTreeNode());
+  }
+
+  addNodeToTree(treeNode: TreeNode) {
+    disconnectNode(treeNode);
+    addChildToTreeNode(this.treeNode, treeNode);
+  }
+
+  newStepNodeChild() {
+    return new StepNode(this.addNewChildNodeToTreeNode());
+  }
+
+  disconnectSelfFromTree() {
+    return disconnectNode(this.treeNode);
+  }
+
+  get parentTreeNode() {
+    return returnParentNode(this.treeNode);
+  }
+
+  get childrenTreeNodes(): TreeNode[] {
+    return this.treeNode.children;
+  }
+
+  get siblingTreeNodes(): TreeNode[] {
+    return this.parentTreeNode.children;
+  }
+
+  get indexAmongSiblings() {
+    return this.treeNode.getIndex();
+  }
+
+  /** @returns The basic step object which is the model of the TreeNode. */
+  basicStepObject() {
+    return this.treeNode.model;
+  }
+
+  isAncestorOf(node: TreeNode) {
+    return this.treeNode.getPath().includes(node);
+  }
+
+  siblingTreeNodeAtIndex(index: number) {
+    return this.siblingTreeNodes[index];
+  }
+
+  addTreeNodeAtIndex(node: TreeNode, index: number) {
+    try {
+      const isChild = this.isChild(node);
+      if (isChild) {
+        return node.setIndex(index);
+      } else {
+        node.drop();
+        return this.treeNode.addChildAtIndex(node, index);
+      }
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
+  isChild(node: TreeNode) {
+    return this.treeNode.children.includes(node);
+  }
+
+  moveNodeAboveSelf(node: TreeNode) {
+    try {
+      disconnectNode(node);
+      return this.parentTreeNode.addChildAtIndex(node, this.indexAmongSiblings);
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
+  moveNodeBelowSelf(node: TreeNode) {
+    try {
+      disconnectNode(node);
+      return this.parentTreeNode.addChildAtIndex(
+        node,
+        this.indexAmongSiblings + 1,
+      );
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
+  findTreeNodeById(id: string) {
+    return this.rootTreeNode.first((node) => node.model.id === id);
+  }
+}
+import { Step } from "./step";
+import Callback from "../callback/callback";
+import type { CallbackObj, FormattedStepObj } from "../../types";
+import TreeModel from "tree-model";
+import StepManager from "./stepManager";
+import StepNode from "./stepNode";
+import { v4 as generateUniqueId } from "uuid";
+import CallbackFactory from "../callback/callbackFactory";
+import StepsValidator from "../../validator/stepsValidator";
+
+export default class RootStepConstructor {
+  rootNode: TreeModel.Node<FormattedStepObj>;
+  stepManager = new StepManager();
+
+  constructor(data: any) {
+    const parsedData = this.parseData(data);
+    this.ensureRequirements(parsedData);
+    this.rootNode = new TreeModel().parse<FormattedStepObj>(parsedData);
+    this.processStep(this.rootNode);
+  }
+
+  parseData(data: any) {
+    data = this.defaultSetup(data);
+    data.children.forEach((child: any) => {
+      return this.parseData(child);
+    });
+    return data as FormattedStepObj;
+  }
+
+  defaultSetup(data: any): FormattedStepObj {
+    data.title = data.title || "";
+    data.id = data.id || generateUniqueId();
+    data.summary = data.summary || "";
+    data.callbacks = this.tranformCallbackObjs(data.callbacks || []);
+    data.children = data.steps || [];
+    delete data.steps;
+    return data;
+  }
+
+  tranformCallbackObjs(callbackObjs: CallbackObj[]): Callback[] {
+    return callbackObjs.map((callbackObj) =>
+      CallbackFactory.createCallback(
+        callbackObj.functionName,
+        callbackObj.eventName,
+        callbackObj.args,
+      ),
+    );
+  }
+
+  ensureRequirements = (data: any): void => {
+    const requiredFields = ["id"];
+    requiredFields.forEach((field) => {
+      if (!data[field]) throw new Error(`${field} is required`);
+    });
+  };
+
+  processStep(node: TreeModel.Node<FormattedStepObj>) {
+    new Step(new StepNode(node), this.stepManager);
+
+    const children = node.children as TreeModel.Node<FormattedStepObj>[];
+    if (children) {
+      children.forEach((child) => this.processStep(child));
+    }
+  }
+
+  get rootStep() {
+    return this.stepManager.searchById(this.rootNode.model.id);
+  }
+
+  registerUpdateCallback(callback: () => void) {
+    this.stepManager.registerUpdateCallback(callback);
+  }
+
+  get stepsValidator() {
+    const stepsValidator = new StepsValidator(this.stepManager);
+    stepsValidator.validate();
+    return stepsValidator;
+  }
+}

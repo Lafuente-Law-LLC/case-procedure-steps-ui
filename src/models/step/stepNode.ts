@@ -35,6 +35,11 @@ export const addChildToTreeNode = (
   return parentNode.addChild(childNode);
 };
 
+/**
+ * This class is a wrapper around the TreeNode class from the tree-model
+ * library. It provides a more intuitive interface for interacting with the tree
+ * structure.
+ */
 export default class StepNode {
   treeNode: TreeNode;
   rootTreeNode: TreeNode;
@@ -54,10 +59,10 @@ export default class StepNode {
     addChildToTreeNode(this.treeNode, treeNode);
   }
 
-
   newStepNodeChild() {
     return new StepNode(this.addNewChildNodeToTreeNode());
   }
+
   disconnectSelfFromTree() {
     return disconnectNode(this.treeNode);
   }
@@ -76,6 +81,11 @@ export default class StepNode {
 
   get indexAmongSiblings() {
     return this.treeNode.getIndex();
+  }
+
+  /** @returns The basic step object which is the model of the TreeNode. */
+  basicStepObject() {
+    return this.treeNode.model;
   }
 
   isAncestorOf(node: TreeNode) {

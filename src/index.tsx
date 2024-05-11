@@ -9,8 +9,6 @@ import { Step } from "./models/step/step";
 import { runConfig } from "./config/config";
 runConfig();
 
-import { EditText } from "react-edit-text";
-
 type AppsProps = {
   title: string;
   description: string;
@@ -33,14 +31,6 @@ const App = ({
   rootStepConstructor.registerUpdateCallback(() => {
     setSteps(rootStep.steps);
   });
-
-
-  const stylings = {
-    
-  }
-
-
-
 
   return (
     <div className="main-app">

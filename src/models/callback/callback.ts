@@ -41,8 +41,8 @@ class Callback {
 
   toJSON(): CallbackObj {
     return {
-      event: this.eventName,
-      function: this.functionName,
+      eventName: this.eventName,
+      functionName: this.functionName,
       args: this.args,
     };
   }

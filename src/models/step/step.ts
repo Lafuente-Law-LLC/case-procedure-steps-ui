@@ -1,7 +1,6 @@
 import StepNode from "./stepNode";
 import StepManager from "./stepManager";
-import type Callback from "../callback/callback";
-
+import Callback from "../callback/callback";
 
 class Step {
   title: string;
@@ -12,17 +11,34 @@ class Step {
   stepManager: StepManager;
 
   constructor(stepNode: StepNode, stepManager: StepManager) {
-    const dataObj = stepNode.treeNode.model;
+    const dataObj = stepNode.basicStepObject();
     if (!dataObj.id) {
       throw new Error("Step id is required");
     }
-    this.title = dataObj.title || "";
-    this.summary = dataObj.summary || "";
-    this.id = dataObj.id;
-    this.callbacks = dataObj.callbacks || [];
+    const { id, title, summary, callbacks } = dataObj;
+    this.id = id;
+    this.title = title || "";
+    this.summary = summary || "";
+    this.callbacks = callbacks || [];
     this.stepNode = stepNode;
     this.stepManager = stepManager;
     this.stepManager.registerInstance(this);
+  }
+
+  get treeNode() {
+    return this.stepNode.treeNode;
+  }
+
+  get steps() {
+    const stepsArray = this.stepNode.childrenTreeNodes.map((node) =>
+      this.stepManager.searchById(node.model.id),
+    );
+
+    return stepsArray.filter((step) => step !== undefined) as Step[];
+  }
+  get parentStep(): Step | null {
+    const parent = this.stepNode.parentTreeNode;
+    return this.stepManager.searchById(parent.model.id) || null;
   }
 
   updateTitle(title: string) {
@@ -30,11 +46,18 @@ class Step {
     this.informStepManager();
   }
 
-  addCallback(callback: Callback) {
-    this.callbacks.push(callback);
+  updateSummary(summary: string) {
+    this.summary = summary;
     this.informStepManager();
   }
 
+  addCallback(callback: Callback) {
+    if (!(callback instanceof Callback)) {
+      throw new Error("Callback must be an instance of Callback");
+    }
+    this.callbacks.push(callback);
+    this.informStepManager();
+  }
 
   removeCallback(callback: Callback) {
     const index = this.callbacks.indexOf(callback);
@@ -43,6 +66,7 @@ class Step {
     }
     this.callbacks.splice(index, 1);
     this.informStepManager();
+    return true;
   }
 
   updateCallback(callback: Callback, partial: Partial<Callback>) {
@@ -51,19 +75,13 @@ class Step {
     }
     callback.update(partial);
     this.informStepManager();
+    return true;
   }
 
-  updateCallbacks(callbacks: Callback[]) {
+  replaceCallbacks(callbacks: Callback[]) {
     this.callbacks = callbacks;
     this.informStepManager();
-  }
-  updateSummary(summary: string) {
-    this.summary = summary;
-    this.informStepManager();
-  }
-  
-  get treeNode () {
-    return this.stepNode.treeNode;
+    return true;
   }
 
   addNewStep() {
@@ -104,11 +122,6 @@ class Step {
     this.informStepManager();
   }
 
-  get parentStep(): Step | null {
-    const parent = this.stepNode.parentTreeNode;
-    return this.stepManager.searchById(parent.model.id) || null;
-  }
-
   isRoot() {
     return this.stepNode.treeNode.getPath().length === 1;
   }
@@ -117,21 +130,16 @@ class Step {
     this.stepManager.callbackFunctions.forEach((callback) => callback());
   }
 
-  get steps() {
-    const stepsArray = this.stepNode.childrenTreeNodes.map((node) =>
-      this.stepManager.searchById(node.model.id),
-    );
-
-    return stepsArray.filter((step) => step !== undefined) as Step[];
-  }
-
   toJSON(): any {
+    let { title, summary, id } = this;
+    const steps = this.steps.map((step) => step && step.toJSON());
+    const callbacks = this.callbacks.map((callback) => callback.toJSON());
     return {
-      title: this.title,
-      summary: this.summary,
-      id: this.id,
-      callbacks: this.callbacks.map((callback) => callback.toJSON()),
-      steps: this.steps.map((step) => step && step.toJSON()),
+      id,
+      title,
+      summary,
+      steps,
+      callbacks,
     };
   }
 }
