@@ -12,6 +12,7 @@ type CallbacksTableProps = {
 
 const CSS_CLASSES = {
   MAIN: "callbacks-table-wrapper",
+  MENU_ITEM: "menu-item",
 };
 
 const CallbacksTable = ({ step }: CallbacksTableProps) => {
@@ -47,7 +48,7 @@ const CallbacksTable = ({ step }: CallbacksTableProps) => {
       </div>
       <CallbackAdditionButton>
         <div
-          className="menu-item"
+          className={CSS_CLASSES.MENU_ITEM}
           onClick={(e) => {
             step.addCallback(CallbackFactory.createCallback("create_task"));
           }}
@@ -55,7 +56,7 @@ const CallbacksTable = ({ step }: CallbacksTableProps) => {
           Add Task Based
         </div>
         <div
-          className="menu-item"
+          className={CSS_CLASSES.MENU_ITEM}
           onClick={(e) => {
             step.addCallback(
               CallbackFactory.createCallback("create_future_event"),

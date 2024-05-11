@@ -104,3 +104,38 @@ $callback-background: rgba(55, 53, 47, 0.2);
     font-size: 0.8em;
   }
 }
+
+.json-container {
+    background-color: #f8f9fa; /* Light grey background */
+    border: 1px solid #dee2e6; /* Matching Bootstrap's borders */
+    padding: 20px;
+    border-radius: 5px; /* Rounded corners like Bootstrap inputs */
+    font-family: monospace; /* Easier to read JSON structure */
+    white-space: pre-wrap; /* Keeps formatted JSON structure */
+    word-wrap: break-word; /* Ensures long text doesn't overflow */
+}
+
+.json-key {
+    color: #563d7c; /* Bootstrap primary color, you can adjust as needed */
+    font-weight: bold;
+}
+
+.json-value {
+    color: #28a745; /* Bootstrap success color for values */
+}
+
+.json-string {
+    color: #007bff; /* Bootstrap info color for strings */
+}
+
+.json-number {
+    color: #ffc107; /* Bootstrap warning color for numbers */
+}
+
+.json-boolean {
+    color: #dc3545; /* Bootstrap danger color for booleans */
+}
+
+.json-null {
+    color: #6c757d; /* Bootstrap secondary color for null */
+}

@@ -25,6 +25,7 @@ export default class RootStepConstructor {
     });
     return data as FormattedStepObj;
   }
+
   defaultSetup(data: any): FormattedStepObj {
     data.title = data.title || "";
     data.id = data.id || generateUniqueId();

@@ -2,8 +2,7 @@
 
 .step-item-container{ 
   height: 80vh;
-  overflow-y: auto;
-  @extend .mt-5;
+  overflow-y: auto; 
   border: grey 1px solid;
   background-color: white;
 }
@@ -11,7 +10,7 @@
 
 .step-item {
   font-family: "Open-Sans", sans-serif;
-  padding: 10;
+  padding: 10px;
   &.step-item {
     margin-left: 3%;
   }

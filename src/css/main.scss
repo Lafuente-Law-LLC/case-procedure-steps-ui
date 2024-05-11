@@ -100,5 +100,24 @@
 
   @import "./styles/animations.scss";
   @import "./styles/components/step-item.scss";
-  @import "./styles/components/callback-component.scss";
 }
+
+.main-app {
+  font-family: 'Roboto', sans-serif;
+  .top {
+    display: flex;
+    .group-1 {
+      padding: 0 10px;
+      flex-grow: 3;
+    }
+    .group-2 {
+      padding: 0 10px;
+      flex-grow: 7
+    }
+  }
+  .bottom {
+    max-height: 1vh;
+  }
+}
+
+@import "./styles/components/callback-component.scss";
