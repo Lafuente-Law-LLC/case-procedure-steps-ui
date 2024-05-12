@@ -39,7 +39,10 @@ export interface FormattedStepObj extends StepObj {
   children: FormattedStepObj[];
 }
 
-/** A node containing all functions from the tree-model library */
+/**
+ * A node containing all functions from the tree-model library. It is called a
+ * treeNode because it is meant to encompass
+ */
 export type TreeNode = Node<FormattedStepObj>;
 
 export type ValidationObject = {

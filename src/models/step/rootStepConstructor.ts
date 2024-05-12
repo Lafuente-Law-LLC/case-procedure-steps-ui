@@ -39,7 +39,7 @@ export default class RootStepConstructor {
 
   tranformCallbackObjs(callbackObjs: CallbackObj[]): Callback[] {
     return callbackObjs.map((callbackObj) =>
-      CallbackFactory.createCallback(
+      CallbackFactory.createCallbackInstance(
         callbackObj.functionName,
         callbackObj.eventName,
         callbackObj.args,
@@ -68,7 +68,7 @@ export default class RootStepConstructor {
   }
 
   registerUpdateCallback(callback: () => void) {
-    this.stepManager.registerUpdateCallback(callback);
+    this.stepManager.registerUpdateFunction(callback);
   }
 
   get stepsValidator() {

@@ -127,7 +127,7 @@ class Step {
   }
 
   informStepManager() {
-    this.stepManager.callbackFunctions.forEach((callback) => callback());
+    this.stepManager.updateFunctions.forEach((updateFn) => updateFn());
   }
 
   toJSON(): any {

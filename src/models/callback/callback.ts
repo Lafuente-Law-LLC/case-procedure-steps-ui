@@ -4,11 +4,16 @@ import { CallbackObj } from "../../types";
 
 export type CallbackProps = {
   id?: string;
-  eventName: string;
+  eventName?: string;
   functionName: string;
   args: Record<string, any>;
 };
-
+/**
+ * Callbacks are objects that related to steps in that they answer the question what should occur after a given event in the lifecycle of a step.
+ * For example imagine that after is step is marked as completed the function sendEmail should be called. The callback object would contain the event name and the function name.
+ * The object would also contain the description of the acceptable arguments that the function sendEmail should receive. In the context of front end development the callback object would be used to create a button that when clicked would call the function sendEmail.
+ * the descriptors help provide context as to how to display certain components related to the callback object. The eventLabelObj is used to associate the event with a label component.
+ */
 class Callback {
   id: string;
   eventName: string;
@@ -17,7 +22,7 @@ class Callback {
 
   constructor({ id, eventName, functionName, args }: CallbackProps) {
     this.id = id || uuidv4();
-    this.eventName = eventName;
+    this.eventName = eventName || "";
     this.functionName = functionName;
     this.args = args;
   }

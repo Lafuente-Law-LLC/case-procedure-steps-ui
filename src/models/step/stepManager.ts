@@ -9,11 +9,11 @@ const ensureIsStep = (instance: Step) => {
 
 export default class StepManager {
   registeredSteps: Set<Step>;
-  callbackFunctions: Set<() => void>;
+  updateFunctions: Set<() => void>;
 
   constructor() {
     this.registeredSteps = new Set<Step>();
-    this.callbackFunctions = new Set<() => void>();
+    this.updateFunctions = new Set<() => void>();
   }
 
   registerInstance(instance: Step) {
@@ -25,8 +25,8 @@ export default class StepManager {
     this.registeredSteps.delete(instance);
   }
 
-  registerUpdateCallback(callback: () => void) {
-    this.callbackFunctions.add(callback);
+  registerUpdateFunction(updateFunction: () => void) {
+    this.updateFunctions.add(updateFunction);
   }
   searchById(id: string) {
     return Array.from(this.registeredSteps).find((step) => step.id === id);

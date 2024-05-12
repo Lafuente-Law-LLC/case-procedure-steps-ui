@@ -50,7 +50,7 @@ const CallbacksTable = ({ step }: CallbacksTableProps) => {
         <div
           className={CSS_CLASSES.MENU_ITEM}
           onClick={(e) => {
-            step.addCallback(CallbackFactory.createCallback("create_task"));
+            step.addCallback(CallbackFactory.createCallbackInstance("create_task", "complete"));
           }}
         >
           Add Task Based
@@ -59,7 +59,7 @@ const CallbacksTable = ({ step }: CallbacksTableProps) => {
           className={CSS_CLASSES.MENU_ITEM}
           onClick={(e) => {
             step.addCallback(
-              CallbackFactory.createCallback("create_future_event"),
+              CallbackFactory.createCallbackInstance("create_future_event", "complete"),
             );
           }}
         >

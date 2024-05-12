@@ -7,28 +7,30 @@ import CallbackFactory from "../../models/callback/callbackFactory";
 import { ValidationObject } from "../../types";
 
 export const getValidatorFromCallback = (callback: Callback) => {
-  const functionName = callback.functionName;
-  const functionArgsPair = CallbackFactory.getFunctionArgsPair(functionName);
-  let val = functionArgsPair?.validator || false;
-  if (!val) {
-    throw new Error("Error with FunctionArgsPair");
+  const { functionName, eventName } = callback;
+  let validator = CallbackFactory.getValidatorFor(eventName, functionName);
+  if (!validator) {
+    throw new Error("Validator not found");
   }
-  return val(callback);
+  const val = validator(callback);
+  return val;
 };
 
 export const getArgsTypeFormCB = (callback: Callback, argName: string) => {
-  const { functionName } = callback;
-  const functionArgsPair = getFunctionArgsPair(functionName);
-  return getArgsType(functionArgsPair, argName);
-};
-
-const getFunctionArgsPair = (functionName: string) => {
-  let functionArgsPair = CallbackFactory.getFunctionArgsPair(functionName);
-  if (!functionArgsPair) {
+  const {functionName, eventName} = callback;
+  const eventFunctionData = CallbackFactory.getFunctionDataFor(eventName, functionName);
+  if (!eventFunctionData) {
     throw new Error("Function not found");
   }
-  return functionArgsPair;
-};
+  const {argDescriptors} = eventFunctionData;
+  const argDescriptor = argDescriptors.find((arg) => arg.name === argName);
+  if (!argDescriptor) {
+    throw new Error("Arg descriptor not found");
+  }
+  return argDescriptor.type;
+} ;
+
+
 
 export const createArgsHandler = ({
   step,
@@ -94,7 +96,8 @@ export const EditableInput = ({
 };
 
 export const getArgsValidator = (callback: Callback) => {
-  return getValidatorFromCallback(callback).argsValidator;
+  const val = getValidatorFromCallback(callback);
+  return val.argsValidator 
 };
 
 export const SelectControl = ({
@@ -111,11 +114,18 @@ export const SelectControl = ({
   );
 };
 export const EventNameSelectOptions = () => {
-  return CallbackFactory.getEventNameDescriptors().map((eventName) => {
-    return (
-      <option key={eventName.name} value={eventName.name}>
-        {eventName.label}
-      </option>
-    );
-  });
+  
+  const entries = CallbackFactory.getEventLabelPairs();
+  console.log(entries);
+  return (
+    <>
+      {entries.map(([eventName, label]) => (
+        <option key={eventName} value={eventName}>
+          {label}
+        </option>
+      ))}
+    </>
+  );
+  
+
 };
