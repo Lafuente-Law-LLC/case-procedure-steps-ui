@@ -95,7 +95,7 @@ if (!element) {
 
 const root = createRoot(element);
 
-const constructorRt = new RootStepConstructor(sampleStep);
+const constructorRt = new RootStepConstructor({});
 
 root.render(
   <App title="" description="" rootStepConstructor={constructorRt} />,
