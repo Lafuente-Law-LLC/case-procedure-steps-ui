@@ -11,6 +11,7 @@ import type { ValidationObject } from "../../types";
 import { stepValidator } from "../../validator/validators";
 import StepItemErrorBadge from "./StepItemErrorBadge";
 
+
 export type StepItemHeadProps = {
   step: Step;
   setCollapseOpen: SetCollapseOpen;
@@ -18,10 +19,16 @@ export type StepItemHeadProps = {
 };
 
 const CSS_CLASSES = {
-  MAIN: "step-item-head",
-  START: "start",
-  CENTER: "center",
-  END: "end",
+  main: "step-item-head",
+  start: "start",
+  center: "center",
+  end: "end",
+  arrowRight: "arrow-right",
+  metaData: "meta-data",
+  modalContainer: "modal-container",
+  buttonGroup: "button-group",
+  addIcon: "add-icon",
+  removeIcon: "remove-icon",
 };
 
 const ItemHeadStart = ({
@@ -35,12 +42,12 @@ const ItemHeadStart = ({
 }) => {
   return (
     <div
-      className={CSS_CLASSES.START}
+      className={CSS_CLASSES.start}
       onClick={onClickHandler}
       aria-expanded={collapseOpen}
     >
       <StepItemErrorBadge {...validationObject} />
-      <ArrowRight className={"arrow-right"} />
+      <ArrowRight className={CSS_CLASSES.arrowRight} />
     </div>
   );
 };
@@ -57,9 +64,9 @@ const ItemHeadCenter = ({
   subStepAndCallbackCounter: string;
 }) => {
   return (
-    <div className={CSS_CLASSES.CENTER}>
+    <div className={CSS_CLASSES.center}>
       <EditText value={title} onChange={onChangeTitleHandler}></EditText>
-      <div className={"meta-data"}>{subStepAndCallbackCounter} </div>
+      <div className={CSS_CLASSES.metaData}>{subStepAndCallbackCounter} </div>
     </div>
   );
 };
@@ -76,14 +83,17 @@ const ItemHeadEnd = ({
   removeStep: ReactClickHandler;
 }) => {
   return (
-    <div className={CSS_CLASSES.END}>
-      <div className="modal-container">
+    <div className={CSS_CLASSES.end}>
+      <div className={CSS_CLASSES.modalContainer}>
         <StepItemModal step={step} />
       </div>
-      <div className="button-group">
-        <IoMdAddCircle className="add-icon" onClick={addStep} />
+      <div className={CSS_CLASSES.buttonGroup}>
+        <IoMdAddCircle className={CSS_CLASSES.addIcon} onClick={addStep} />
         {!stepHasChildren && (
-          <IoMdRemoveCircle className="remove-icon" onClick={removeStep} />
+          <IoMdRemoveCircle
+            className={CSS_CLASSES.removeIcon}
+            onClick={removeStep}
+          />
         )}
       </div>
     </div>
@@ -112,7 +122,7 @@ const StepItemHead: React.FC<StepItemHeadProps> = ({
   return (
     <div
       ref={refElement}
-      className={CSS_CLASSES.MAIN}
+      className={CSS_CLASSES.main}
       data-step-id={step.id}
       {...StepItemHeadDragProps(refElement)}
     >
