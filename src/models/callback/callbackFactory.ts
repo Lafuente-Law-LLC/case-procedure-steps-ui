@@ -1,11 +1,8 @@
 import Callback from "./callback";
 import type { CallbackValidator } from "../../validator/validators";
 
-function formatString(input: string): string {
-  // Split the string by underscores
+function formatString(input: string): string { 
   const words = input.split("_");
-
-  // Capitalize the first letter of each word and join them with a space
   const formattedString = words
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
@@ -29,13 +26,6 @@ export type ArgDescriptor = {
   required: boolean;
 };
 
-/**
- * The event is associated with a label component. The object is used to
- * associate the event with a label component.
- */
-type eventLabelObj = {
-  name: string;
-};
 /**
  * Represents a map of registered event names to their corresponding function
  * names.
