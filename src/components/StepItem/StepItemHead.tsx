@@ -10,7 +10,10 @@ import StepItemModal from "./StepItemModal";
 import type { ValidationObject } from "../../types";
 import { stepValidator } from "../../validator/validators";
 import StepItemErrorBadge from "./StepItemErrorBadge";
-
+import StepItemCol from "./StepItemCol";
+import { BsPlusSquareFill } from "react-icons/bs";
+import { IoTriangleSharp } from "react-icons/io5";
+import { AiFillDelete } from "react-icons/ai";
 
 export type StepItemHeadProps = {
   step: Step;
@@ -119,6 +122,9 @@ const StepItemHead: React.FC<StepItemHeadProps> = ({
 
   const refElement = useRef<HTMLDivElement>(null);
   const validator = stepValidator(step);
+  const TopCorner = () => {
+    return <></>;
+  };
   return (
     <div
       ref={refElement}
@@ -126,7 +132,7 @@ const StepItemHead: React.FC<StepItemHeadProps> = ({
       data-step-id={step.id}
       {...StepItemHeadDragProps(refElement)}
     >
-      <ItemHeadStart
+      {/* <ItemHeadStart
         validationObject={validator.validate()}
         collapseOpen={collapseOpen}
         onClickHandler={() => setCollapseOpen((prev) => !prev)}
@@ -143,7 +149,60 @@ const StepItemHead: React.FC<StepItemHeadProps> = ({
         stepHasChildren={step.steps.length > 0}
         addStep={addStepOnClick}
         removeStep={removeStepOnClick}
-      />
+      /> */}
+
+      <StepItemCol
+        header={
+          <IoTriangleSharp
+            className={`triangle ${collapseOpen ? "open" : ""}`}
+            size={12}
+            onClick={() => setCollapseOpen((prev) => !prev)}
+          ></IoTriangleSharp>
+        }
+      >
+        {}
+      </StepItemCol>
+
+      <StepItemCol header="Title">
+        <>
+          <input
+            type="text"
+            value={step.title}
+            className="form-control"
+            onChange={(e) => {
+              step.updateTitle(e.target.value);
+            }}
+          ></input>
+        </>
+      </StepItemCol>
+      <StepItemCol header="Summary" className="summary">
+        <>
+          <textarea
+          
+            value={step.summary}
+            className="form-control"
+            onChange={(e) => {
+              step.updateSummary(e.target.value);
+            }}
+          ></textarea>
+        </>
+      </StepItemCol>
+      <StepItemCol
+        className={"testie"}
+        header={
+          <div className={"right"}>
+            <StepItemModal step={step}></StepItemModal>
+            <BsPlusSquareFill
+              className="bs-plus-square"
+              size={28}
+              onClick={addStepOnClick}
+            ></BsPlusSquareFill>
+          </div>
+        }
+      >
+        <div>{showSubStepsAndCallbacks(step)}</div>
+        {step.steps.length > 0 && <AiFillDelete onClick={removeStepOnClick}></AiFillDelete>}
+      </StepItemCol>
     </div>
   );
 };
