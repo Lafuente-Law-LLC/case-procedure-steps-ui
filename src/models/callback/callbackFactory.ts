@@ -162,4 +162,12 @@ export default class CallbackFactory {
       args: args || this.buildDefaultArgs(argDescriptors),
     });
   }
+
+
+  static getEventNames(functionName: string) {
+    const eventNames = Array.from(this.registeredEventNames.keys());
+    return eventNames.filter((eventName) =>
+      this.isFunctionNameFor(eventName, functionName),
+    );
+  }
 }
