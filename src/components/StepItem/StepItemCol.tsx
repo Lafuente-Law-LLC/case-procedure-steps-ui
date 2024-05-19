@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 type StepItemColProps = {
   header?: string | React.ReactNode;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
 };
 

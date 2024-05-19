@@ -1,5 +1,4 @@
 @import "bootstrap/scss/bootstrap.scss";
-@import "react-edit-text/dist/index.css";
 @import url("https://fonts.googleapis.com");
 @import url("https://fonts.gstatic.com") crossfade;
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;1,100;1,300;1,400&display=swap");
@@ -8,25 +7,23 @@
 
 .case-procedure-steps {
   font-family: "Open-Sans", sans-serif;
-  .label-row-component {
-    @extend .row;
-    & .label {
-      @extend .col-4;
-      @extend .text-secondary;
-    }
-    & .value {
-      @extend .col-8;
-    }
-    &.invalid {
-      & .label {
-        @extend .text-danger;
+  .main-container {
+    .top-row {
+      display: flex;
+      .col-1 {
+        padding: 0 10px;
+        flex-grow: 3;
       }
-      & .value {
-        @extend .text-danger;
+      .col-2 {
+        padding: 0 10px;
+        flex-grow: 7;
       }
     }
   }
-
+  .garbage-can{
+    fill: $gray-900; 
+    cursor: pointer;
+  }
   .error-badge {
     height: 100%;
     display: flex;
@@ -46,25 +43,38 @@
     }
   }
 
+  .cross-button {
+    width: 2em; /* Width of the button */
+    height: 2em; /* Height of the button */
+    background-color: white; /* Background color of the button */
+    border: 1px solid #8a8686dc; /* Border of the button */
+    border-radius: 2px;
+    left: 12px;
+    position: relative; /* Positioning context for pseudo-elements */
+    cursor: pointer; /* Pointer cursor on hover */
+  }
+
+  .cross-button::before,
+  .cross-button::after {
+    content: ""; /* No content, just for styling */
+    position: absolute; /* Absolute positioning within the button */
+    top: 50%; /* Vertical center alignment */
+    left: 50%; /* Horizontal center alignment */
+    width: 40%; /* Width of the cross line */
+    height: 1px; /* Thickness of the cross line */
+    background-color: black; /* Color of the cross */
+    transform: translate(-50%, -50%); /* Center the cross line */
+  }
+
+  .cross-button::before {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .cross-button::after {
+    transform: translate(-50%, -50%) rotate(-180deg);
+  }
   @import "./styles/animations.scss";
   @import "./styles/components/step-item.scss";
-}
-
-.main-app {
-  .top {
-    display: flex;
-    .group-1 {
-      padding: 0 10px;
-      flex-grow: 3;
-    }
-    .group-2 {
-      padding: 0 10px;
-      flex-grow: 7;
-    }
-  }
-  .bottom {
-    max-height: 1vh;
-  }
 }
 
 @import "./styles/components/callback-component.scss";

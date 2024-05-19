@@ -1,37 +1,44 @@
-$border-radius-step-item: 1em;
-
 .step-item-container {
   height: 80vh;
   overflow-y: auto;
-  background-color: #f4f4f48e;
+  border: 1px solid $gray-500;
 }
 
 .step-item {
   padding: 10px;
   margin-left: 3%;
 }
+.step-item-head {
+  border-radius: $font-size-base;
+  display: flex;
+  border: 1px solid $gray-400;
+  background-color: $gray-100;
+  transition: margin 0.3s ease;
+  @extend .shadow-sm;
+}
 
+.step-item-head.drag-over {
+  margin: 14px;
+}
+
+.step-item-head.invalid {
+  border: 1px solid red;
+}
+
+.step-item-body {
+  padding-top: 1em;
+  padding-bottom: 0.5em;
+  outline: 1px dotted grey;
+}
 .left-corner {
   .header {
-    border-top-left-radius: $border-radius-step-item;
+    border-top-left-radius: $font-size-base;
   }
 }
 .right-corner {
   .header {
-    border-top-right-radius: $border-radius-step-item;
+    border-top-right-radius: $font-size-base;
   }
-}
-
-.triangle {
-  transform: rotate(90deg);
-}
-.triangle.open {
-  transform: rotate(180deg);
-}
-
-.step-item-col .bs-plus-square {
-  cursor: pointer;
-  fill: white;
 }
 
 .step-item-col.right-corner {
@@ -64,49 +71,16 @@ $border-radius-step-item: 1em;
 }
 
 .step-item-col .header {
-  height: 40px;
+  height: 42px;
   padding: 0.5rem;
-  background-color: #aa777754;
-  font-size: 14px;
-  font-weight: bold;
+  background-color: $green-200;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
 }
 
 .step-item-col .body {
   padding: 5px;
-  font-size: 13px;
-}
-/* Base button styles */
-.cross-button {
-  width: 2em; /* Width of the button */
-  height: 2em; /* Height of the button */
-  background-color: white; /* Background color of the button */
-  border: 1px solid #8a8686dc; /* Border of the button */
-  border-radius: 2px;
-  left: 12px;
-  position: relative; /* Positioning context for pseudo-elements */
-  cursor: pointer; /* Pointer cursor on hover */
-}
-
-/* Cross styling using pseudo-elements */
-.cross-button::before,
-.cross-button::after {
-  content: ""; /* No content, just for styling */
-  position: absolute; /* Absolute positioning within the button */
-  top: 50%; /* Vertical center alignment */
-  left: 50%; /* Horizontal center alignment */
-  width: 40%; /* Width of the cross line */
-  height: 1px; /* Thickness of the cross line */
-  background-color: black; /* Color of the cross */
-  transform: translate(-50%, -50%); /* Center the cross line */
-}
-
-/* Rotate one pseudo-element to create the cross */
-.cross-button::before {
-  transform: translate(-50%, -50%) rotate(90deg);
-}
-
-.cross-button::after {
-  transform: translate(-50%, -50%) rotate(-180deg);
+  font-size: $font-size-base * 0.8;
 }
 
 .step-item-col .body input,
@@ -117,7 +91,7 @@ $border-radius-step-item: 1em;
   border: 1px solid #ccc;
   border-radius: 5px;
   outline: none;
-  background-color: rgba(255, 255, 255, 0.808);
+  background-color: rgba(255, 255, 255, 0.212);
   box-shadow: 0 2px 4px rgba(200, 205, 207, 0.1);
   transition:
     border-color 0.3s ease,
@@ -125,6 +99,16 @@ $border-radius-step-item: 1em;
   color: #333;
 }
 
+.step-item-col .body input {
+  &.error {
+    border: 1px solid red;
+  }
+}
+.step-item-col .body textarea {
+  &.error {
+    border: 1px solid red;
+  }
+}
 .step-item-col .body input:focus {
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
@@ -150,28 +134,6 @@ $border-radius-step-item: 1em;
 .step-item-col.right-corner {
   max-width: 150px;
   border-radius: 0 1em 1em 0;
-}
-
-.step-item-head {
-  border-radius: $border-radius-step-item;
-  display: flex;
-  border: 1px solid grey;
-  background-color: #f4f4f4;
-  transition: margin 0.3s ease;
-}
-
-.step-item-head.drag-over {
-  margin: 14px;
-}
-
-.step-item-head.invalid {
-  border: 1px solid red;
-}
-
-.step-item-body {
-  padding-top: 1em;
-  padding-bottom: 0.5em;
-  outline: 1px dotted grey;
 }
 
 .three-dots-vertical {
@@ -211,4 +173,11 @@ $border-radius-step-item: 1em;
 .button-group .add-icon,
 .button-group .remove-icon {
   cursor: pointer;
+}
+.triangle {
+  cursor: pointer;
+  transform: rotate(90deg);
+}
+.triangle.open {
+  transform: rotate(180deg);
 }

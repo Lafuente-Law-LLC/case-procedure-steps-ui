@@ -1,5 +1,4 @@
 import React from "react";
-import type { FunctionArgsPair } from "../../models/callback/utils";
 import { Form } from "react-bootstrap";
 import { Step } from "../../models/step/step";
 import Callback from "../../models/callback/callback";
@@ -57,10 +56,6 @@ export const createEventNameCellHandler = (step: Step, callback: Callback) => {
   };
 };
 
-const getArgsType = (funcArgsPair: FunctionArgsPair, argName: string) => {
-  const arg = funcArgsPair.args.find((arg) => arg.name === argName);
-  return arg ? arg.type : "string";
-};
 
 type EditableInputObj = {
   label: string;
