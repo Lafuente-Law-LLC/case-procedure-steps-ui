@@ -26,7 +26,7 @@ const StepItemModal: React.FC<{ step: Step }> = ({ step }) => {
   };
   return (
     <div className={CSS_CLASSES.MAIN}>
-      <ThreeDotsVertical className={CSS_CLASSES.button} onClick={handleShow} />
+      <ThreeDotsVertical size={15} className={CSS_CLASSES.button} onClick={handleShow} />
       <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Header closeButton={true}>
           <Modal.Title as="div" className="h5">

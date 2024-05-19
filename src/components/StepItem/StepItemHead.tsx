@@ -11,7 +11,7 @@ import type { ValidationObject } from "../../types";
 import { stepValidator } from "../../validator/validators";
 import StepItemErrorBadge from "./StepItemErrorBadge";
 import StepItemCol from "./StepItemCol";
-import { BsPlusSquareFill } from "react-icons/bs";
+
 import { IoTriangleSharp } from "react-icons/io5";
 import { AiFillDelete } from "react-icons/ai";
 
@@ -132,26 +132,8 @@ const StepItemHead: React.FC<StepItemHeadProps> = ({
       data-step-id={step.id}
       {...StepItemHeadDragProps(refElement)}
     >
-      {/* <ItemHeadStart
-        validationObject={validator.validate()}
-        collapseOpen={collapseOpen}
-        onClickHandler={() => setCollapseOpen((prev) => !prev)}
-      />
-      <ItemHeadCenter
-        title={step.title}
-        onChangeTitleHandler={(e) => {
-          step.updateTitle(e.target.value);
-        }}
-        subStepAndCallbackCounter={showSubStepsAndCallbacks(step)}
-      />
-      <ItemHeadEnd
-        step={step}
-        stepHasChildren={step.steps.length > 0}
-        addStep={addStepOnClick}
-        removeStep={removeStepOnClick}
-      /> */}
-
       <StepItemCol
+        className={"triangle-col left-corner"}
         header={
           <IoTriangleSharp
             className={`triangle ${collapseOpen ? "open" : ""}`}
@@ -163,12 +145,11 @@ const StepItemHead: React.FC<StepItemHeadProps> = ({
         {}
       </StepItemCol>
 
-      <StepItemCol header="Title">
+      <StepItemCol header="Title" className="title">
         <>
           <input
             type="text"
             value={step.title}
-            className="form-control"
             onChange={(e) => {
               step.updateTitle(e.target.value);
             }}
@@ -178,9 +159,7 @@ const StepItemHead: React.FC<StepItemHeadProps> = ({
       <StepItemCol header="Summary" className="summary">
         <>
           <textarea
-          
             value={step.summary}
-            className="form-control"
             onChange={(e) => {
               step.updateSummary(e.target.value);
             }}
@@ -188,20 +167,20 @@ const StepItemHead: React.FC<StepItemHeadProps> = ({
         </>
       </StepItemCol>
       <StepItemCol
-        className={"testie"}
+        className={"right-corner"}
         header={
           <div className={"right"}>
             <StepItemModal step={step}></StepItemModal>
-            <BsPlusSquareFill
-              className="bs-plus-square"
-              size={28}
-              onClick={addStepOnClick}
-            ></BsPlusSquareFill>
+            <button className="cross-button" onClick={addStepOnClick}></button>
           </div>
         }
       >
         <div>{showSubStepsAndCallbacks(step)}</div>
-        {step.steps.length > 0 && <AiFillDelete onClick={removeStepOnClick}></AiFillDelete>}
+        {!(step.steps.length > 0) && (
+          <div>
+            <AiFillDelete onClick={removeStepOnClick}></AiFillDelete>
+          </div>
+        )}
       </StepItemCol>
     </div>
   );
