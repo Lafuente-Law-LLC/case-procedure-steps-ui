@@ -81,7 +81,7 @@ const StepsTemplateContainer = ({
 }) => {
   return (
     <StepItemContainer steps={steps}>
-      <button className={"mui-button"} onClick={addStep}>
+      <button className={"btn btn-primary mt-3 "} onClick={addStep}>
         Add
       </button>
     </StepItemContainer>

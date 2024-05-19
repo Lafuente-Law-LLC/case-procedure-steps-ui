@@ -85,7 +85,6 @@ $border-radius-step-item: 1em;
   left: 12px;
   position: relative; /* Positioning context for pseudo-elements */
   cursor: pointer; /* Pointer cursor on hover */
-  
 }
 
 /* Cross styling using pseudo-elements */
@@ -172,6 +171,7 @@ $border-radius-step-item: 1em;
 .step-item-body {
   padding-top: 1em;
   padding-bottom: 0.5em;
+  outline: 1px dotted grey;
 }
 
 .three-dots-vertical {
