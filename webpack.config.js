@@ -4,8 +4,25 @@ module.exports = {
   mode: "development",
   entry: "./src/index.tsx", // Update entry file extension to .tsx
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "bundle.js",
+    publicPath: "/",
+    library: { name: "CaseProcedureSteps", type: "umd" },
+    clean: true,
+    path: path.resolve(__dirname, "lib"),
+    filename: "index.js",
+  }, 
+  externals: {
+    react: {
+      root: "React",
+      commonjs: "react",
+      commonjs2: "react",
+      amd: "react",
+    },
+    "react-dom": {
+      root: "ReactDOM",
+      commonjs: "react-dom",
+      commonjs2: "react-dom",
+      amd: "react-dom",
+    },
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".jsx"], // Add .tsx and .ts extensions
