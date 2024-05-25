@@ -2,13 +2,14 @@ const { green, cyan, red } = require("chalk");
 const webpack = require("webpack");
 const path = require("path");
 const fse = require("fs-extra");
-const execa = require("execa");
+const shellJS = require("shelljs");
+const { globSync } = require("glob");
 const cherryPick = require("cherry-pick").default;
-const getConfig = require("./webpack.config.js");
+const getConfig = require("../webpack.config.js");
 
 const paths = {
   srcRoot: path.join(__dirname, "../src"),
-  typesRoot: path.join(__dirname, "../types"),
+  typesRoot: path.join(__dirname, "../lib/src"),
   libRoot: path.join(__dirname, "../lib"),
   distRoot: path.join(__dirname, "../lib/dist"),
   cjsRoot: path.join(__dirname, "../lib/cjs"),
@@ -32,8 +33,7 @@ const log = {
 const clean = () =>
   fse.existsSync(paths.libRoot) && fse.removeSync(paths.libRoot);
 
-const shell = (cmd) =>
-  execa(cmd, { stdio: ["pipe", "pipe", "inherit"], shell: true });
+const shell = (cmd) => shellJS.exec(cmd, { silent: false }).code === 0;
 
 const step = (name, fn) => async () => {
   log.step(name);
@@ -46,7 +46,17 @@ const has = (t) => !targets.length || targets.includes(t);
 // Build steps
 const buildTypes = step("generating .d.ts", () => shell("yarn build-types"));
 
-const copyTypes = (dest) => shell(`cpy ${paths.typesRoot}/*.d.ts ${dest}`);
+const copyTypes = (dest) => {
+  const jsfiles = globSync(`${paths.typesRoot}/**/*.d.ts`);
+  if (!jsfiles.length) {
+    return;
+  }
+  jsfiles.forEach((file) => {
+    let relative = path.relative(paths.typesRoot, file);
+    shell(`cp ${file} ${path.join(dest, relative)}`)
+  });
+  //shell(`yarn cpy ${paths.typesRoot}/**/**/*.d.ts ${dest} --cwd=src`);
+};
 
 const babel = (outDir, envName) =>
   shell(
@@ -86,19 +96,14 @@ const buildDirectories = step("Linking directories", () =>
   }),
 );
 
-
 const runBuild = async () => {
   log.targets();
   clean();
 
   try {
     await buildTypes();
-    await Promise.all([
-      has("lib") && buildLib(),
-      has("es") && buildEsm(),
-      has("dist") && buildDist(),
-    ]);
-    await buildDirectories();
+    await Promise.all([has("lib") && buildLib(), has("es") && buildEsm()]);
+    //await buildDirectories();
   } catch (err) {
     log.error(err);
     process.exit(1);

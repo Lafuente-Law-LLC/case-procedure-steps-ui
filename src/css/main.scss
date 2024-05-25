@@ -4,9 +4,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,400;0,600;1,100;1,200;1,900&family=Roboto:ital,wght@0,100;0,400;1,300;1,400&display=swap");
 
+@import "bootstrap/scss/_functions.scss";
 .case-procedure-steps {
   @import "bootstrap/scss/bootstrap.scss";
-
   font-family: "Open-Sans", sans-serif;
   .main-container {
     .top-row {
@@ -21,8 +21,8 @@
       }
     }
   }
-  .garbage-can{
-    fill: $gray-600; 
+  .garbage-can {
+    fill: $gray-600;
     cursor: pointer;
     &:hover {
       fill: $gray-800;
