@@ -43,7 +43,6 @@ const step = (name, fn) => async () => {
 
 const has = (t) => !targets.length || targets.includes(t);
 
-// Build steps
 const buildTypes = step("generating .d.ts", () => shell("yarn build-types"));
 
 const copyTypes = (dest) => {
@@ -53,9 +52,8 @@ const copyTypes = (dest) => {
   }
   jsfiles.forEach((file) => {
     let relative = path.relative(paths.typesRoot, file);
-    shell(`cp ${file} ${path.join(dest, relative)}`)
+    shell(`cp ${file} ${path.join(dest, relative)}`);
   });
-  //shell(`yarn cpy ${paths.typesRoot}/**/**/*.d.ts ${dest} --cwd=src`);
 };
 
 const babel = (outDir, envName) =>
@@ -65,12 +63,12 @@ const babel = (outDir, envName) =>
 
 const buildLib = step("commonjs modules", async () => {
   await babel(paths.cjsRoot, "cjs");
-  await copyTypes(paths.cjsRoot);
+  copyTypes(paths.cjsRoot);
 });
 
 const buildEsm = step("es modules", async () => {
   await babel(paths.esRoot, "esm");
-  await copyTypes(paths.esRoot);
+  copyTypes(paths.esRoot);
 });
 
 const buildDist = step(

@@ -5,13 +5,14 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = (env, argv) => {
   return {
     mode: "development",
-    entry: "./src/index.tsx", // Update entry file extension to .tsx
+    entry: "./src/index.tsx",
     output: {
       publicPath: "/",
-      library: { name: "CaseProcedureSteps", type: "umd" },
-      clean: true,
-      path: path.resolve(__dirname, "lib"),
+      path: path.resolve(__dirname, "dist"),
       filename: "index.js",
+      library: "CaseProcedureApp",
+      libraryTarget: "umd",
+      globalObject: "this",
     },
     externals: {
       react: {
@@ -29,6 +30,9 @@ module.exports = (env, argv) => {
     },
     resolve: {
       extensions: [".tsx", ".ts", ".js", ".jsx"], // Add .tsx and .ts extensions
+      alias: {
+        react: path.resolve(__dirname, "node_modules/react"),
+      },
     },
     plugins: [
       new htmlWebpackPlugin({

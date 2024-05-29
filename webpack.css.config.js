@@ -3,10 +3,10 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   mode: "development",
-  entry: "./src/css/main.scss", // Update entry file extension to .tsx
+  entry: "./src/css/main.scss",
   output: {
-    path: path.resolve(__dirname, "lib/css"), // Update output path to "lib/css"
-    filename: "css/[name].js", // Dummy JS file, as Webpack needs an output filename
+    path: path.resolve(__dirname, "lib/css"),
+    filename: "css/[name].js",
   },
   plugins: [
     new MiniCssExtractPlugin({
