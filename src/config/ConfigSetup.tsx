@@ -3,6 +3,9 @@ import RootStepConstructor from "../models/step/rootStepConstructor";
 import StepItemContainer from "../components/StepItem/StepItemContainer";
 import { Step } from "../models/step/step";
 import { runConfig } from "./config";
+
+
+
 runConfig();
 
 export  type CaseProcedureStep = {
