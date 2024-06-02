@@ -7,11 +7,12 @@ import { ValidationObject } from "../../types";
 
 export const getValidatorFromCallback = (callback: Callback) => {
   const { functionName, eventName } = callback;
-  let validator = CallbackFactory.getValidatorFor(eventName, functionName);
+  let validator = CallbackFactory.getValidatorFor(functionName);
   if (!validator) {
     throw new Error("Validator not found");
   }
-  const val = validator(callback);
+  const val = validator.validate(callback)
+  debugger
   return val;
 };
 

@@ -15,11 +15,6 @@ const CSS_CLASSES = {
   MENU_ITEM: "menu-item",
 };
 
-const getTheFirstEventName = (functionName: string) => {
-  const eventNames = CallbackFactory.getEventNames(functionName);
-  return eventNames[0];
-};
-
 const CallbacksTable = ({ step }: CallbacksTableProps) => {
   const [editMode, setEditMode] = useState(false);
 
@@ -56,10 +51,7 @@ const CallbacksTable = ({ step }: CallbacksTableProps) => {
           className={CSS_CLASSES.MENU_ITEM}
           onClick={(e) => {
             step.addCallback(
-              CallbackFactory.createCallbackInstance(
-                "create_task",
-                getTheFirstEventName("create_task"),
-              ),
+              CallbackFactory.createPartialCallbackInstance("create_task")
             );
           }}
         >
@@ -69,10 +61,7 @@ const CallbacksTable = ({ step }: CallbacksTableProps) => {
           className={CSS_CLASSES.MENU_ITEM}
           onClick={(e) => {
             step.addCallback(
-              CallbackFactory.createCallbackInstance(
-                "create_future_event",
-                getTheFirstEventName("create_future_event"),
-              ),
+              CallbackFactory.createPartialCallbackInstance("create_event")
             );
           }}
         >

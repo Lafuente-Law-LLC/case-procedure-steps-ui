@@ -9,25 +9,25 @@ module.exports = (env, argv) => {
     output: {
       publicPath: "/",
       path: path.resolve(__dirname, "dist"),
-      filename: "index.js",
-      library: "CaseProcedureApp",
-      libraryTarget: "umd",
-      globalObject: "this",
+      // filename: "index.js",
+      // library: "CaseProcedureApp",
+      // libraryTarget: "umd",
+      // globalObject: "this",
     },
-    externals: {
-      react: {
-        root: "React",
-        commonjs: "react",
-        commonjs2: "react",
-        amd: "react",
-      },
-      "react-dom": {
-        root: "ReactDOM",
-        commonjs: "react-dom",
-        commonjs2: "react-dom",
-        amd: "react-dom",
-      },
-    },
+    // externals: {
+    //   react: {
+    //     root: "React",
+    //     commonjs: "react",
+    //     commonjs2: "react",
+    //     amd: "react",
+    //   },
+    //   "react-dom": {
+    //     root: "ReactDOM",
+    //     commonjs: "react-dom",
+    //     commonjs2: "react-dom",
+    //     amd: "react-dom",
+    //   },
+    // },
     resolve: {
       extensions: [".tsx", ".ts", ".js", ".jsx"], // Add .tsx and .ts extensions
       alias: {

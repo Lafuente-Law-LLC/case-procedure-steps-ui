@@ -1,22 +1,24 @@
-import Joi, { ObjectSchema } from "joi";
 import { ValidationObject } from "../types";
+export type ValidationLogicFunction = (
+  subject: any,
+) => Record<string, string[]>;
 
-export default class Validator {
-  schema: ObjectSchema;
-  subject: any;
-  validationObject: Joi.ValidationResult;
-  constructor(schema: ObjectSchema, subject: any) {
-    this.subject = subject;
-    this.schema = schema;
-    this.validationObject = this.schema.validate(this.subject, {
-      abortEarly: false,
-    });
+export default class GeneralValidator {
+  errors: Record<string, string[]> = {};
+  validationLogicFunction: ValidationLogicFunction;
+  constructor(validationLogicFunction: ValidationLogicFunction) {
+    this.validationLogicFunction = validationLogicFunction;
+    this.errors = {};
   }
 
   get errorMessages() {
-    return (
-      this.validationObject.error?.details.map((detail) => detail.message) ?? []
-    );
+    return Object.values(this.errors)
+      .flat()
+      .map((error) => error);
+  }
+
+  valid() {
+    return this.errorMessages.length === 0;
   }
 
   findErrorMessageForField(fieldName: string) {
@@ -29,12 +31,12 @@ export default class Validator {
   }
 
   findErrorForField(fieldName: string) {
-    return this.validationObject.error?.details.find(
-      (detail) => detail.context?.key === fieldName,
-    );
+    return this.errors[fieldName]
+      ? { message: this.errors[fieldName][0] }
+      : undefined;
   }
 
-  validField(fieldName: string):ValidationObject {
+  validField(fieldName: string): ValidationObject {
     const error = this.findErrorForField(fieldName);
     return {
       valid: error === undefined,
@@ -42,10 +44,10 @@ export default class Validator {
     };
   }
 
-
-  validate():ValidationObject {
+  validate(subject: any): ValidationObject {
+    this.errors = this.validationLogicFunction(subject);
     return {
-      valid: this.validationObject.error === undefined,
+      valid: this.valid(),
       message: this.errorMessages.join(", "),
     };
   }

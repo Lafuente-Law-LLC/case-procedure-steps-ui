@@ -1,67 +1,85 @@
 import CallbackFactory from "../models/callback/callbackFactory";
-import {
-  eventCallbackValidator,
-  taskCallbackValidator,
-} from "../validator/validators";
-import type { CallbackRegistrationObject } from "../models/callback/callbackFactory";
+import { CallbackConfig } from "../models/callback/callbackFactory";
 
-type PartialCallbackRegObj = Pick<
-  CallbackRegistrationObject,
-  "functionName" | "argDescriptors" | "validator"
->;
-
-const createFutureEventFn: PartialCallbackRegObj = {
-  functionName: "create_future_event",
-  argDescriptors: [
-    { name: "title", type: "string", required: true, default: "New Title" },
+const createEvent: CallbackConfig = {
+  functionName: "create_event",
+  eventName: {
+    in: ["complete", "after_create"],
+    default: "after_create",
+  },
+  args: [
+    {
+      name: "title",
+      type: "string",
+      default: "",
+      required: true,
+    },
     {
       name: "summary",
       type: "string",
+      default: "",
       required: true,
-      default: "New Summary",
     },
-    { name: "days", type: "number", required: true, default: 0 },
   ],
-  validator: eventCallbackValidator,
 };
 
-const createTaskFn: PartialCallbackRegObj = {
+const createTask: CallbackConfig = {
   functionName: "create_task",
-  argDescriptors: [
-    { name: "title", type: "string", required: true, default: "New Title" },
+  eventName: {
+    in: ["complete", "after_create"],
+    default: "after_create",
+  },
+  args: [
+    {
+      name: "title",
+      type: "string",
+      default: "",
+      required: true,
+    },
     {
       name: "summary",
       type: "string",
+      default: "",
       required: true,
-      default: "New Summary",
     },
   ],
-  validator: taskCallbackValidator,
 };
 
-export const runConfig = () => {
-  const createFutureEventOnComplete: CallbackRegistrationObject = {
-    eventName: "complete",
-    ...createFutureEventFn,
-  };
-
-  const createFutureEventOnAfterCreate: CallbackRegistrationObject = {
-    eventName: "after_create",
-    ...createFutureEventFn,
-  };
-
-  const createTaskOnAfterCreate: CallbackRegistrationObject = {
-    eventName: "after_create",
-    ...createTaskFn,
-  };
-
-  const createTaskOnComplete: CallbackRegistrationObject = {
-    eventName: "complete",
-    ...createTaskFn,
-  };
-
-  CallbackFactory.registerCallbackType(createFutureEventOnComplete);
-  CallbackFactory.registerCallbackType(createFutureEventOnAfterCreate);
-  CallbackFactory.registerCallbackType(createTaskOnAfterCreate);
-  CallbackFactory.registerCallbackType(createTaskOnComplete);
+const createFutureEvent: CallbackConfig = {
+  functionName: "create_future_event",
+  eventName: {
+    in: ["complete", "after_create"],
+    default: "after_create",
+  },
+  args: [
+    {
+      name: "title",
+      type: "string",
+      default: "",
+      required: true,
+    },
+    {
+      name: "summary",
+      type: "string",
+      default: "",
+      required: true,
+    },
+    {
+      name: "date",
+      type: "number",
+      default: 10,
+      required: true,
+    },
+  ],
 };
+
+
+
+CallbackFactory.registerCallbackConfig(createEvent);
+CallbackFactory.registerCallbackConfig(createTask);
+CallbackFactory.registerCallbackConfig(createFutureEvent);
+
+const runConfig = () => {
+  console.log("Config has been run");
+}
+export { runConfig };

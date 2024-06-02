@@ -3,7 +3,7 @@ import { Step } from "../../models/step/step";
 import type { SetCollapseOpen, CollapseOpen } from "./StepItem";
 import { StepItemHeadDragProps } from "../features/dragging";
 import StepItemModal from "./StepItemModal";
-import { stepValidator } from "../../validator/validators";
+
 import StepItemCol from "./StepItemCol";
 import { IoTriangleSharp } from "react-icons/io5";
 import { AiFillDelete } from "react-icons/ai";
@@ -39,7 +39,7 @@ const StepItemHead: React.FC<StepItemHeadProps> = ({
   };
 
   const refElement = useRef<HTMLDivElement>(null);
-  const validator = stepValidator(step);
+  
 
   return (
     <div
@@ -65,29 +65,23 @@ const StepItemHead: React.FC<StepItemHeadProps> = ({
         <>
           <input
             type="text"
-            className={validator.errorInField("title") ? "error" : ""}
+            
             value={step.title}
             onChange={(e) => {
               step.updateTitle(e.target.value);
             }}
           ></input>
-          <span className="error-message flex-grow-4">
-            {validator.findErrorMessageForField("title")}
-          </span>
         </>
       </StepItemCol>
       <StepItemCol header="Summary" className="summary">
         <>
           <textarea
             value={step.summary}
-            className={validator.errorInField("summary") ? "error" : ""}
+            
             onChange={(e) => {
               step.updateSummary(e.target.value);
             }}
           ></textarea>
-          <span className="error-message flex-grow-4">
-            {validator.findErrorMessageForField("summary")}
-          </span>
         </>
       </StepItemCol>
       <StepItemCol
