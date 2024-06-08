@@ -9,14 +9,14 @@ import {
   getArgsValidator,
   SelectControl,
 } from "./tableRowUtils";
-import { ValidationObject } from "../../types";
+import { FieldValidationObject } from "../../types";
 
 type ArgsCellProps = {
   argName: string;
   value: string;
   editMode: boolean;
   type: string;
-  validationObject: ValidationObject;
+  validationObject: FieldValidationObject;
   onChangeHandler: React.ChangeEventHandler<HTMLInputElement>;
 };
 
@@ -24,14 +24,14 @@ type EventNameCellProps = {
   eventNameValue: string;
   editMode: boolean;
   onChangeHandler: React.ChangeEventHandler<HTMLSelectElement>;
-  validationObject: ValidationObject;
+  validationObject: FieldValidationObject;
 } & React.PropsWithChildren;
 
 const ArgsCell = ({
   argName,
   value,
   type,
-  validationObject,
+
   onChangeHandler,
 
   editMode,
@@ -44,7 +44,6 @@ const ArgsCell = ({
       type={type}
       onChange={onChangeHandler}
       editMode={editMode}
-      validationObject={validationObject}
     />
   );
 };
@@ -80,13 +79,9 @@ export const EventNameCell = ({
   eventNameValue,
   editMode,
   onChangeHandler,
-  validationObject,
 }: EventNameCellProps) => {
-  const { valid, message } = validationObject;
-
   return (
     <td>
-      {!valid && <div className="error-message">{message}</div>}
       {editMode ? (
         <SelectControl
           onChangeHandler={onChangeHandler}

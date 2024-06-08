@@ -15,9 +15,12 @@ const CSS_CLASSES = {
   MENU_ITEM: "menu-item",
 };
 
+const handleMenuBtnClick = (functionName: string, step: Step) => {
+  step.addCallback(CallbackFactory.createPartialCallbackInstance(functionName));
+};
+
 const CallbacksTable = ({ step }: CallbacksTableProps) => {
   const [editMode, setEditMode] = useState(false);
-
   return (
     <>
       <div className={CSS_CLASSES.MAIN}>
@@ -50,9 +53,7 @@ const CallbacksTable = ({ step }: CallbacksTableProps) => {
         <div
           className={CSS_CLASSES.MENU_ITEM}
           onClick={(e) => {
-            step.addCallback(
-              CallbackFactory.createPartialCallbackInstance("create_task")
-            );
+            handleMenuBtnClick("create_task", step);
           }}
         >
           Add Task Based
@@ -60,9 +61,7 @@ const CallbacksTable = ({ step }: CallbacksTableProps) => {
         <div
           className={CSS_CLASSES.MENU_ITEM}
           onClick={(e) => {
-            step.addCallback(
-              CallbackFactory.createPartialCallbackInstance("create_event")
-            );
+            handleMenuBtnClick("create_event", step);
           }}
         >
           Add Event Based

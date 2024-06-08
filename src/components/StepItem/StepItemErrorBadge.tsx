@@ -1,13 +1,16 @@
 import React from "react";
 import { Badge } from "react-bootstrap";
-import type { ValidationObject } from "../../types";
+import type { FieldValidationObject } from "../../types";
 import usePopper from "../hooks/usePopper";
 
 const CSS_CLASSES = {
   MAIN: "error-badge",
 };
 
-const StepItemErrorBadge: React.FC<ValidationObject> = ({ valid, message }) => {
+const StepItemErrorBadge: React.FC<FieldValidationObject> = ({
+  valid,
+  message,
+}) => {
   const { popperProps } = usePopper();
 
   return (

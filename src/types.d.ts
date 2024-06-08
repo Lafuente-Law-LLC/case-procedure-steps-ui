@@ -45,7 +45,7 @@ export interface FormattedStepObj extends StepObj {
  */
 export type TreeNode = Node<FormattedStepObj>;
 
-export type ValidationObject = {
+export type FieldValidationObject = {
   valid: boolean;
   message: string;
 };

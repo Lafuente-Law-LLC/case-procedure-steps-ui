@@ -1,5 +1,7 @@
 import Callback from "./callback";
-import { CallbackValidator } from "../../validator/validators";
+import {CallbackValidator}from "../../validator/validators";
+
+
 type EventConfig = {
   in: string[];
   default: string;

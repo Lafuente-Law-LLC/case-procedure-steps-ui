@@ -1,54 +1,72 @@
-import { ValidationObject } from "../types";
+export type FieldValidationObject = {
+  valid: boolean;
+  message: string;
+};
+
 export type ValidationLogicFunction = (
   subject: any,
 ) => Record<string, string[]>;
 
+/**
+ * @example
+ *   // Define a simple validation logic function
+ *   const validateUser = (user) => {
+ *     const errors = {};
+ *     if (!user.name) {
+ *       errors.name = ["Name is required"];
+ *     }
+ *     if (!user.email) {
+ *       errors.email = ["Email is required"];
+ *     } else if (!/^\S+@\S+\.\S+$/.test(user.email)) {
+ *       errors.email.push("Email is invalid");
+ *     }
+ *     return errors;
+ *   };
+ *
+ *   // Instantiate the GeneralValidator with the validation logic
+ *   const userValidator = new GeneralValidator(validateUser);
+ *
+ *   // Validate a user object
+ *   const user = { name: "", email: "invalid-email" };
+ *   userValidator.validate(user);
+ *
+ *   console.log(userValidator.errors); // { name: ['Name is required'], email: ['Email is invalid'] }
+ *   console.log(userValidator.valid()); // false
+ *   console.log(userValidator.findErrorMessageForField("email")); // 'Email is invalid'
+ *   console.log(userValidator.validField("name")); // { valid: false, message: 'Name is required' }
+ */
+
 export default class GeneralValidator {
   errors: Record<string, string[]> = {};
   validationLogicFunction: ValidationLogicFunction;
+
   constructor(validationLogicFunction: ValidationLogicFunction) {
     this.validationLogicFunction = validationLogicFunction;
-    this.errors = {};
   }
 
-  get errorMessages() {
-    return Object.values(this.errors)
-      .flat()
-      .map((error) => error);
+  get errorMessages(): string[] {
+    return Object.values(this.errors).flat();
   }
 
-  valid() {
+  valid(): boolean {
     return this.errorMessages.length === 0;
   }
 
-  findErrorMessageForField(fieldName: string) {
-    const error = this.findErrorForField(fieldName);
-    return error ? error.message : undefined;
+  findErrorMessageForField(fieldName: string): string | undefined {
+    return this.errors[fieldName]?.[0];
   }
 
-  errorInField(fieldName: string) {
-    return this.findErrorForField(fieldName) !== undefined;
+  errorInField(fieldName: string): boolean {
+    return Boolean(this.errors[fieldName]);
   }
 
-  findErrorForField(fieldName: string) {
-    return this.errors[fieldName]
-      ? { message: this.errors[fieldName][0] }
-      : undefined;
+  validField(fieldName: string): FieldValidationObject {
+    const message = this.findErrorMessageForField(fieldName) ?? "";
+    return { valid: !message, message };
   }
 
-  validField(fieldName: string): ValidationObject {
-    const error = this.findErrorForField(fieldName);
-    return {
-      valid: error === undefined,
-      message: error?.message ?? "",
-    };
-  }
-
-  validate(subject: any): ValidationObject {
+  validate(subject: any): Record<string, string[]> {
     this.errors = this.validationLogicFunction(subject);
-    return {
-      valid: this.valid(),
-      message: this.errorMessages.join(", "),
-    };
+    return this.errors;
   }
 }

@@ -3,34 +3,14 @@ import { Form } from "react-bootstrap";
 import { Step } from "../../models/step/step";
 import Callback from "../../models/callback/callback";
 import CallbackFactory from "../../models/callback/callbackFactory";
-import { ValidationObject } from "../../types";
+import { FieldValidationObject } from "../../types";
 
-export const getValidatorFromCallback = (callback: Callback) => {
-  const { functionName, eventName } = callback;
-  let validator = CallbackFactory.getValidatorFor(functionName);
-  if (!validator) {
-    throw new Error("Validator not found");
-  }
-  const val = validator.validate(callback)
-  debugger
-  return val;
+type EditableInputObj = {
+  label: string;
+  value: string;
+  type: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
-
-export const getArgsTypeFormCB = (callback: Callback, argName: string) => {
-  const {functionName, eventName} = callback;
-  const eventFunctionData = CallbackFactory.getFunctionDataFor(eventName, functionName);
-  if (!eventFunctionData) {
-    throw new Error("Function not found");
-  }
-  const {argDescriptors} = eventFunctionData;
-  const argDescriptor = argDescriptors.find((arg) => arg.name === argName);
-  if (!argDescriptor) {
-    throw new Error("Arg descriptor not found");
-  }
-  return argDescriptor.type;
-} ;
-
-
 
 export const createArgsHandler = ({
   step,
@@ -58,12 +38,6 @@ export const createEventNameCellHandler = (step: Step, callback: Callback) => {
 };
 
 
-type EditableInputObj = {
-  label: string;
-  value: string;
-  type: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-};
 
 export const EditableInput = ({
   label,
@@ -74,7 +48,7 @@ export const EditableInput = ({
   validationObject,
 }: EditableInputObj & {
   editMode: boolean;
-  validationObject: ValidationObject;
+  validationObject?: FieldValidationObject;
 }) => {
   const { valid, message } = validationObject;
   return (
@@ -91,11 +65,6 @@ export const EditableInput = ({
   );
 };
 
-export const getArgsValidator = (callback: Callback) => {
-  const val = getValidatorFromCallback(callback);
-  return val.argsValidator 
-};
-
 export const SelectControl = ({
   onChangeHandler,
   value,
@@ -104,13 +73,14 @@ export const SelectControl = ({
   value?: string;
 }) => {
   return (
-    <Form.Control as="select" onChange={onChangeHandler} value={value}>
-      <EventNameSelectOptions />
-    </Form.Control>
+    <Form.Control
+      as="select"
+      onChange={onChangeHandler}
+      value={value}
+    ></Form.Control>
   );
 };
 export const EventNameSelectOptions = () => {
-  
   const entries = CallbackFactory.getEventLabelPairs();
   console.log(entries);
   return (
@@ -122,6 +92,4 @@ export const EventNameSelectOptions = () => {
       ))}
     </>
   );
-  
-
 };

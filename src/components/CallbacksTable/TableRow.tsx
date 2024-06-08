@@ -4,7 +4,7 @@ import { Step } from "../../models/step/step";
 import { EventNameCell, FunctionNameCell, ArgsCellGroup } from "./TableCells";
 import {
   createEventNameCellHandler,
-  getValidatorFromCallback,
+  
 } from "./tableRowUtils";
 
 const TableRow = ({
@@ -24,9 +24,7 @@ const TableRow = ({
         onChangeHandler={createEventNameCellHandler(step, callback)}
         editMode={editMode}
         eventNameValue={callback.eventName}
-        validationObject={getValidatorFromCallback(callback).validField(
-          "eventName",
-        )}
+        validationObject={{}}
       />
       <FunctionNameCell functionName={callback.functionName} />
       <ArgsCellGroup callback={callback} step={step} editMode={editMode} />

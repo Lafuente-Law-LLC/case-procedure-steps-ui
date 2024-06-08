@@ -1,74 +1,55 @@
 import { Step } from "../models/step/step";
-import { ValidationObject } from "../types";
-import { getValidatorFromCallback } from "../components/CallbacksTable/tableRowUtils";
+import type { ValidationRule } from "model-validations";
+import { Validator } from "model-validations";
+import CallbackFactory from "../models/callback/callbackFactory";
+import GeneralValidator from "./validator";
 
-import StepManager from "../models/step/stepManager";
+const validationRules: ValidationRule[] = [
+  { attribute: "id", validationType: "presence", options: {} },
+  { attribute: "title", validationType: "presence", options: {} },
+  { attribute: "summary", validationType: "presence", options: {} },
+];
 
-export type ValidatedStepObj = {
-  step: Step;
-  validationObject: ValidationObject;
-  callbackValidationObjects: ValidationObject[];
-  valid: boolean;
+const validateStep = (step: Step): Record<string, string[]> => {
+  let argsErrors: string[] = [];
+  let hasCallbacks = step.callbacks.length > 0;
+  const validator = new Validator();
+  for (const rule of validationRules) {
+    validator.registerRule(rule);
+  }
+  if (hasCallbacks) {
+    for (const callback of step.callbacks) {
+      let cbValidator = CallbackFactory.getValidatorFor(callback.functionName);
+      argsErrors = [
+        ...argsErrors,
+        ...cbValidator.validate(callback.args).errorMessages,
+      ];
+    }
+  }
+
+  let errors = validator.validate(step);
+  if (argsErrors.length > 0) {
+    errors.args = argsErrors;
+  }
+  return errors;
 };
 
-function validateStep(step: Step): ValidatedStepObj {
-  const validationObject = stepValidator(step).validate();
-  const callbackValidationObjects: ValidationObject[] = [];
-
-  step.callbacks.forEach((callback) => {
-    const validator = getValidatorFromCallback(callback);
-    const validationObj = validator.validate();
-    callbackValidationObjects.push(validationObj);
-  });
-
-  const valid =
-    validationObject.valid &&
-    callbackValidationObjects.every((validationObj) => validationObj.valid);
-
-  return {
-    step: step,
-    validationObject: validationObject,
-    callbackValidationObjects: callbackValidationObjects,
-    valid: valid,
-  };
-}
-
-class StepsValidator {
-  stepManager: StepManager;
-  steps: Set<Step> = new Set();
-
-  constructor(stepManager: StepManager) {
-    this.stepManager = stepManager;
-    this.steps = stepManager.registeredSteps;
+export class StepValidator extends GeneralValidator {
+  step: Step;
+  constructor(step: Step) {
+    super(validateStep);
+    this.step = step;
   }
 
   validate = () => {
-    const validSteps: ValidatedStepObj[] = [];
-    const invalidSteps: ValidatedStepObj[] = [];
-
-    const stepsToValidate = Array.from(this.steps).filter(
-      (step) => !step.isRoot(),
-    );
-
-    stepsToValidate.forEach((step) => {
-      const validatedStep = validateStep(step);
-      if (validatedStep.valid) {
-        validSteps.push(validatedStep);
-      } else {
-        invalidSteps.push(validatedStep);
-      }
-    });
-
-    return { validSteps, invalidSteps };
+    return validateStep(this.step);
   };
 
-  getValidSteps = () => {
-    return this.validate().validSteps;
+  valid = () => {
+    return Object.values(this.validate()).flat().length === 0;
   };
 
-  getInvalidSteps = () => {
-    return this.validate().invalidSteps;
+  findErrorMessageForField = (fieldName: string) => {
+    return this.validate()[fieldName]?.[0];
   };
 }
-
-export default StepsValidator;
