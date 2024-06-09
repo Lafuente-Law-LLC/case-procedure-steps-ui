@@ -1,28 +1,29 @@
 import React from "react";
 import { Step } from "../../models/step/step";
 import Callback from "../../models/callback/callback";
-
+import { CallbackValidator } from "../../validator/validators";
 import {
   EditableInput,
   createArgsHandler,
   SelectControl,
 } from "./tableRowUtils";
-
+import CallbackController from "../../models/callback/callbackController";
 
 type ArgsCellProps = {
   argName: string;
   value: string;
   editMode: boolean;
-  argType: string; 
+  argType: string;
   onChangeHandler: React.ChangeEventHandler<HTMLInputElement>;
+  errorMessage?: string;
 };
 
 type EventNameCellProps = {
   eventNameValue: string;
   editMode: boolean;
   onChangeHandler: React.ChangeEventHandler<HTMLSelectElement>;
-  
   selectOptions: [string, string][];
+  errorMessage?: string;
 } & React.PropsWithChildren;
 
 const ArgsCell = ({
@@ -31,6 +32,7 @@ const ArgsCell = ({
   argType,
   onChangeHandler,
   editMode,
+  errorMessage,
 }: ArgsCellProps) => {
   return (
     <EditableInput
@@ -40,6 +42,7 @@ const ArgsCell = ({
       type={argType}
       onChange={onChangeHandler}
       editMode={editMode}
+      errorMessage={errorMessage}
     />
   );
 };
@@ -53,8 +56,16 @@ export const ArgsCellGroup = ({
   callback: Callback;
   step: Step;
   editMode: boolean;
-  argTypes: {[key: string]: string};  
+  argTypes: { [key: string]: string };
 }) => {
+  let argsValidator: Record<string, any> = {};
+  const callbackValidator = CallbackController.getValidatorFor(
+    callback.functionName,
+  );
+  if (callbackValidator) {
+    argsValidator = callbackValidator.validateArgs(callback.args);
+  }
+
   return (
     <td>
       {Object.entries(callback.args).map(([argName, value]) => {
@@ -63,9 +74,10 @@ export const ArgsCellGroup = ({
             key={argName}
             argName={argName}
             value={value}
-            argType={argTypes[argName] || "text"} 
+            argType={argTypes[argName] || "text"}
             onChangeHandler={createArgsHandler({ step, callback, argName })}
             editMode={editMode}
+            errorMessage={argsValidator[argName] || undefined}
           />
         );
       })}
@@ -76,7 +88,7 @@ export const EventNameCell = ({
   eventNameValue,
   editMode,
   onChangeHandler,
-  selectOptions, 
+  selectOptions,
 }: EventNameCellProps) => {
   return (
     <td>

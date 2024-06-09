@@ -4,34 +4,20 @@ import { Validator } from "model-validations";
 import CallbackController from "../models/callback/callbackController";
 import GeneralValidator from "./validator";
 
+import Callback from "../models/callback/callback";
 const validationRules: ValidationRule[] = [
   { attribute: "id", validationType: "presence", options: {} },
   { attribute: "title", validationType: "presence", options: {} },
   { attribute: "summary", validationType: "presence", options: {} },
 ];
 
-const validateStep = (step: Step): Record<string, string[]> => {
-  let argsErrors: string[] = [];
-  let hasCallbacks = step.callbacks.length > 0;
+const validateStep = (step: Step) => {
   const validator = new Validator();
   for (const rule of validationRules) {
     validator.registerRule(rule);
   }
-  if (hasCallbacks) {
-    for (const callback of step.callbacks) {
-      let cbValidator = CallbackController.getValidatorFor(callback.functionName);
-      argsErrors = [
-        ...argsErrors,
-        ...cbValidator.validate(callback.args).errorMessages,
-      ];
-    }
-  }
 
-  let errors = validator.validate(step);
-  if (argsErrors.length > 0) {
-    errors.args = argsErrors;
-  }
-  return errors;
+  return validator.validate(step);
 };
 
 export class StepValidator extends GeneralValidator {
@@ -39,6 +25,14 @@ export class StepValidator extends GeneralValidator {
   constructor(step: Step) {
     super(validateStep);
     this.step = step;
+  }
+
+  validateCallback(callback: Callback) {
+    const validator = CallbackController.getValidatorFor(callback.functionName);
+    if (!validator) {
+      return {};
+    }
+    return validator.validate(callback);
   }
 
   validate = () => {

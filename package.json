@@ -58,7 +58,7 @@
     "date-fns": "^3.3.1",
     "joi": "^17.12.2",
     "lodash.merge": "^4.6.2",
-    "model-validations": "file:../model-validations/",
+    "model-validations": "file:../model-validations",
     "package.json": "^2.0.1",
     "postcss-loader": "^8.1.1",
     "postcss-preset-env": "^9.5.14",

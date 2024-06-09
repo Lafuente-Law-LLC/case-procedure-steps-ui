@@ -15,12 +15,12 @@ class ArgumentSpecValidator extends GeneralValidator {
     const collection: any[] = [];
     argumentSpec.forEach((argSpec) => {
       const argSpecTransformer = new ArgumentSpecTransformer(argSpec);
-      collection.push(argSpecTransformer.validationResults);
+      collection.push(...argSpecTransformer.validationResults);
     });
 
     const validator = new Validator();
     collection.forEach((obj) => validator.registerRule(obj));
-
+    
     const getErrors = (subject: any) => {
       return validator.validate(subject);
     };
@@ -30,24 +30,22 @@ class ArgumentSpecValidator extends GeneralValidator {
 }
 
 export class CallbackValidator extends GeneralValidator {
+  argsValidator: ArgumentSpecValidator;
   constructor(callbackConfig: CallbackConfig) {
     const convertedValidatorObjs = new CallbackTransformer(callbackConfig)
       .validationResults;
     const validator = new Validator();
     convertedValidatorObjs.forEach((obj) => validator.registerRule(obj));
-    const argsValidator = new ArgumentSpecValidator(callbackConfig.args);
 
     const getErrors = (subject: any) => {
-      const errors = validator.validate(subject);
-      const argsErrors = argsValidator.validate(subject.args).errorMessages;
-      if (argsErrors.length > 0) {
-        errors.args = errors.args
-          ? [...errors.args, ...argsErrors]
-          : argsErrors;
-      }
-
-      return errors;
+      return validator.validate(subject);
     };
     super(getErrors);
+
+    this.argsValidator = new ArgumentSpecValidator(callbackConfig.args);
+  }
+
+  validateArgs(args: any) {
+    return this.argsValidator.validate(args);
   }
 }

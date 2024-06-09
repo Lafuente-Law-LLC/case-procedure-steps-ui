@@ -2,7 +2,6 @@ import React from "react";
 import { Form } from "react-bootstrap";
 import { Step } from "../../models/step/step";
 import Callback from "../../models/callback/callback";
-import { FieldValidationObject } from "../../types";
 
 type EditableInputObj = {
   label: string;
@@ -42,14 +41,14 @@ export const EditableInput = ({
   type,
   onChange,
   editMode,
-  validationObject,
+  errorMessage,
 }: EditableInputObj & {
   editMode: boolean;
-  validationObject?: FieldValidationObject;
+  errorMessage?: string; 
 }) => {
   
   return (
-    <div className={`label-row-component`}>
+    <div className={`label-row-component ${errorMessage ? 'invalid' : '' }`}>
       <div className="label">{label}</div>
       <div className="value">
         {!editMode ? (
@@ -58,6 +57,7 @@ export const EditableInput = ({
           <Form.Control type={type} value={value} onChange={onChange} />
         )}
       </div>
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
     </div>
   );
 };

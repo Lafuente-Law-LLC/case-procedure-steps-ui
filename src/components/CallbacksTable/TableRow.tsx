@@ -5,25 +5,34 @@ import { EventNameCell, FunctionNameCell, ArgsCellGroup } from "./TableCells";
 import { createEventNameCellHandler } from "./tableRowUtils";
 import CallbackController from "../../models/callback/callbackController";
 import type { ArgumentSpec } from "../../models/callback/callbackController";
-
+import { StepValidator } from "../../validator/stepValidator";
 /**
- * Converts an array of ArgumentSpec objects to a dictionary with argument names as keys
- * and their corresponding types as values.
+ * Converts an array of ArgumentSpec objects to a dictionary with argument names
+ * as keys and their corresponding types as values.
+ *
  * @param argsSpec - Array of ArgumentSpec objects.
  * @returns A dictionary with argument names as keys and their types as values.
  */
-const returnArgsWithType = (argsSpec: ArgumentSpec[]): { [key: string]: string } => {
-  return argsSpec.reduce((acc, arg) => {
-    acc[arg.name] = arg.type === "string" ? "text" : arg.type;
-    return acc;
-  }, {} as { [key: string]: string });
+const returnArgsWithType = (
+  argsSpec: ArgumentSpec[],
+): { [key: string]: string } => {
+  return argsSpec.reduce(
+    (acc, arg) => {
+      acc[arg.name] = arg.type === "string" ? "text" : arg.type;
+      return acc;
+    },
+    {} as { [key: string]: string },
+  );
 };
 
 /**
- * Converts an array containing an event name string into a tuple containing the event name
- * and a formatted version of it (e.g., ['create_event'] => ['create_event', 'Create Event']).
+ * Converts an array containing an event name string into a tuple containing the
+ * event name and a formatted version of it (e.g., ['create_event'] =>
+ * ['create_event', 'Create Event']).
+ *
  * @param arr - Array containing a single event name string.
- * @returns A tuple containing the original event name and a formatted version of it.
+ * @returns A tuple containing the original event name and a formatted version
+ *   of it.
  */
 const returnSelectOption = (arr: string[]): [string, string] => {
   return [
@@ -36,7 +45,9 @@ const returnSelectOption = (arr: string[]): [string, string] => {
 };
 
 /**
- * Component representing a table row for displaying and editing callback information.
+ * Component representing a table row for displaying and editing callback
+ * information.
+ *
  * @param props - Component props.
  * @param props.callback - The callback object.
  * @param props.editMode - Boolean indicating if the row is in edit mode.
@@ -60,7 +71,10 @@ const TableRow = ({
   }
 
   const argsDictionary = returnArgsWithType(callbackConfig.args);
-  const events = callbackConfig.eventName.in.map((e) => returnSelectOption([e]));
+  const events = callbackConfig.eventName.in.map((e) =>
+    returnSelectOption([e]),
+  );
+
 
   return (
     <tr>
@@ -77,6 +91,9 @@ const TableRow = ({
         editMode={editMode}
         argTypes={argsDictionary}
       />
+      <td>
+        <button onClick={() => step.removeCallback(callback)}>X</button>
+      </td>
     </tr>
   );
 };
