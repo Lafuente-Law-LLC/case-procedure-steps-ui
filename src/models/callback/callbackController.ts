@@ -1,6 +1,7 @@
 import Callback from "./callback";
 import { CallbackValidator } from "../../validator/validators";
 
+
 type EventConfig = {
   in: string[];
   default: string;
@@ -38,6 +39,7 @@ export default class CallbackController {
     }
     return callbackConfig.eventName.in;
   }
+
   static registerCallbackConfig(config: CallbackConfig) {
     this.callbackConfigs.set(config.functionName, config);
   }
@@ -59,13 +61,13 @@ export default class CallbackController {
     return new CallbackValidator(callbackConfig);
   }
 
-  static buildDefaultArgs = (argDescriptors: ArgumentSpec[]) => {
+  static buildDefaultArgs(argDescriptors: ArgumentSpec[]) {
     const obj: Record<string, any> = {};
     argDescriptors.forEach((arg) => {
       obj[arg.name] = arg.default;
     });
     return obj;
-  };
+  }
 
   static createPartialCallbackInstance(
     functionName: string,
@@ -76,7 +78,7 @@ export default class CallbackController {
     if (!callbackConfig) {
       throw new Error("Callback not found");
     }
-    eventName = eventName ? eventName : callbackConfig.eventName.default;
+    eventName = eventName || callbackConfig.eventName.default;
     const events = callbackConfig.eventName.in;
     if (!events.includes(eventName)) {
       throw new Error("Event not allowed for this callback");
@@ -104,7 +106,7 @@ export default class CallbackController {
       throw new Error("Event not allowed for this callback");
     }
 
-    args = args ? args : this.buildDefaultArgs(callbackConfig.args);
+    args = args || this.buildDefaultArgs(callbackConfig.args);
 
     return new Callback({
       functionName,
