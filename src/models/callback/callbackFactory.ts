@@ -1,6 +1,5 @@
 import Callback from "./callback";
-import {CallbackValidator}from "../../validator/validators";
-
+import { CallbackValidator } from "../../validator/validators";
 
 type EventConfig = {
   in: string[];
@@ -9,7 +8,7 @@ type EventConfig = {
 
 export type ArgumentSpec = {
   name: string;
-  type: ("string" | "number" | "boolean" | "object" | "array" | "function")
+  type: "string" | "number" | "boolean" | "object" | "array" | "function";
   default: any;
   required: boolean;
 };
@@ -32,6 +31,13 @@ function formatString(input: string): string {
 export default class CallbackFactory {
   static callbackConfigs: Map<string, CallbackConfig> = new Map();
 
+  static availableEvents(functionName: string) {
+    const callbackConfig = this.getCallbackConfig(functionName);
+    if (!callbackConfig) {
+      throw new Error("Callback not found");
+    }
+    return callbackConfig.eventName.in;
+  }
   static registerCallbackConfig(config: CallbackConfig) {
     this.callbackConfigs.set(config.functionName, config);
   }
@@ -49,9 +55,8 @@ export default class CallbackFactory {
     if (!callbackConfig) {
       throw new Error("Callback not found");
     }
-   
+
     return new CallbackValidator(callbackConfig);
-   
   }
 
   static buildDefaultArgs = (argDescriptors: ArgumentSpec[]) => {
@@ -62,18 +67,16 @@ export default class CallbackFactory {
     return obj;
   };
 
-
   static createPartialCallbackInstance(
     functionName: string,
     eventName?: string,
     args?: Record<string, any>,
   ) {
- 
     const callbackConfig = this.getCallbackConfig(functionName);
     if (!callbackConfig) {
       throw new Error("Callback not found");
     }
-     eventName = eventName ? eventName : callbackConfig.eventName.default;
+    eventName = eventName ? eventName : callbackConfig.eventName.default;
     const events = callbackConfig.eventName.in;
     if (!events.includes(eventName)) {
       throw new Error("Event not allowed for this callback");

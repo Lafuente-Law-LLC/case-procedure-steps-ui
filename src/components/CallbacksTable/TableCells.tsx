@@ -4,9 +4,7 @@ import Callback from "../../models/callback/callback";
 
 import {
   EditableInput,
-  getArgsTypeFormCB,
   createArgsHandler,
-  getArgsValidator,
   SelectControl,
 } from "./tableRowUtils";
 import { FieldValidationObject } from "../../types";
@@ -15,8 +13,7 @@ type ArgsCellProps = {
   argName: string;
   value: string;
   editMode: boolean;
-  type: string;
-  validationObject: FieldValidationObject;
+  argType: string; 
   onChangeHandler: React.ChangeEventHandler<HTMLInputElement>;
 };
 
@@ -24,16 +21,15 @@ type EventNameCellProps = {
   eventNameValue: string;
   editMode: boolean;
   onChangeHandler: React.ChangeEventHandler<HTMLSelectElement>;
-  validationObject: FieldValidationObject;
+  
+  selectOptions: [string, string][];
 } & React.PropsWithChildren;
 
 const ArgsCell = ({
   argName,
   value,
-  type,
-
+  argType,
   onChangeHandler,
-
   editMode,
 }: ArgsCellProps) => {
   return (
@@ -41,7 +37,7 @@ const ArgsCell = ({
       key={argName}
       label={argName}
       value={value}
-      type={type}
+      type={argType}
       onChange={onChangeHandler}
       editMode={editMode}
     />
@@ -52,10 +48,12 @@ export const ArgsCellGroup = ({
   callback,
   step,
   editMode,
+  argTypes,
 }: {
   callback: Callback;
   step: Step;
   editMode: boolean;
+  argTypes: {[key: string]: string};  
 }) => {
   return (
     <td>
@@ -65,8 +63,7 @@ export const ArgsCellGroup = ({
             key={argName}
             argName={argName}
             value={value}
-            type={getArgsTypeFormCB(callback, argName)}
-            validationObject={getArgsValidator(callback).validField(argName)}
+            argType={argTypes[argName] || "text"} 
             onChangeHandler={createArgsHandler({ step, callback, argName })}
             editMode={editMode}
           />
@@ -79,11 +76,13 @@ export const EventNameCell = ({
   eventNameValue,
   editMode,
   onChangeHandler,
+  selectOptions, 
 }: EventNameCellProps) => {
   return (
     <td>
       {editMode ? (
         <SelectControl
+          options={selectOptions}
           onChangeHandler={onChangeHandler}
           value={eventNameValue}
         />

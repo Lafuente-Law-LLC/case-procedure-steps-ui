@@ -2,7 +2,6 @@ import React from "react";
 import { Form } from "react-bootstrap";
 import { Step } from "../../models/step/step";
 import Callback from "../../models/callback/callback";
-import CallbackFactory from "../../models/callback/callbackFactory";
 import { FieldValidationObject } from "../../types";
 
 type EditableInputObj = {
@@ -37,8 +36,6 @@ export const createEventNameCellHandler = (step: Step, callback: Callback) => {
   };
 };
 
-
-
 export const EditableInput = ({
   label,
   value,
@@ -50,9 +47,9 @@ export const EditableInput = ({
   editMode: boolean;
   validationObject?: FieldValidationObject;
 }) => {
-  const { valid, message } = validationObject;
+  
   return (
-    <div className={`label-row-component ${valid === false ? "invalid" : ""}`}>
+    <div className={`label-row-component`}>
       <div className="label">{label}</div>
       <div className="value">
         {!editMode ? (
@@ -68,28 +65,20 @@ export const EditableInput = ({
 export const SelectControl = ({
   onChangeHandler,
   value,
+  options,
 }: {
   onChangeHandler: any;
+  options: [string, string][];
   value?: string;
 }) => {
   return (
-    <Form.Control
-      as="select"
-      onChange={onChangeHandler}
-      value={value}
-    ></Form.Control>
-  );
-};
-export const EventNameSelectOptions = () => {
-  const entries = CallbackFactory.getEventLabelPairs();
-  console.log(entries);
-  return (
-    <>
-      {entries.map(([eventName, label]) => (
-        <option key={eventName} value={eventName}>
+    <Form.Control as="select" onChange={onChangeHandler} value={value}>
+      {options.map(([value, label]) => (
+        <option key={value} value={value}>
           {label}
         </option>
       ))}
-    </>
+    </Form.Control>
   );
 };
+
