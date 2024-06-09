@@ -8,17 +8,21 @@
   padding: 10px;
   margin-left: 3%;
 }
+
 .step-item-head {
   border-radius: $font-size-base;
   display: flex;
   border: 1px solid $gray-400;
   background-color: $gray-100;
-  transition: margin 0.3s ease;
+  transition: height 0.3s ease;
   @extend .shadow-sm;
 }
 
-.step-item-head.drag-over {
-  margin: 14px;
+.step-item-divider {
+  &.drag-over {
+    height: 1.8rem;
+    background-color: lightblue;
+  }
 }
 
 .step-item-head.invalid {
@@ -30,15 +34,13 @@
   padding-bottom: 0.5em;
   outline: 1px dotted grey;
 }
-.left-corner {
-  .header {
-    border-top-left-radius: $font-size-base;
-  }
+
+.left-corner .header {
+  border-top-left-radius: $font-size-base;
 }
-.right-corner {
-  .header {
-    border-top-right-radius: $font-size-base;
-  }
+
+.right-corner .header {
+  border-top-right-radius: $font-size-base;
 }
 
 .step-item-col.right-corner {
@@ -93,26 +95,16 @@
   outline: none;
   background-color: rgba(255, 255, 255, 0.212);
   box-shadow: 0 2px 4px rgba(200, 205, 207, 0.1);
-  transition:
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   color: #333;
 }
 
-.step-item-col .body input {
-  &.error {
-    border: 1px solid red;
-  }
+.step-item-col .body input.error,
+.step-item-col .body textarea.error {
+  border: 1px solid red;
 }
-.step-item-col .body textarea {
-  &.error {
-    border: 1px solid red;
-  }
-}
-.step-item-col .body input:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
+
+.step-item-col .body input:focus,
 .step-item-col .body textarea:focus {
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
@@ -144,10 +136,6 @@
   min-height: 1rem;
 }
 
-.step-item-divider.drag-over {
-  background-color: lightblue;
-}
-
 .start[aria-expanded="true"] .arrow-right {
   transform: rotate(90deg);
 }
@@ -174,10 +162,12 @@
 .button-group .remove-icon {
   cursor: pointer;
 }
+
 .triangle {
   cursor: pointer;
   transform: rotate(90deg);
 }
+
 .triangle.open {
   transform: rotate(180deg);
 }
