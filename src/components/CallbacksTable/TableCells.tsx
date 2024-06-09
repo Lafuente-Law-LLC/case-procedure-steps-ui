@@ -7,7 +7,7 @@ import {
   createArgsHandler,
   SelectControl,
 } from "./tableRowUtils";
-import { FieldValidationObject } from "../../types";
+
 
 type ArgsCellProps = {
   argName: string;

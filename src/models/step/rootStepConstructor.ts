@@ -5,7 +5,7 @@ import TreeModel from "tree-model";
 import StepManager from "./stepManager";
 import StepNode from "./stepNode";
 import { v4 as generateUniqueId } from "uuid";
-import CallbackFactory from "../callback/callbackFactory";
+import CallbackController from "../callback/callbackController";
 
 
 export default class RootStepConstructor {
@@ -39,7 +39,7 @@ export default class RootStepConstructor {
 
   tranformCallbackObjs(callbackObjs: CallbackObj[]): Callback[] {
     return callbackObjs.map((callbackObj) =>
-      CallbackFactory.createCallbackInstance(
+      CallbackController.createCallbackInstance(
         callbackObj.functionName,
         callbackObj.eventName,
         callbackObj.args,

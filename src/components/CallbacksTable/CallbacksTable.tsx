@@ -3,7 +3,7 @@ import { Form } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import { Step } from "../../models/step/step";
 import CallbackAdditionButton from "./CallbackAdditionButton";
-import CallbackFactory from "../../models/callback/callbackFactory";
+import CallbackController from "../../models/callback/callbackController";
 import TableRow from "./TableRow";
 
 type CallbacksTableProps = {
@@ -16,7 +16,7 @@ const CSS_CLASSES = {
 };
 
 const handleMenuBtnClick = (functionName: string, step: Step) => {
-  step.addCallback(CallbackFactory.createPartialCallbackInstance(functionName));
+  step.addCallback(CallbackController.createPartialCallbackInstance(functionName));
 };
 
 const CallbacksTable = ({ step }: CallbacksTableProps) => {
@@ -65,6 +65,14 @@ const CallbacksTable = ({ step }: CallbacksTableProps) => {
           }}
         >
           Add Event Based
+        </div>
+        <div
+          className={CSS_CLASSES.MENU_ITEM}
+          onClick={(e) => {
+            handleMenuBtnClick("create_future_event", step);
+          }}
+        >
+          Add Future Event Based
         </div>
       </CallbackAdditionButton>
     </>

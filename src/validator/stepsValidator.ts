@@ -1,7 +1,7 @@
 import { Step } from "../models/step/step";
 import type { ValidationRule } from "model-validations";
 import { Validator } from "model-validations";
-import CallbackFactory from "../models/callback/callbackFactory";
+import CallbackController from "../models/callback/callbackController";
 import GeneralValidator from "./validator";
 
 const validationRules: ValidationRule[] = [
@@ -19,7 +19,7 @@ const validateStep = (step: Step): Record<string, string[]> => {
   }
   if (hasCallbacks) {
     for (const callback of step.callbacks) {
-      let cbValidator = CallbackFactory.getValidatorFor(callback.functionName);
+      let cbValidator = CallbackController.getValidatorFor(callback.functionName);
       argsErrors = [
         ...argsErrors,
         ...cbValidator.validate(callback.args).errorMessages,

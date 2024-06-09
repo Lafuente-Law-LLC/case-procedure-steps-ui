@@ -1,5 +1,5 @@
-import CallbackFactory from "../models/callback/callbackFactory";
-import { CallbackConfig } from "../models/callback/callbackFactory";
+import CallbackController from "../models/callback/callbackController";
+import { CallbackConfig } from "../models/callback/callbackController";
 
 const createEvent: CallbackConfig = {
   functionName: "create_event",
@@ -75,9 +75,9 @@ const createFutureEvent: CallbackConfig = {
 
 
 
-CallbackFactory.registerCallbackConfig(createEvent);
-CallbackFactory.registerCallbackConfig(createTask);
-CallbackFactory.registerCallbackConfig(createFutureEvent);
+CallbackController.registerCallbackConfig(createEvent);
+CallbackController.registerCallbackConfig(createTask);
+CallbackController.registerCallbackConfig(createFutureEvent);
 
 const runConfig = () => {
   console.log("Config has been run");

@@ -4,7 +4,7 @@ import { Validator } from "model-validations";
 import type {
   CallbackConfig,
   ArgumentSpec,
-} from "../models/callback/callbackFactory";
+} from "../models/callback/callbackController";
 import {
   CallbackTransformer,
   ArgumentSpecTransformer,

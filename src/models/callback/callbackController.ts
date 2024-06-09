@@ -28,7 +28,7 @@ function formatString(input: string): string {
   return formattedString;
 }
 
-export default class CallbackFactory {
+export default class CallbackController {
   static callbackConfigs: Map<string, CallbackConfig> = new Map();
 
   static availableEvents(functionName: string) {
