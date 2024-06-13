@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = (env, argv) => {
   return {
     mode: "development",
-    entry: "./src/index.tsx",
+    entry: "./src/index.dev.tsx",
     output: {
       publicPath: "/",
       path: path.resolve(__dirname, "dist"),
@@ -57,8 +57,7 @@ module.exports = (env, argv) => {
           test: /\.scss$/,
           use: [
             MiniCssExtractPlugin.loader,
-            "css-loader",
-            "postcss-loader",
+            "css-loader", 
             "sass-loader",
           ],
         },

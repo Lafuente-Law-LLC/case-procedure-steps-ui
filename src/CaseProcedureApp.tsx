@@ -1,8 +1,7 @@
 import React from "react";
 import RootStepConstructor from "./models/step/rootStepConstructor";
 import ConfigSetup, { CaseProcedureStep } from "./config/ConfigSetup";
-
-
+import { CallbackConfig } from "./models/callback/callbackController";
 
 
 type AppsProps = {
@@ -10,13 +9,15 @@ type AppsProps = {
   description: string;
   initialData: any;
   onSubmitFunction: (caseProcedureStep: CaseProcedureStep) => void;
+  callbackConfigs?: CallbackConfig[]; 
 };
 
- const CaseProcedureApp = ({
+const CaseProcedureApp = ({
   title,
   description,
   initialData,
   onSubmitFunction,
+  callbackConfigs
 }: AppsProps) => {
   const constructorRt = new RootStepConstructor(initialData);
 
@@ -26,6 +27,7 @@ type AppsProps = {
       description={description}
       rootStepConstructor={constructorRt}
       onSubmitFunction={onSubmitFunction}
+      callbackConfigs={callbackConfigs}
     />
   );
 };

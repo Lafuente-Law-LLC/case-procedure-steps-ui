@@ -1,16 +1,7 @@
+import type { Step } from "./models/step/step";
+import type { CallbackConfig, ArgumentSpec} from "./models/callback/callbackController";
+import type Callback from "./models/callback/callback";
 import CaseProcedureApp from "./CaseProcedureApp";
-import React from "react";
-import { createRoot } from "react-dom/client";
-import "./css/main.scss";
+export { Step, CallbackConfig, ArgumentSpec, Callback}
 
-const root = createRoot(document.getElementById("root") as HTMLElement);
-root.render(
-  <CaseProcedureApp
-    title=""
-    description=""
-    initialData={{}}
-    onSubmitFunction={() => {}}
-  />,
-);
-
-export { CaseProcedureApp };
+export {CaseProcedureApp}

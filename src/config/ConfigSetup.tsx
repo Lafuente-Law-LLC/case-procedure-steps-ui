@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import RootStepConstructor from "../models/step/rootStepConstructor";
 import StepItemContainer from "../components/StepItem/StepItemContainer";
 import { Step } from "../models/step/step";
-import { runConfig } from "./config";
+import { CallbackConfig } from "../models/callback/callbackController";
+import CallbackController from "../models/callback/callbackController";
 
-
-
-runConfig();
-
-export  type CaseProcedureStep = {
+export type CaseProcedureStep = {
   title: string;
   description: string;
   rootStep: Step;
@@ -19,6 +16,13 @@ type ConfigProps = {
   description: string;
   rootStepConstructor: RootStepConstructor;
   onSubmitFunction: (caseProcedureStep: CaseProcedureStep) => void;
+  callbackConfigs?: CallbackConfig[];
+};
+
+const setupCallbackController = (callbackConfigs: CallbackConfig[]) => {
+  callbackConfigs.forEach((config) => {
+    CallbackController.registerCallbackConfig(config);
+  });
 };
 
 const ConfigSetup = ({
@@ -26,7 +30,11 @@ const ConfigSetup = ({
   description,
   rootStepConstructor,
   onSubmitFunction,
+  callbackConfigs,
 }: ConfigProps) => {
+  if (callbackConfigs) {
+    setupCallbackController(callbackConfigs);
+  }
   const [newTitle, setTitle] = useState(title);
   const [newDescription, setDescription] = useState(description);
   const rootStep = rootStepConstructor.rootStep;

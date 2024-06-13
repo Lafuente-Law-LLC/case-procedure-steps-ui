@@ -1,0 +1,33 @@
+import StepNode from "./stepNode";
+import StepManager from "./stepManager";
+import Callback from "../callback/callback";
+declare class Step {
+    title: string;
+    summary: string;
+    id: string;
+    callbacks: Callback[];
+    stepNode: StepNode;
+    stepManager: StepManager;
+    constructor(stepNode: StepNode, stepManager: StepManager);
+    get treeNode(): import("../../types").TreeNode;
+    get steps(): Step[];
+    get parentStep(): Step | null;
+    updateTitle(title: string): void;
+    updateSummary(summary: string): void;
+    addCallback(callback: Callback): void;
+    removeCallback(callback: Callback): boolean;
+    updateCallback(callback: Callback, partial: Partial<Callback>): boolean;
+    replaceCallbacks(callbacks: Callback[]): boolean;
+    addNewStep(): void;
+    addAsChildStep(step: Step): void;
+    isAncestorOf(step: Step): boolean;
+    findStepById(id: string): Step | undefined;
+    addStepToIndex(step: Step, index: number): void;
+    moveStepAboveSelf(step: Step): void;
+    moveStepBelowSelf(step: Step): void;
+    remove(): void;
+    isRoot(): boolean;
+    informStepManager(): void;
+    toJSON(): any;
+}
+export { Step };

@@ -13,7 +13,6 @@
     "@babel/preset-env": "^7.23.9",
     "@babel/preset-react": "^7.23.3",
     "@babel/preset-typescript": "^7.23.3",
-    "@fullhuman/postcss-purgecss": "^6.0.0",
     "@types/bootstrap": "^5.2.10",
     "@types/jest": "^29.5.12",
     "@types/joi": "^17.2.3",
@@ -58,10 +57,7 @@
     "date-fns": "^3.3.1",
     "joi": "^17.12.2",
     "lodash.merge": "^4.6.2",
-    "model-validations": "file:../model-validations",
     "package.json": "^2.0.1",
-    "postcss-loader": "^8.1.1",
-    "postcss-preset-env": "^9.5.14",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.1",
     "react-bootstrap-icons": "^1.11.3",
@@ -82,7 +78,7 @@
     "build:tools": "node ./tools/build.js"
   },
   "peerDependencies": {
-    "postcss": "^8.4.31",
+    "model-validations": "file:../model-validations",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   }
